@@ -15,16 +15,23 @@ import React, {
   useState,
 } from 'react';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton as MIconButton,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useColumnHeaderStyles = makeStyles((theme) => ({
   divider: {
@@ -65,17 +72,20 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
           <b>{title}</b>
         </Typography>
         <Box display='flex' alignItems='center'>
-          {showEditAction && <IconButton icon='edit' onClick={onEdit} />}
+          {/* {showEditAction && <IconButton icon='edit' onClick={onEdit} />}
           {showDeleteAction && (
             <IconButton icon='deleteForever' onClick={onDelete} />
-          )}
+          )} */}
+          <MIconButton aria-label='delete'>
+            <MoreHorizIcon />
+          </MIconButton>
         </Box>
       </Box>
       <Typography title={description} noWrap gutterBottom>
         {description}
       </Typography>
 
-      <Divider className={classes.divider} />
+      {/* <Divider className={classes.divider} /> */}
     </>
   );
 };
@@ -174,6 +184,8 @@ export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
             index={index}
             onEdit={onRecordEdit}
             onDelete={onRecordDelete}
+            showEditAction={false}
+            showDeleteAction={false}
           />
         ))
       ) : (
@@ -202,8 +214,22 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
     <>
       <Divider className={classes.divider} />
       <Typography variant='caption' component='p' title={content} noWrap>
-        {content}
+        {/* {content} */}
       </Typography>
+
+      <Button
+        variant='outlined'
+        // color='secondary'
+        // size='large'
+        // className={classes.button}
+        startIcon={<AddIcon />}
+        style={{
+          width: 200,
+          height: 36,
+        }}
+      >
+        {/* 添加新分组 */}
+      </Button>
     </>
   );
 };
@@ -480,14 +506,14 @@ const Column: React.FC<ColumnProps> = (props) => {
         onEdit={handleOpenEditDialog}
         onDelete={handleOpenDeleteDialog}
       />
-      <ColumnActionComponent
+      {/* <ColumnActionComponent
         showAddRecordAction={showAddRecordAction}
         showDeleteAllRecordAction={showDeleteAllRecordAction}
         disableAddRecordAction={disableAddRecordAction}
         disableAllRecordDeleteAction={disableAllRecordDeleteAction}
         onAddRecord={handleOpenAddRecordDialog}
         onDeleteAllRecord={handleOpenDeleteAllRecordDialog}
-      />
+      /> */}
       <ColumnCardListComponent
         column={column}
         onRecordEdit={handleOpenEditRecordDialog}

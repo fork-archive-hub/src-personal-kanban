@@ -85,7 +85,7 @@ const Board: React.FC<BoardProps> = (props) => {
       {placeholder}
       <Button
         variant='outlined'
-        color='primary'
+        // color='primary'
         size='large'
         // className={classes.button}
         startIcon={<AddIcon />}
