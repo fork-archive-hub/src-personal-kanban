@@ -1,24 +1,30 @@
-import React from "react";
-import clsx from "clsx";
-import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import { makeStyles } from "@material-ui/core/styles";
+import Card from 'PersonalKanban/components/Card';
+import ColumnForm from 'PersonalKanban/components/ColumnForm';
+import IconButton from 'PersonalKanban/components/IconButton';
+import RecordForm from 'PersonalKanban/components/RecordForm';
+import { ColumnColor, DarkColumnColor } from 'PersonalKanban/enums';
+import { useTheme } from 'PersonalKanban/providers/ThemeProvider';
+import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
+import { Column as ColumnType, Record } from 'PersonalKanban/types';
+import clsx from 'clsx';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
-import Card from "PersonalKanban/components/Card";
-import IconButton from "PersonalKanban/components/IconButton";
-import ColumnForm from "PersonalKanban/components/ColumnForm";
-import RecordForm from "PersonalKanban/components/RecordForm";
-import { ColumnColor, DarkColumnColor } from "PersonalKanban/enums";
-import { Record, Column as ColumnType } from "PersonalKanban/types";
-import { useTheme } from "PersonalKanban/providers/ThemeProvider";
-import { useTranslation } from "PersonalKanban/providers/TranslationProvider";
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useColumnHeaderStyles = makeStyles((theme) => ({
   divider: {
@@ -50,18 +56,18 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
   return (
     <>
       <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
+        display='flex'
+        alignItems='center'
+        justifyContent='space-between'
         marginBottom={Boolean(description) ? 0.5 : 0}
       >
-        <Typography variant="h6" title={title} noWrap>
+        <Typography variant='h6' title={title} noWrap>
           <b>{title}</b>
         </Typography>
-        <Box display="flex" alignItems="center">
-          {showEditAction && <IconButton icon="edit" onClick={onEdit} />}
+        <Box display='flex' alignItems='center'>
+          {showEditAction && <IconButton icon='edit' onClick={onEdit} />}
           {showDeleteAction && (
-            <IconButton icon="deleteForever" onClick={onDelete} />
+            <IconButton icon='deleteForever' onClick={onDelete} />
           )}
         </Box>
       </Box>
@@ -106,14 +112,14 @@ export const ColumnAction: React.FC<ColumnActionProps> = (props) => {
     <>
       {showAddRecordAction && (
         <IconButton
-          icon="add"
+          icon='add'
           disabled={disableAddRecordAction}
           onClick={onAddRecord}
         />
       )}
       {showAllRecordDeleteAction && (
         <IconButton
-          icon="delete"
+          icon='delete'
           disabled={disableAllRecordDeleteAction}
           onClick={onDeleteAllRecord}
         />
@@ -171,7 +177,7 @@ export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
           />
         ))
       ) : (
-        <Typography>{t("noRecord")}</Typography>
+        <Typography>{t('noRecord')}</Typography>
       )}
     </div>
   );
@@ -195,7 +201,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
   return (
     <>
       <Divider className={classes.divider} />
-      <Typography variant="caption" component="p" title={content} noWrap>
+      <Typography variant='caption' component='p' title={content} noWrap>
         {content}
       </Typography>
     </>
@@ -228,6 +234,7 @@ type ColumnProps = {
   ColumnFooterComponent?: any;
 };
 
+/** 看板的一列，是一个面板，上面可以放置小卡片 */
 const Column: React.FC<ColumnProps> = (props) => {
   const {
     column,
@@ -276,89 +283,89 @@ const Column: React.FC<ColumnProps> = (props) => {
       : ColumnColor[columnColor],
   });
 
-  const [dialog, setDialog] = React.useState({
+  const [dialog, setDialog] = useState({
     open: false,
-    title: "",
+    title: '',
     content: null,
     actions: null,
   });
 
-  const handleDelete = React.useCallback(
+  const handleDelete = useCallback(
     (e) => {
       onDelete && onDelete({ column, e });
     },
-    [column, onDelete]
+    [column, onDelete],
   );
 
-  const handleEdit = React.useCallback(
+  const handleEdit = useCallback(
     (column: ColumnType) => {
       onEdit && onEdit({ column });
     },
-    [onEdit]
+    [onEdit],
   );
 
-  const handleAddRecord = React.useCallback(
+  const handleAddRecord = useCallback(
     (record: Record) => {
       onAddRecord && onAddRecord({ column, record });
     },
-    [column, onAddRecord]
+    [column, onAddRecord],
   );
 
-  const handleRecordEdit = React.useCallback(
+  const handleRecordEdit = useCallback(
     (record: Record) => {
       onRecordEdit({ column, record });
     },
-    [column, onRecordEdit]
+    [column, onRecordEdit],
   );
 
-  const handleRecordDelete = React.useCallback(
+  const handleRecordDelete = useCallback(
     (record: Record) => {
       onRecordDelete({ column, record });
     },
-    [column, onRecordDelete]
+    [column, onRecordDelete],
   );
 
-  const handleAllRecordDelete = React.useCallback(() => {
+  const handleAllRecordDelete = useCallback(() => {
     onAllRecordDelete({ column });
   }, [column, onAllRecordDelete]);
 
-  const handleOpenDialog = React.useCallback(({ content, title, actions }) => {
+  const handleOpenDialog = useCallback(({ content, title, actions }) => {
     setDialog({ content, title, actions, open: true });
   }, []);
 
-  const handleCloseDialog = React.useCallback(() => {
-    setDialog(() => ({ content: null, title: "", actions: null, open: false }));
+  const handleCloseDialog = useCallback(() => {
+    setDialog(() => ({ content: null, title: '', actions: null, open: false }));
   }, []);
 
-  const handleOpenDeleteDialog = React.useCallback(() => {
-    const content = <Typography>{t("deleteColumnConfirmation")}</Typography>;
+  const handleOpenDeleteDialog = useCallback(() => {
+    const content = <Typography>{t('deleteColumnConfirmation')}</Typography>;
     const actions = (
       <>
-        <Button variant="outlined" onClick={handleCloseDialog}>
-          {t("cancel")}
+        <Button variant='outlined' onClick={handleCloseDialog}>
+          {t('cancel')}
         </Button>
         &nbsp;
         <Button
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           onClick={(e) => {
             handleCloseDialog();
             handleDelete(e);
           }}
         >
-          {t("delete")}
+          {t('delete')}
         </Button>
       </>
     );
 
-    handleOpenDialog({ content, actions, title: t("deleteColumn") });
+    handleOpenDialog({ content, actions, title: t('deleteColumn') });
   }, [t, handleOpenDialog, handleDelete, handleCloseDialog]);
 
-  const handleOpenEditDialog = React.useCallback(() => {
+  const handleOpenEditDialog = useCallback(() => {
     const content = (
       <ColumnForm
         column={column}
-        formTitle={t("editColumn")}
+        formTitle={t('editColumn')}
         onSubmit={(column: any) => {
           handleCloseDialog();
           handleEdit(column);
@@ -370,7 +377,7 @@ const Column: React.FC<ColumnProps> = (props) => {
     handleOpenDialog({ content });
   }, [column, t, handleOpenDialog, handleCloseDialog, handleEdit]);
 
-  const handleOpenAddRecordDialog = React.useCallback(() => {
+  const handleOpenAddRecordDialog = useCallback(() => {
     const content = (
       <RecordForm
         onSubmit={(record: Record) => {
@@ -384,7 +391,7 @@ const Column: React.FC<ColumnProps> = (props) => {
     handleOpenDialog({ content });
   }, [handleOpenDialog, handleCloseDialog, handleAddRecord]);
 
-  const handleOpenEditRecordDialog = React.useCallback(
+  const handleOpenEditRecordDialog = useCallback(
     (record: Record) => {
       const content = (
         <RecordForm
@@ -399,63 +406,63 @@ const Column: React.FC<ColumnProps> = (props) => {
 
       handleOpenDialog({ content });
     },
-    [handleOpenDialog, handleCloseDialog, handleRecordEdit]
+    [handleOpenDialog, handleCloseDialog, handleRecordEdit],
   );
 
-  const handleOpenDeleteRecordDialog = React.useCallback(
+  const handleOpenDeleteRecordDialog = useCallback(
     (record: Record) => {
-      const content = <Typography>{t("deleteRecordConfirmation")}</Typography>;
+      const content = <Typography>{t('deleteRecordConfirmation')}</Typography>;
       const actions = (
         <>
-          <Button variant="outlined" onClick={handleCloseDialog}>
-            {t("cancel")}
+          <Button variant='outlined' onClick={handleCloseDialog}>
+            {t('cancel')}
           </Button>
           &nbsp;
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={(e) => {
               handleCloseDialog();
               handleRecordDelete(record);
             }}
           >
-            {t("delete")}
+            {t('delete')}
           </Button>
         </>
       );
 
-      handleOpenDialog({ content, actions, title: t("deleteRecord") });
+      handleOpenDialog({ content, actions, title: t('deleteRecord') });
     },
-    [t, handleOpenDialog, handleCloseDialog, handleRecordDelete]
+    [t, handleOpenDialog, handleCloseDialog, handleRecordDelete],
   );
 
-  const handleOpenDeleteAllRecordDialog = React.useCallback(
+  const handleOpenDeleteAllRecordDialog = useCallback(
     (record: Record) => {
       const content = (
-        <Typography>{t("deleteAllRecordConfirmation")}</Typography>
+        <Typography>{t('deleteAllRecordConfirmation')}</Typography>
       );
       const actions = (
         <>
-          <Button variant="outlined" onClick={handleCloseDialog}>
-            {t("cancel")}
+          <Button variant='outlined' onClick={handleCloseDialog}>
+            {t('cancel')}
           </Button>
           &nbsp;
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             onClick={(e) => {
               handleCloseDialog();
               handleAllRecordDelete();
             }}
           >
-            {t("delete")}
+            {t('delete')}
           </Button>
         </>
       );
 
-      handleOpenDialog({ content, actions, title: t("deleteAllRecord") });
+      handleOpenDialog({ content, actions, title: t('deleteAllRecord') });
     },
-    [t, handleOpenDialog, handleCloseDialog, handleAllRecordDelete]
+    [t, handleOpenDialog, handleCloseDialog, handleAllRecordDelete],
   );
 
   return (

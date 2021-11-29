@@ -1,9 +1,14 @@
-import React from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-
 import Board from "PersonalKanban/components/Board";
 import KanbanColumn from "PersonalKanban/components/KanbanColumn";
 import { Column } from "PersonalKanban/types";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 type KanbanBoardProps = {
   columns: Column[];
@@ -32,16 +37,16 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
     ColumnComponent = KanbanColumn,
   } = props;
 
-  const getColumnById = React.useCallback(
+  const getColumnById = useCallback(
     (columnId) => columns.find((column) => column.id === columnId),
     [columns]
   );
 
-  const getColumnByIndex = React.useCallback((index) => columns[index], [
+  const getColumnByIndex = useCallback((index) => columns[index], [
     columns,
   ]);
 
-  const handleDragEnd = React.useCallback(
+  const handleDragEnd = useCallback(
     (result) => {
       const { source, destination, type } = result;
 

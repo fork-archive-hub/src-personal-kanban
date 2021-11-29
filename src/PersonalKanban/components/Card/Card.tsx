@@ -1,12 +1,12 @@
-import React from "react";
+import IconButton from "PersonalKanban/components/IconButton";
+import { Record } from "PersonalKanban/types";
 import clsx from "clsx";
+import React from "react";
+
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { Record } from "PersonalKanban/types";
-import IconButton from "PersonalKanban/components/IconButton";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -34,6 +34,9 @@ type CardProps = {
   onEdit?: any;
 };
 
+/**
+ * 看板中面板上的一个卡片
+ */
 const Card: React.FC<CardProps> = (props) => {
   const {
     record,
