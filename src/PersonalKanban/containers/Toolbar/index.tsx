@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import ColumnForm from 'PersonalKanban/components/ColumnForm';
+import IconButton from 'PersonalKanban/components/IconButton';
+import { useTheme } from 'PersonalKanban/providers/ThemeProvider';
+import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
+import { Column } from 'PersonalKanban/types';
+import React, { useState } from 'react';
 
-import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import Divider from "@material-ui/core/Divider";
-import MuiToolbar from "@material-ui/core/Toolbar";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Grid from "@material-ui/core/Grid";
-import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { makeStyles, useTheme as useMuiTheme } from "@material-ui/core/styles";
-
-import { useTranslation } from "PersonalKanban/providers/TranslationProvider";
-import ColumnForm from "PersonalKanban/components/ColumnForm";
-import IconButton from "PersonalKanban/components/IconButton";
-import { Column } from "PersonalKanban/types";
-import { useTheme } from "PersonalKanban/providers/ThemeProvider";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogContent,
+  Divider,
+  Grid,
+  Link,
+  IconButton as MIconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Popover,
+  Typography,
+} from '@material-ui/core';
+import MuiToolbar from '@material-ui/core/Toolbar';
+import { makeStyles, useTheme as useMuiTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 type AddColumnButtonProps = {
   onSubmit: any;
@@ -46,13 +51,13 @@ const AddColumnButton: React.FC<AddColumnButtonProps> = (props) => {
       onSubmit({ column });
       handleCloseDialog();
     },
-    [onSubmit, handleCloseDialog]
+    [onSubmit, handleCloseDialog],
   );
 
   return (
-    <Box display="block">
-      <IconButton icon="add" color="primary" onClick={handleOpenDialog}>
-        {t("addColumn")}
+    <Box display='block'>
+      <IconButton icon='add' color='primary' onClick={handleOpenDialog}>
+        {t('addColumn')}
       </IconButton>
       <Dialog onClose={handleCloseDialog} open={open}>
         <DialogContent>
@@ -88,14 +93,14 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
       onClear({ e });
       handleCloseDialog();
     },
-    [onClear, handleCloseDialog]
+    [onClear, handleCloseDialog],
   );
 
   return (
-    <Box display="flex">
+    <Box display='flex'>
       <IconButton
-        icon="delete"
-        color="primary"
+        icon='delete'
+        color='primary'
         disabled={disabled}
         onClick={handleOpenDialog}
       ></IconButton>
@@ -103,23 +108,23 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography gutterBottom variant="h6">
-                {t("clearBoard")}
+              <Typography gutterBottom variant='h6'>
+                {t('clearBoard')}
               </Typography>
               <Divider />
             </Grid>
             <Grid item xs={12}>
               <Typography gutterBottom>
-                {t("clearBoardConfirmation")}
+                {t('clearBoardConfirmation')}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="outlined" onClick={handleCloseDialog}>
-                {t("cancel")}
+              <Button variant='outlined' onClick={handleCloseDialog}>
+                {t('cancel')}
               </Button>
               &nbsp;
-              <Button color="primary" variant="contained" onClick={handleClear}>
-                {t("clear")}
+              <Button color='primary' variant='contained' onClick={handleClear}>
+                {t('clear')}
               </Button>
             </Grid>
           </Grid>
@@ -150,29 +155,29 @@ const LanguageButton: React.FC<LanguageButtonProps> = (props) => {
   };
 
   return (
-    <Box display="block">
+    <Box display='block'>
       <IconButton
-        icon={"language"}
-        aria-controls="language-menu"
-        aria-haspopup="true"
-        color="inherit"
+        icon={'language'}
+        aria-controls='language-menu'
+        aria-haspopup='true'
+        color='inherit'
         onClick={handleClick}
       />
       <Menu
-        id="language-menu"
+        id='language-menu'
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleChangeLanguage("en")}>English</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("fr")}>Français</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("es")}>Español</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("ru")}>Pусский</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("de")}>Deutsch</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("in")}>हिंदी</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("jp")}>日本語</MenuItem>
-        <MenuItem onClick={handleChangeLanguage("cn")}>中文</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('en')}>English</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('fr')}>Français</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('es')}>Español</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('ru')}>Pусский</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('de')}>Deutsch</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('in')}>हिंदी</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('jp')}>日本語</MenuItem>
+        <MenuItem onClick={handleChangeLanguage('cn')}>中文</MenuItem>
       </Menu>
     </Box>
   );
@@ -183,8 +188,8 @@ const DarkThemeButton: React.FC<{}> = () => {
 
   return (
     <IconButton
-      color="inherit"
-      icon={darkTheme ? "invertColors" : "invertColorsOff"}
+      color='inherit'
+      icon={darkTheme ? 'invertColors' : 'invertColorsOff'}
       onClick={handleToggleDarkTheme}
     />
   );
@@ -193,11 +198,11 @@ const DarkThemeButton: React.FC<{}> = () => {
 const GitHubButton: React.FC<{}> = () => {
   return (
     <IconButton
-      color="inherit"
-      icon="gitHub"
+      color='inherit'
+      icon='gitHub'
       component={Link}
-      href="https://github.com/nishantpainter/personal-kanban"
-      target="_blank"
+      href='https://github.com/nishantpainter/personal-kanban'
+      target='_blank'
     />
   );
 };
@@ -211,7 +216,7 @@ const useInfoButtonStyles = makeStyles((theme) => ({
     padding: theme.spacing(),
   },
   buttonGridItem: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 }));
 
@@ -229,57 +234,57 @@ const InfoButton: React.FC<{}> = () => {
 
   const open = Boolean(anchorEl);
 
-  const id = open ? "info-popover" : undefined;
+  const id = open ? 'info-popover' : undefined;
 
   return (
     <>
-      <IconButton icon="info" color="primary" onClick={openInfo} />
+      <IconButton icon='info' color='primary' onClick={openInfo} />
       <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={closeInfo}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
         PaperProps={{ className: classes.paper }}
       >
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Box marginTop={2} textAlign="center">
+            <Box marginTop={2} textAlign='center'>
               <img
-                src="https://stacks.rocks/site/templates/assets/images/stacks-logo-dark.svg"
-                height="30"
-                alt="Stacks"
+                src='https://stacks.rocks/site/templates/assets/images/stacks-logo-dark.svg'
+                height='30'
+                alt='Stacks'
               />
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body2">
-              <Link href="https://stacks.rocks/" target="_blank">
+            <Typography variant='body2'>
+              <Link href='https://stacks.rocks/' target='_blank'>
                 Stacks
               </Link>
               &nbsp;is a cross-platform all-in-one project management tool that
               works on top of a local folder.
               <br />
               <br />
-              Get 20% off on your order by applying coupon{" "}
+              Get 20% off on your order by applying coupon{' '}
               <strong>NISHANT20</strong>
               <br />
               <br />
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.buttonGridItem}>
-            <Button variant="contained" color="primary">
+            <Button variant='contained' color='primary'>
               <Link
-                color="inherit"
-                href="https://stacks.rocks/store/?coupon=NISHANT20"
-                target="_blank"
+                color='inherit'
+                href='https://stacks.rocks/store/?coupon=NISHANT20'
+                target='_blank'
               >
                 Order Now
               </Link>
@@ -311,28 +316,45 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
 
   const muiTheme = useMuiTheme();
 
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   return (
-    <AppBar color="default" elevation={6} className={classes.paper}>
+    <AppBar color='default' elevation={0} className={classes.paper}>
       <MuiToolbar>
-        <Box display="flex" alignItems="center">
-          <IconButton
-            icon="personalKanban"
-            color="primary"
-            size="small"
-            iconProps={{ fontSize: "large" }}
+        <Box display='flex' alignItems='center'>
+          {/* <IconButton
+            icon='personalKanban'
+            color='primary'
+            size='small'
+            iconProps={{ fontSize: 'large' }}
             disableRipple
             disableTouchRipple
             disableFocusRipple
-          />
+          /> */}
+          <MIconButton
+            size='medium'
+            color='primary'
+            aria-label='taskBoardLogoIcon'
+          >
+            <DashboardIcon />
+          </MIconButton>
           &nbsp;
-          <Typography variant={isMobile ? "body1" : "h6"}>
-            <b>{t("personalKanban")}</b>
+          <Typography variant={isMobile ? 'body1' : 'h6'}>
+            {/* <b>{t("personalKanban")}</b> */}
+            看板名称1
           </Typography>
+          {/* <Button
+            // variant="contained"
+            color='primary'
+            size='large'
+            // className={classes.button}
+            startIcon={<DashboardIcon />}
+          >
+            看板名称1
+          </Button> */}
         </Box>
-        <Box display="flex" flexGrow={1} />
-        <Box display="flex">
+        <Box display='flex' flexGrow={1} />
+        <Box display='flex'>
           <AddColumnButton onSubmit={onNewColumn} />
           &nbsp;
           <ClearBoardButton
@@ -340,10 +362,10 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
             onClear={onClearBoard}
           />
           &nbsp;
-          <InfoButton />
+          {/* <InfoButton /> */}
           &nbsp;
-          <DarkThemeButton /> &nbsp;
-          <LanguageButton /> &nbsp;
+          {/* <DarkThemeButton /> &nbsp; */}
+          {/* <LanguageButton /> &nbsp; */}
           <GitHubButton />
         </Box>
       </MuiToolbar>

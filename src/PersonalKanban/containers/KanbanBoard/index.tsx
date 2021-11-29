@@ -7,7 +7,7 @@ import {
   getInitialState,
   reorder,
   reorderCards,
-} from 'PersonalKanban/services/Utils';
+} from 'PersonalKanban/services/utils';
 import { Column, Record } from 'PersonalKanban/types';
 import React, {
   useCallback,

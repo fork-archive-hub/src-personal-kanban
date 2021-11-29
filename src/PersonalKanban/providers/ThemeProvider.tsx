@@ -1,26 +1,22 @@
-import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import StorageService from 'PersonalKanban/services/StorageService';
+import React from 'react';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
 import {
-  MuiThemeProvider,
-  createMuiTheme,
-  Theme,
-} from "@material-ui/core/styles";
-import {
-  purple,
-  indigo,
   blue,
-  green,
-  yellow,
-  orange,
-  red,
-  brown,
   blueGrey,
+  brown,
+  green,
+  indigo,
   lightGreen,
-} from "@material-ui/core/colors";
+  orange,
+  purple,
+  red,
+  yellow,
+} from '@material-ui/core/colors';
+import { MuiThemeProvider, Theme, createTheme } from '@material-ui/core/styles';
 
-import StorageService from "PersonalKanban/services/StorageService";
-
-declare module "@material-ui/core/styles/createMuiTheme" {
+declare module '@material-ui/core/styles/createTheme' {
   interface Theme {
     custom?: any;
   }
@@ -35,13 +31,13 @@ type ThemeProviderProps = {
   darkTheme?: boolean;
 };
 
-const pastelCode = 200;
+const pastelCode = 50;
 
 const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
   const { children } = props;
 
   const [darkTheme, setDarkTheme] = React.useState(
-    props.darkTheme || StorageService.getDarkMode()
+    props.darkTheme || StorageService.getDarkMode(),
   );
 
   const handleToggleDarkTheme = React.useCallback(() => {
@@ -51,46 +47,46 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
     });
   }, []);
 
-  const theme: Theme = createMuiTheme({
+  const theme: Theme = createTheme({
     palette: {
-      primary: darkTheme ? lightGreen : brown,
-      secondary: blueGrey,
-      type: darkTheme ? "dark" : "light",
+      // primary: darkTheme ? lightGreen : brown,
+      // secondary: blueGrey,
+      type: darkTheme ? 'dark' : 'light',
     },
     overrides: {
       MuiPaper: {
         root: {
-          cursor: "pointer",
+          cursor: 'pointer',
           padding: 8,
         },
       },
       MuiDivider: {
         root: {
-          backgroundColor: "rgba(255,255,255,0.5)",
+          backgroundColor: 'rgba(255,255,255,0.5)',
         },
       },
     },
-    typography: {
-      fontFamily: "'Nunito', sans-serif",
-      fontWeightLight: 300,
-      fontWeightMedium: 400,
-      fontWeightRegular: 400,
-      fontWeightBold: 700,
-    },
+    // typography: {
+    //   fontFamily: "'Nunito', sans-serif",
+    //   fontWeightLight: 300,
+    //   fontWeightMedium: 400,
+    //   fontWeightRegular: 400,
+    //   fontWeightBold: 700,
+    // },
     props: {
       MuiDivider: {
         light: darkTheme ? false : true,
       },
       MuiTextField: {
-        variant: "outlined",
-        margin: "dense",
+        variant: 'outlined',
+        margin: 'dense',
         fullWidth: true,
       },
       MuiButton: {
-        size: "small",
+        size: 'small',
       },
       MuiRadio: {
-        size: "small",
+        size: 'small',
       },
     },
     custom: {
@@ -113,7 +109,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
       darkTheme,
       handleToggleDarkTheme,
     }),
-    [darkTheme, handleToggleDarkTheme]
+    [darkTheme, handleToggleDarkTheme],
   );
 
   return (

@@ -26,9 +26,6 @@ node_modules
 dist
 es
 docs/build
-react-table.js
-react-table.min.js
-react-table.css
 .history
 package-lock.json
 coverage

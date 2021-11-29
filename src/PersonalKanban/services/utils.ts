@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
-
 import { Column } from "PersonalKanban/types";
+import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 
 export const getId = (): string => {
   return uuidv4();
@@ -64,11 +63,11 @@ export const getInitialState = () => {
     {
       id: getId(),
       title: "Todo",
-      color: "Orange",
+      // color: "Orange",
       records: [
         {
           id: getId(),
-          color: "Yellow",
+          // color: "Yellow",
           title: "Clear Board",
           description:
             "Make a fresh start by erasing this board. Click delete button on main toolbar.",
@@ -80,11 +79,11 @@ export const getInitialState = () => {
     {
       id: getId(),
       title: "In-Progress",
-      color: "Red",
+      // color: "Red",
       records: [
         {
           id: getId(),
-          color: "Purple",
+          // color: "Purple",
           title: "Give ratings",
           description: "Rate and Star Personal Kanban",
           createdAt: getCreatedAt(),
@@ -95,11 +94,11 @@ export const getInitialState = () => {
     {
       id: getId(),
       title: "Completed",
-      color: "Green",
+      // color: "Green",
       records: [
         {
           id: getId(),
-          color: "Indigo",
+          // color: "Indigo",
           title: "Be Awesome",
           description: "Rock the world with your creativity !",
           createdAt: getCreatedAt(),

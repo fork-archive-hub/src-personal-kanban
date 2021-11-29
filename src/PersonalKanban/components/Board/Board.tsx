@@ -1,23 +1,30 @@
-import React from "react";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import Column from 'PersonalKanban/components/Column';
+import { COLUMN_WIDTH } from 'PersonalKanban/constants';
+import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
+import { Column as ColumnType } from 'PersonalKanban/types';
+import React from 'react';
 
-import Column from "PersonalKanban/components/Column";
-import { useTranslation } from "PersonalKanban/providers/TranslationProvider";
-import { Column as ColumnType } from "PersonalKanban/types";
-import { COLUMN_WIDTH } from "PersonalKanban/constants";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 
 const useBoardStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
-    display: "inline-flex",
-    width: "fit-content",
+    height: '100vh',
+    display: 'inline-flex',
+    width: 'fit-content',
   },
   column: {
     width: COLUMN_WIDTH,
     margin: theme.spacing(),
-    height: "fit-content",
+    height: 'fit-content',
   },
 }));
 
@@ -71,11 +78,24 @@ const Board: React.FC<BoardProps> = (props) => {
           />
         ))
       ) : (
-        <Box display="flex" justifyContent="center">
-          <Typography>{t("noColumn")}</Typography>
+        <Box display='flex' justifyContent='center'>
+          <Typography>{t('noColumn')}</Typography>
         </Box>
       )}
       {placeholder}
+      <Button
+        variant='outlined'
+        color='primary'
+        size='large'
+        // className={classes.button}
+        startIcon={<AddIcon />}
+        style={{
+          width: 240,
+          height: 48,
+        }}
+      >
+        添加新分组
+      </Button>
     </div>
   );
 };
