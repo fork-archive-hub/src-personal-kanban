@@ -17,9 +17,10 @@ import AddIcon from '@material-ui/icons/Add';
 
 const useBoardStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
     display: 'inline-flex',
     width: 'fit-content',
+    height: '100vh',
+    backgroundColor: '#eef3fc',
   },
   column: {
     width: COLUMN_WIDTH,
@@ -41,6 +42,7 @@ type BoardProps = {
   onAllRecordDelete?: any;
 };
 
+/** 高度100vh的仪表板 */
 const Board: React.FC<BoardProps> = (props) => {
   const {
     columns,

@@ -6,22 +6,25 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    height: 150,
-  },
-  description: {
-    maxHeight: '5rem',
-    minHeight: '5rem',
-    display: '-webkit-box',
-    '-webkit-line-clamp': 4,
-    '-webkit-box-orient': 'vertical',
-    overflow: 'hidden',
-    whiteSpace: 'pre-line',
-  },
-}));
+const useStyles = makeStyles<Theme>((theme) =>
+  createStyles({
+    paper: {
+      height: 150,
+    },
+    description: {
+      color: theme.palette.text.secondary,
+      maxHeight: '5rem',
+      minHeight: '5rem',
+      // display: '-webkit-box',
+      // '-webkit-line-clamp': 4,
+      // '-webkit-box-orient': 'vertical',
+      overflow: 'hidden',
+      whiteSpace: 'pre-line',
+    },
+  }),
+);
 
 type CardProps = {
   record: Record;
@@ -62,6 +65,7 @@ const Card: React.FC<CardProps> = (props) => {
 
   return (
     <Paper
+      elevation={0}
       className={clsx(classes.paper, className)}
       style={style}
       ref={innerRef}
@@ -69,7 +73,7 @@ const Card: React.FC<CardProps> = (props) => {
     >
       <Box display='flex' alignItems='center' justifyContent='space-between'>
         <Typography title={title} gutterBottom noWrap>
-          <b>{title}</b>
+          {title}
         </Typography>
         <Box display='flex' alignItems='center'>
           {/* {showEditAction && <IconButton icon="edit" onClick={handleEdit} />}
@@ -79,9 +83,9 @@ const Card: React.FC<CardProps> = (props) => {
         </Box>
       </Box>
       <Typography
+        variant='subtitle1'
         title={description}
         className={classes.description}
-        variant='body2'
         gutterBottom
       >
         {description}

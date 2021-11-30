@@ -235,9 +235,11 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
 };
 
 const useColumnStyles = makeStyles(() => ({
-  paper: (props: any) => ({
-    backgroundColor: props.backgroundColor,
-  }),
+  paper: (props: any) => {
+    // console.log(';;col-props ', props);
+    const bgColor = props.backgroundColor || 'transparent';
+    return { backgroundColor: bgColor };
+  },
 }));
 
 type ColumnProps = {
@@ -261,7 +263,7 @@ type ColumnProps = {
 };
 
 /** 看板的一列，是一个面板，上面可以放置小卡片 */
-const Column: React.FC<ColumnProps> = (props) => {
+export function Column(props: ColumnProps) {
   const {
     column,
     className,
@@ -493,7 +495,7 @@ const Column: React.FC<ColumnProps> = (props) => {
 
   return (
     <Paper
-      elevation={4}
+      elevation={0}
       className={clsx(className, classes.paper)}
       ref={innerRef}
       {...rest}
@@ -527,6 +529,6 @@ const Column: React.FC<ColumnProps> = (props) => {
       </Dialog>
     </Paper>
   );
-};
+}
 
 export default Column;
