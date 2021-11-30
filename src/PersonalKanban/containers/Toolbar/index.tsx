@@ -2,7 +2,6 @@ import ColumnForm from 'PersonalKanban/components/ColumnForm';
 import IconButton from 'PersonalKanban/components/IconButton';
 import { useTheme } from 'PersonalKanban/providers/ThemeProvider';
 import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
-import { Column } from 'PersonalKanban/types';
 import React, { useState } from 'react';
 
 import {
@@ -26,6 +25,8 @@ import MuiToolbar from '@material-ui/core/Toolbar';
 import { makeStyles, useTheme as useMuiTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+
+import type { Column } from '../../types';
 
 type AddColumnButtonProps = {
   onSubmit: any;
@@ -295,9 +296,11 @@ const InfoButton: React.FC<{}> = () => {
     </>
   );
 };
-const useToolbarStyles = makeStyles(() => ({
+const useToolbarStyles = makeStyles((theme) => ({
   paper: {
     padding: 0,
+    backgroundColor: '#fff',
+    color: theme.palette.text.primary,
   },
 }));
 
@@ -319,18 +322,9 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
 
   return (
-    <AppBar color='default' elevation={0} className={classes.paper}>
+    <AppBar elevation={0} className={classes.paper}>
       <MuiToolbar>
         <Box display='flex' alignItems='center'>
-          {/* <IconButton
-            icon='personalKanban'
-            color='primary'
-            size='small'
-            iconProps={{ fontSize: 'large' }}
-            disableRipple
-            disableTouchRipple
-            disableFocusRipple
-          /> */}
           <MIconButton
             size='medium'
             color='primary'
@@ -340,18 +334,8 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
           </MIconButton>
           &nbsp;
           <Typography variant={isMobile ? 'body1' : 'h6'}>
-            {/* <b>{t("personalKanban")}</b> */}
-            看板名称1
+            示例看板 - 任务管理
           </Typography>
-          {/* <Button
-            // variant="contained"
-            color='primary'
-            size='large'
-            // className={classes.button}
-            startIcon={<DashboardIcon />}
-          >
-            看板名称1
-          </Button> */}
         </Box>
         <Box display='flex' flexGrow={1} />
         <Box display='flex'>

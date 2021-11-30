@@ -1,6 +1,6 @@
-import Board from "PersonalKanban/components/Board";
-import KanbanColumn from "PersonalKanban/components/KanbanColumn";
-import { Column } from "PersonalKanban/types";
+import Board from 'PersonalKanban/components/Board';
+import KanbanColumn from 'PersonalKanban/components/KanbanColumn';
+import { Column } from 'PersonalKanban/types';
 import React, {
   useCallback,
   useEffect,
@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 type KanbanBoardProps = {
   columns: Column[];
@@ -21,6 +21,8 @@ type KanbanBoardProps = {
   onRecordDelete?: any;
   onAllRecordDelete?: any;
   ColumnComponent?: any;
+  handleOpenAddColumnDialog?: Function;
+
 };
 
 const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
@@ -35,16 +37,15 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
     onRecordDelete,
     onAllRecordDelete,
     ColumnComponent = KanbanColumn,
+    handleOpenAddColumnDialog
   } = props;
 
   const getColumnById = useCallback(
     (columnId) => columns.find((column) => column.id === columnId),
-    [columns]
+    [columns],
   );
 
-  const getColumnByIndex = useCallback((index) => columns[index], [
-    columns,
-  ]);
+  const getColumnByIndex = useCallback((index) => columns[index], [columns]);
 
   const handleDragEnd = useCallback(
     (result) => {
@@ -63,7 +64,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
         return;
       }
 
-      if (type === "COLUMN") {
+      if (type === 'COLUMN') {
         onColumnMove({
           column: getColumnByIndex(source.index),
           index: destination.index,
@@ -80,12 +81,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
         index: destination.index,
       });
     },
-    [onColumnMove, onCardMove, getColumnByIndex, getColumnById]
+    [onColumnMove, onCardMove, getColumnByIndex, getColumnById],
   );
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="BOARD" type="COLUMN" direction="horizontal">
+      <Droppable droppableId='BOARD' type='COLUMN' direction='horizontal'>
         {(provided) => (
           <>
             <Board
@@ -96,6 +97,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
               placeholder={provided.placeholder}
               onColumnEdit={onColumnEdit}
               onColumnDelete={onColumnDelete}
+              handleOpenAddColumnDialog={handleOpenAddColumnDialog}
               onAddRecord={onAddRecord}
               onRecordEdit={onRecordEdit}
               onRecordDelete={onRecordDelete}

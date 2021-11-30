@@ -20,6 +20,8 @@ import React, {
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 
+import AddColumnDialog from './AddColumnDialog';
+
 const useKanbanBoardStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }));
@@ -141,6 +143,7 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
         const columns = cloneColumns(_columns);
 
         columns[columnIndex].records = [
+          ...columns[columnIndex].records,
           {
             id: getId(),
             title: record.title,
@@ -148,7 +151,6 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
             color: record.color,
             createdAt: getCreatedAt(),
           },
-          ...columns[columnIndex].records,
         ];
         return columns;
       });
@@ -197,6 +199,14 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
     [cloneColumns, getColumnIndex],
   );
 
+  const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
+  const handleOpenAddColumnDialog = useCallback(() => {
+    setIsAddColumnDialogOpen(true);
+  }, []);
+  const handleCloseAddColumnDialog = useCallback(() => {
+    setIsAddColumnDialogOpen(false);
+  }, []);
+
   useEffect(() => {
     StorageService.setColumns(columns);
   }, [columns]);
@@ -215,6 +225,7 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
           onColumnMove={handleColumnMove}
           onColumnEdit={handleColumnEdit}
           onColumnDelete={handleColumnDelete}
+          handleOpenAddColumnDialog={handleOpenAddColumnDialog}
           onCardMove={handleCardMove}
           onAddRecord={handleAddRecord}
           onRecordEdit={handleRecordEdit}
@@ -222,6 +233,11 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
           onAllRecordDelete={handleAllRecordDelete}
         />
       </Box>
+      <AddColumnDialog
+        open={isAddColumnDialogOpen}
+        onClose={handleCloseAddColumnDialog}
+        onSubmit={handleAddColumn}
+      />
     </>
   );
 };

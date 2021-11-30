@@ -34,6 +34,9 @@ import AddIcon from '@material-ui/icons/Add';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useColumnHeaderStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: '#fff',
+  },
   divider: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(1),
@@ -63,13 +66,19 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
   return (
     <>
       <Box
+        bgcolor='#fff'
         display='flex'
         alignItems='center'
         justifyContent='space-between'
+        padding='0 16px'
         marginBottom={Boolean(description) ? 0.5 : 0}
       >
-        <Typography variant='h6' title={title} noWrap>
-          <b>{title}</b>
+        <Typography
+          // variant='h6'
+          title={title}
+          noWrap
+        >
+          {title}
         </Typography>
         <Box display='flex' alignItems='center'>
           {/* {showEditAction && <IconButton icon='edit' onClick={onEdit} />}
@@ -81,10 +90,9 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
           </MIconButton>
         </Box>
       </Box>
-      <Typography title={description} noWrap gutterBottom>
-        {description}
-      </Typography>
-
+      {/* <Typography title={description} noWrap gutterBottom>
+            {description}
+        </Typography> */}
       {/* <Divider className={classes.divider} /> */}
     </>
   );
@@ -200,35 +208,39 @@ const useColumnFooterStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(0.5),
   },
+  addCardButton: {
+    width: 260,
+    height: 36,
+    color: theme.palette.text.secondary,
+    backgroundColor: '#fff',
+    border: 'none',
+  },
 }));
 
 type ColumnFooterProps = {
   content?: string;
+  handleOpenAddRecordDialog?: Function;
 };
 
 export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
-  const { content } = props;
+  const { content, handleOpenAddRecordDialog } = props;
 
   const classes = useColumnFooterStyles();
   return (
     <>
-      <Divider className={classes.divider} />
+      {/* <Divider className={classes.divider} /> */}
       <Typography variant='caption' component='p' title={content} noWrap>
         {/* {content} */}
       </Typography>
 
       <Button
+        onClick={handleOpenAddRecordDialog as any}
         variant='outlined'
         // color='secondary'
-        // size='large'
-        // className={classes.button}
+        className={classes.addCardButton}
         startIcon={<AddIcon />}
-        style={{
-          width: 200,
-          height: 36,
-        }}
       >
-        {/* 添加新分组 */}
+        {/* 添加新任务卡片 */}
       </Button>
     </>
   );
@@ -521,7 +533,10 @@ export function Column(props: ColumnProps) {
         onRecordEdit={handleOpenEditRecordDialog}
         onRecordDelete={handleOpenDeleteRecordDialog}
       />
-      <ColumnFooterComponent content={caption} />
+      <ColumnFooterComponent
+        content={caption}
+        handleOpenAddRecordDialog={handleOpenAddRecordDialog}
+      />
       <Dialog open={dialog.open} onClose={handleCloseDialog}>
         <DialogTitle>{dialog.title}</DialogTitle>
         <DialogContent>{dialog.content}</DialogContent>

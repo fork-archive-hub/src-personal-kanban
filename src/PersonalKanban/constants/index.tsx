@@ -1,1 +1,1 @@
-export const COLUMN_WIDTH = 250;
+export const COLUMN_WIDTH = 280;

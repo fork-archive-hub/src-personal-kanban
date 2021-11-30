@@ -11,7 +11,9 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     paper: {
-      height: 150,
+      minHeight: 150,
+      maxHeight: 480,
+      padding: '16px',
     },
     description: {
       color: theme.palette.text.secondary,
@@ -69,6 +71,7 @@ const Card: React.FC<CardProps> = (props) => {
       className={clsx(classes.paper, className)}
       style={style}
       ref={innerRef}
+      onClick={handleEdit}
       {...rest}
     >
       <Box display='flex' alignItems='center' justifyContent='space-between'>
@@ -95,11 +98,6 @@ const Card: React.FC<CardProps> = (props) => {
       </Typography>
     </Paper>
   );
-};
-
-Card.defaultProps = {
-  showDeleteAction: true,
-  showEditAction: true,
 };
 
 export default Card;
