@@ -110,22 +110,26 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography gutterBottom variant='h6'>
-                {t('clearBoard')}
+                {/* {t('clearBoard')} */}
+                删除所有分组和卡片
               </Typography>
               <Divider />
             </Grid>
             <Grid item xs={12}>
               <Typography gutterBottom>
-                {t('clearBoardConfirmation')}
+                {/* {t('clearBoardConfirmation')} */}
+                是否要删除所有分组和所有卡片？
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <Button variant='outlined' onClick={handleCloseDialog}>
-                {t('cancel')}
+                {/* {t('cancel')} */}
+                取消
               </Button>
-              &nbsp;
+              &emsp;
               <Button color='primary' variant='contained' onClick={handleClear}>
-                {t('clear')}
+                {/* {t('clear')} */}
+                确认删除
               </Button>
             </Grid>
           </Grid>
@@ -340,17 +344,17 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
         <Box display='flex' flexGrow={1} />
         <Box display='flex'>
           <AddColumnButton onSubmit={onNewColumn} />
-          &nbsp;
+          &emsp;
           <ClearBoardButton
             disabled={clearButtonDisabled}
             onClear={onClearBoard}
           />
-          &nbsp;
+          &emsp;
           {/* <InfoButton /> */}
-          &nbsp;
+          {/* &nbsp; */}
           {/* <DarkThemeButton /> &nbsp; */}
           {/* <LanguageButton /> &nbsp; */}
-          <GitHubButton />
+          {/* <GitHubButton /> */}
         </Box>
       </MuiToolbar>
     </AppBar>

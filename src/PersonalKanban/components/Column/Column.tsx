@@ -71,7 +71,9 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
         alignItems='center'
         justifyContent='space-between'
         padding='0 16px'
-        marginBottom={Boolean(description) ? 0.5 : 0}
+        // marginBottom={Boolean(description) ? 0.5 : 0}
+        // marginBottom={1.5}
+        marginBottom='12px'
       >
         <Typography
           // variant='h6'
@@ -155,7 +157,8 @@ ColumnAction.defaultProps = {
 
 const useColumnCardListStyles = makeStyles((theme) => ({
   card: {
-    marginBottom: theme.spacing(),
+    // marginBottom: theme.spacing(2),
+    marginBottom: 12,
   },
 }));
 
@@ -183,22 +186,21 @@ export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
 
   return (
     <div ref={innerRef}>
-      {records && records.length ? (
-        records.map((record: Record, index) => (
-          <CardComponent
-            key={record.id}
-            record={record}
-            className={classes.card}
-            index={index}
-            onEdit={onRecordEdit}
-            onDelete={onRecordDelete}
-            showEditAction={false}
-            showDeleteAction={false}
-          />
-        ))
-      ) : (
-        <Typography>{t('noRecord')}</Typography>
-      )}
+      {records && records.length
+        ? records.map((record: Record, index) => (
+            <CardComponent
+              key={record.id}
+              record={record}
+              className={classes.card}
+              index={index}
+              onEdit={onRecordEdit}
+              onDelete={onRecordDelete}
+              showEditAction={false}
+              showDeleteAction={false}
+            />
+          ))
+        : // <Typography>{t('noRecord')}</Typography>
+          null}
     </div>
   );
 };
@@ -209,7 +211,7 @@ const useColumnFooterStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0.5),
   },
   addCardButton: {
-    width: 260,
+    width: 264,
     height: 36,
     color: theme.palette.text.secondary,
     backgroundColor: '#fff',
@@ -236,6 +238,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
       <Button
         onClick={handleOpenAddRecordDialog as any}
         variant='outlined'
+        size='large'
         // color='secondary'
         className={classes.addCardButton}
         startIcon={<AddIcon />}

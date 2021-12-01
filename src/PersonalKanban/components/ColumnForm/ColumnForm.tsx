@@ -1,20 +1,20 @@
-import React from "react";
-import { useFormik } from "formik";
-import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from 'PersonalKanban/components/Radio';
+import { ColumnColor } from 'PersonalKanban/enums/index';
+import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
+import { Column } from 'PersonalKanban/types';
+import { useFormik } from 'formik';
+import React from 'react';
 
-import { Column } from "PersonalKanban/types";
-import { ColumnColor } from "PersonalKanban/enums/index";
-import Radio from "PersonalKanban/components/Radio";
-import { useTranslation } from "PersonalKanban/providers/TranslationProvider";
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 type ColumnFormProps = {
   column?: Partial<Column>;
@@ -30,7 +30,8 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
   const {
     column,
     disabled,
-    formTitle = t("addColumn"),
+    // formTitle = t("addColumn"),
+    formTitle = '添加分组 (任务清单)',
     onSubmit,
     onCancel,
   } = props;
@@ -38,13 +39,13 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: Object.assign(
       {
-        title: "",
-        description: "",
-        color: "",
+        title: '',
+        description: '',
+        color: '',
         wipEnabled: false,
         wipLimit: 0,
       },
-      column
+      column,
     ),
     onSubmit: (values) => {
       onSubmit && onSubmit(values);
@@ -52,11 +53,11 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
     validate: (values) => {
       const errors: any = {};
       if (!values.title) {
-        errors.title = t("titleRequired");
+        errors.title = t('titleRequired');
       }
 
       if (values.wipEnabled && !values.wipLimit) {
-        errors.wipLimit = t("limitRequired");
+        errors.wipLimit = t('limitRequired');
       }
 
       return errors;
@@ -74,22 +75,22 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
 
       handleChange(e);
     },
-    [handleChange]
+    [handleChange],
   );
 
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Typography gutterBottom variant="h6">
+          <Typography gutterBottom variant='h6'>
             {formTitle}
           </Typography>
           <Divider />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            name="title"
-            label={t("title")}
+            name='title'
+            label={t('title')}
             value={values.title}
             error={Boolean(errors.title)}
             helperText={errors.title}
@@ -101,8 +102,8 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
           <TextField
             multiline
             rows={3}
-            name="description"
-            label={t("description")}
+            name='description'
+            label={t('description')}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
@@ -116,16 +117,16 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
               <Checkbox
                 checked={values.wipEnabled}
                 onChange={handleChange}
-                name="wipEnabled"
+                name='wipEnabled'
               />
             }
-            label={t("wipLimitEnabled")}
+            label={t('wipLimitEnabled')}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            name="wipLimit"
-            label={t("wipLimit")}
+            name='wipLimit'
+            label={t('wipLimit')}
             value={values.wipLimit}
             error={Boolean(errors.wipLimit)}
             helperText={errors.wipLimit}
@@ -135,12 +136,12 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
         </Grid>
 
         <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">{t("background")}</FormLabel>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>{t('background')}</FormLabel>
             <RadioGroup
               row
-              aria-label="background"
-              name="color"
+              aria-label='background'
+              name='color'
               value={values.color}
               onChange={handleChange}
             >
@@ -158,17 +159,17 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="outlined" disabled={disabled} onClick={onCancel}>
-            {t("cancel")}
+          <Button variant='outlined' disabled={disabled} onClick={onCancel}>
+            {t('cancel')}
           </Button>
           &nbsp;
           <Button
-            type="submit"
-            color="primary"
-            variant="contained"
+            type='submit'
+            color='primary'
+            variant='contained'
             disabled={disabled}
           >
-            {t("submit")}
+            {t('submit')}
           </Button>
         </Grid>
       </Grid>

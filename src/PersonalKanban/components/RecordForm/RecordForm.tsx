@@ -1,18 +1,18 @@
-import React from "react";
-import { useFormik } from "formik";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from 'PersonalKanban/components/Radio';
+import { RecordColor } from 'PersonalKanban/enums';
+import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
+import { Record } from 'PersonalKanban/types';
+import { useFormik } from 'formik';
+import React from 'react';
 
-import { Record } from "PersonalKanban/types";
-import { RecordColor } from "PersonalKanban/enums";
-import Radio from "PersonalKanban/components/Radio";
-import { useTranslation } from "PersonalKanban/providers/TranslationProvider";
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 type RecordFormProps = {
   record?: Record;
@@ -28,7 +28,8 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
   const {
     record,
     disabled,
-    formTitle = t("addRecord"),
+    // formTitle = t("addRecord"),
+    formTitle = '添加任务卡片',
     onSubmit,
     onCancel,
   } = props;
@@ -36,11 +37,11 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: Object.assign(
       {
-        title: "",
-        description: "",
-        color: "",
+        title: '',
+        description: '',
+        color: '',
       },
-      record
+      record,
     ),
     onSubmit: (values) => {
       onSubmit && onSubmit(values);
@@ -48,7 +49,7 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
     validate: (values) => {
       const errors: any = {};
       if (!values.title) {
-        errors.title = t("titleRequired");
+        errors.title = t('titleRequired');
       }
 
       return errors;
@@ -59,15 +60,15 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
     <form onSubmit={handleSubmit}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Typography gutterBottom variant="h6">
+          <Typography gutterBottom variant='h6'>
             {formTitle}
           </Typography>
           <Divider />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            name="title"
-            label={t("title")}
+            name='title'
+            label={t('title')}
             value={values.title}
             error={Boolean(errors.title)}
             helperText={errors.title}
@@ -79,8 +80,8 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
           <TextField
             multiline
             rows={3}
-            name="description"
-            label={t("description")}
+            name='description'
+            label={t('description')}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
@@ -89,12 +90,12 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">{t("background")}</FormLabel>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>{t('background')}</FormLabel>
             <RadioGroup
               row
-              aria-label="background"
-              name="color"
+              aria-label='background'
+              name='color'
               value={values.color}
               onChange={handleChange}
             >
@@ -112,17 +113,17 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="outlined" disabled={disabled} onClick={onCancel}>
-            {t("cancel")}
+          <Button variant='outlined' disabled={disabled} onClick={onCancel}>
+            {t('cancel')}
           </Button>
           &nbsp;
           <Button
-            type="submit"
-            color="primary"
-            variant="contained"
+            type='submit'
+            color='primary'
+            variant='contained'
             disabled={disabled}
           >
-            {t("submit")}
+            {t('submit')}
           </Button>
         </Grid>
       </Grid>

@@ -17,6 +17,16 @@ export const getCreatedAt = () => {
   return `${moment().format('DD-MM-YYYY')} ${moment().format('h:mm:ss a')}`;
 };
 
+/**
+ * 获取ISO格式的当前时间，返回值示例 2021-11-17T15:45:56
+ */
+export function getDateNowISOStrWithTimezone() {
+  //offset in milliseconds
+  const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+  const dateISOStr = new Date(Date.now() - timezoneOffset).toISOString();
+  return dateISOStr.slice(0, -5);
+}
+
 export const reorderCards = ({
   columns,
   sourceColumn,
@@ -67,11 +77,50 @@ export const getInitialState = () => {
       records: [
         {
           id: getId(),
-          // color: "Yellow",
           title: 'Clear Board',
+          // color: "Yellow",
           description:
             'Make a fresh start by erasing this board. Click delete button on main toolbar.',
+          tags: [{ tagName: 'ckeditor', bgColor: 'beige' }],
           createdAt: getCreatedAt(),
+          // 任务负责人
+          taskStatus: 'done',
+          taskMembers: [{ userId: 'id1', username: '用户名1' }],
+          taskStartTime: getDateNowISOStrWithTimezone().slice(0, 10),
+          taskDueTime: getDateNowISOStrWithTimezone().slice(0, 10),
+          taskPriority: 10,
+          subTaskList: {
+            id: getId(),
+            title: 'checklist1 子任务',
+            // color: "Red",
+            records: [
+              {
+                id: getId(),
+                // color: "Purple",
+                title: '子任务1 Give ratings',
+                createdAt: getCreatedAt(),
+              },
+              {
+                id: getId() + 'aa',
+                // color: "Purple",
+                title: '子任务2 Give ratings',
+                createdAt: getCreatedAt(),
+              },
+            ],
+            createdAt: getCreatedAt(),
+          },
+          relatedDocs: {
+            title: '相关文档',
+            docList: [
+              {
+                docTitle: '卡片详情',
+                docId: 'unique-doc-id',
+                url: '',
+              },
+            ],
+          },
+          attachments: [],
+          comments: {},
         },
       ],
       createdAt: getCreatedAt(),

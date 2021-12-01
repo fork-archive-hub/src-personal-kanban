@@ -11,7 +11,7 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     paper: {
-      minHeight: 150,
+      minHeight: 80,
       maxHeight: 480,
       padding: '16px',
     },

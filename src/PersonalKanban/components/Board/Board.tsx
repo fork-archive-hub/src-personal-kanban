@@ -24,13 +24,14 @@ const useBoardStyles = makeStyles((theme) => ({
   },
   column: {
     width: COLUMN_WIDTH,
-    margin: theme.spacing(),
     height: 'fit-content',
+    // margin: theme.spacing(),
   },
   addColButton: {
-    width: 260,
+    width: 264,
     height: 48,
-    margin: theme.spacing(2),
+    margin: theme.spacing(1),
+    // margin: '8px 16px',
     backgroundColor: '#fff',
     color: theme.palette.text.secondary,
     border: 'none',
@@ -91,7 +92,7 @@ const Board: React.FC<BoardProps> = (props) => {
         ))
       ) : (
         <Box display='flex' justifyContent='center'>
-          <Typography>{t('noColumn')}</Typography>
+          {/* <Typography>{t('noColumn')}</Typography> */}
         </Box>
       )}
       {placeholder}
