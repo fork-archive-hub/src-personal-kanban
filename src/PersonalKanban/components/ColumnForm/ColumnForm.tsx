@@ -1,6 +1,5 @@
 import Radio from 'PersonalKanban/components/Radio';
 import { ColumnColor } from 'PersonalKanban/enums/index';
-import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
 import { Column } from 'PersonalKanban/types';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -22,18 +21,17 @@ type ColumnFormProps = {
   onCancel: any;
   disabled?: boolean;
   formTitle?: string;
+  enableWipLimit?: boolean;
 };
 
-const ColumnForm: React.FC<ColumnFormProps> = (props) => {
-  const { t } = useTranslation();
-
+export function ColumnForm(props: ColumnFormProps) {
   const {
     column,
     disabled,
-    // formTitle = t("addColumn"),
     formTitle = '添加分组 (任务清单)',
     onSubmit,
     onCancel,
+    enableWipLimit = false,
   } = props;
 
   const { values, errors, handleChange, handleSubmit } = useFormik({
@@ -53,11 +51,13 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
     validate: (values) => {
       const errors: any = {};
       if (!values.title) {
-        errors.title = t('titleRequired');
+        // errors.title = t('titleRequired');
+        errors.title = '* 必填项';
       }
 
       if (values.wipEnabled && !values.wipLimit) {
-        errors.wipLimit = t('limitRequired');
+        // errors.wipLimit = t('limitRequired');
+        errors.wipLimit = '* 必填项 卡片数量上限';
       }
 
       return errors;
@@ -90,7 +90,7 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
         <Grid item xs={12}>
           <TextField
             name='title'
-            label={t('title')}
+            label={'分组名称'}
             value={values.title}
             error={Boolean(errors.title)}
             helperText={errors.title}
@@ -103,7 +103,7 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
             multiline
             rows={3}
             name='description'
-            label={t('description')}
+            label={'分组描述或任务清单描述'}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
@@ -112,32 +112,36 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={values.wipEnabled}
-                onChange={handleChange}
-                name='wipEnabled'
-              />
-            }
-            label={t('wipLimitEnabled')}
-          />
+          {enableWipLimit ? (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.wipEnabled}
+                  onChange={handleChange}
+                  name='wipEnabled'
+                />
+              }
+              label={'wipLimitEnabled'}
+            />
+          ) : null}
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            name='wipLimit'
-            label={t('wipLimit')}
-            value={values.wipLimit}
-            error={Boolean(errors.wipLimit)}
-            helperText={errors.wipLimit}
-            disabled={disabled || !values.wipEnabled}
-            onChange={handleWipLimitChange}
-          />
+          {enableWipLimit ? (
+            <TextField
+              name='wipLimit'
+              label={'wipLimit'}
+              value={values.wipLimit}
+              error={Boolean(errors.wipLimit)}
+              helperText={errors.wipLimit}
+              disabled={disabled || !values.wipEnabled}
+              onChange={handleWipLimitChange}
+            />
+          ) : null}
         </Grid>
 
         <Grid item xs={12}>
           <FormControl component='fieldset'>
-            <FormLabel component='legend'>{t('background')}</FormLabel>
+            <FormLabel component='legend'>背景色</FormLabel>
             <RadioGroup
               row
               aria-label='background'
@@ -160,21 +164,21 @@ const ColumnForm: React.FC<ColumnFormProps> = (props) => {
         </Grid>
         <Grid item xs={12}>
           <Button variant='outlined' disabled={disabled} onClick={onCancel}>
-            {t('cancel')}
+            取消
           </Button>
-          &nbsp;
+          &emsp;
           <Button
             type='submit'
             color='primary'
             variant='contained'
             disabled={disabled}
           >
-            {t('submit')}
+            添加
           </Button>
         </Grid>
       </Grid>
     </form>
   );
-};
+}
 
 export default ColumnForm;

@@ -70,14 +70,18 @@ export const reorderCards = ({
 
 export const getInitialState = () => {
   return [
+    // 这里是一个分组/面板
     {
       id: getId(),
-      title: 'Todo',
+      title: '未开始',
       // color: "Orange",
+      // records包含一个面板中的所有卡片
       records: [
+        // 这里是一个卡片
         {
           id: getId(),
-          title: 'Clear Board',
+          title:
+            '一个很长很长的标题，长到必须要换行了，甚至超过2行，显示更多行，也超过了详情弹窗中标题输入框的长度',
           // color: "Yellow",
           description:
             'Make a fresh start by erasing this board. Click delete button on main toolbar.',
@@ -88,7 +92,8 @@ export const getInitialState = () => {
           taskMembers: [{ userId: 'id1', username: '用户名1' }],
           taskStartTime: getDateNowISOStrWithTimezone().slice(0, 10),
           taskDueTime: getDateNowISOStrWithTimezone().slice(0, 10),
-          taskPriority: 10,
+          taskPriority: 11,
+          taskEmoji: '💡',
           subTaskList: {
             id: getId(),
             title: 'checklist1 子任务',
@@ -113,8 +118,13 @@ export const getInitialState = () => {
             title: '相关文档',
             docList: [
               {
-                docTitle: '卡片详情',
-                docId: 'unique-doc-id',
+                docTitle: 'ckeditor architecture core',
+                docId: 'unique-doc-id1',
+                url: '',
+              },
+              {
+                docTitle: 'ckeditor editing engine',
+                docId: 'unique-doc-id2',
                 url: '',
               },
             ],
@@ -127,7 +137,7 @@ export const getInitialState = () => {
     },
     {
       id: getId(),
-      title: 'In-Progress',
+      title: '进行中',
       // color: "Red",
       records: [
         {
@@ -156,7 +166,7 @@ export const getInitialState = () => {
     },
     {
       id: getId(),
-      title: 'Completed',
+      title: '已完成',
       // color: "Green",
       records: [
         {

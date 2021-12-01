@@ -5,6 +5,17 @@ export type Record = {
   caption?: string;
   color?: string;
   createdAt?: string;
+  tags?: any[];
+  taskStatus?: string;
+  taskMembers?: any[];
+  taskStartTime?: string;
+  taskDueTime?: string;
+  taskPriority?: number;
+  taskEmoji?: string;
+  subTaskList?: any[];
+  relatedDocs?: any[];
+  attachments?: any[];
+  comments?: any;
 };
 
 export type Column = {

@@ -2,7 +2,7 @@ import Column from 'PersonalKanban/components/Column';
 import { COLUMN_WIDTH } from 'PersonalKanban/constants';
 import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
 import { Column as ColumnType } from 'PersonalKanban/types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Box,

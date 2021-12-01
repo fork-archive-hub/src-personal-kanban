@@ -33,6 +33,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
+import { RecordDetails } from '../RecordDetails';
+
 const useColumnHeaderStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: '#fff',
@@ -70,7 +72,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
         display='flex'
         alignItems='center'
         justifyContent='space-between'
-        padding='0 16px'
+        padding='0 0 0 12px'
         // marginBottom={Boolean(description) ? 0.5 : 0}
         // marginBottom={1.5}
         marginBottom='12px'
@@ -79,6 +81,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
           // variant='h6'
           title={title}
           noWrap
+          style={{ fontWeight: 500 }}
         >
           {title}
         </Typography>
@@ -87,7 +90,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
           {showDeleteAction && (
             <IconButton icon='deleteForever' onClick={onDelete} />
           )} */}
-          <MIconButton aria-label='delete'>
+          <MIconButton aria-label='更多任务分组操作' disableRipple>
             <MoreHorizIcon />
           </MIconButton>
         </Box>
@@ -253,7 +256,19 @@ const useColumnStyles = makeStyles(() => ({
   paper: (props: any) => {
     // console.log(';;col-props ', props);
     const bgColor = props.backgroundColor || 'transparent';
-    return { backgroundColor: bgColor };
+    return {
+      backgroundColor: bgColor,
+    };
+  },
+
+  dialogPaper: {
+    maxHeight: '80vh',
+    maxWidth: '65vh',
+    // overflow: 'hidden',
+  },
+  dialogContent: {
+    overflow: 'hidden',
+    // minHeight: 860,
   },
 }));
 
@@ -437,14 +452,14 @@ export function Column(props: ColumnProps) {
   const handleOpenEditRecordDialog = useCallback(
     (record: Record) => {
       const content = (
-        <RecordForm
+        <RecordDetails
           record={record}
           onSubmit={(record: Record) => {
             handleCloseDialog();
             handleRecordEdit(record);
           }}
           onCancel={handleCloseDialog}
-        ></RecordForm>
+        ></RecordDetails>
       );
 
       handleOpenDialog({ content });
@@ -458,7 +473,7 @@ export function Column(props: ColumnProps) {
       const actions = (
         <>
           <Button variant='outlined' onClick={handleCloseDialog}>
-            {t('cancel')}
+            取消
           </Button>
           &nbsp;
           <Button
@@ -469,7 +484,7 @@ export function Column(props: ColumnProps) {
               handleRecordDelete(record);
             }}
           >
-            {t('delete')}
+            删除当前卡片
           </Button>
         </>
       );
@@ -540,9 +555,15 @@ export function Column(props: ColumnProps) {
         content={caption}
         handleOpenAddRecordDialog={handleOpenAddRecordDialog}
       />
-      <Dialog open={dialog.open} onClose={handleCloseDialog}>
-        <DialogTitle>{dialog.title}</DialogTitle>
-        <DialogContent>{dialog.content}</DialogContent>
+      <Dialog
+        open={dialog.open}
+        onClose={handleCloseDialog}
+        classes={{ paper: classes.dialogPaper }}
+      >
+        {/* <DialogTitle>{dialog.title}</DialogTitle> */}
+        <DialogContent className={classes.dialogContent}>
+          {dialog.content}
+        </DialogContent>
         <DialogActions>{dialog.actions}</DialogActions>
       </Dialog>
     </Paper>

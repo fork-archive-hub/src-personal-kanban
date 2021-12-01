@@ -1,6 +1,5 @@
 import Radio from 'PersonalKanban/components/Radio';
 import { RecordColor } from 'PersonalKanban/enums';
-import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
 import { Record } from 'PersonalKanban/types';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -22,13 +21,10 @@ type RecordFormProps = {
   formTitle?: string;
 };
 
-const RecordForm: React.FC<RecordFormProps> = (props) => {
-  const { t } = useTranslation();
-
+export function RecordForm(props: RecordFormProps) {
   const {
     record,
     disabled,
-    // formTitle = t("addRecord"),
     formTitle = '添加任务卡片',
     onSubmit,
     onCancel,
@@ -49,7 +45,7 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
     validate: (values) => {
       const errors: any = {};
       if (!values.title) {
-        errors.title = t('titleRequired');
+        errors.title = '* 必填项';
       }
 
       return errors;
@@ -68,7 +64,8 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
         <Grid item xs={12}>
           <TextField
             name='title'
-            label={t('title')}
+            // label={t('title')}
+            label={'任务名称'}
             value={values.title}
             error={Boolean(errors.title)}
             helperText={errors.title}
@@ -81,7 +78,8 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
             multiline
             rows={3}
             name='description'
-            label={t('description')}
+            // label={t('description')}
+            label={'任务描述'}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
@@ -91,7 +89,7 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
         </Grid>
         <Grid item xs={12}>
           <FormControl component='fieldset'>
-            <FormLabel component='legend'>{t('background')}</FormLabel>
+            <FormLabel component='legend'>背景色</FormLabel>
             <RadioGroup
               row
               aria-label='background'
@@ -114,21 +112,21 @@ const RecordForm: React.FC<RecordFormProps> = (props) => {
         </Grid>
         <Grid item xs={12}>
           <Button variant='outlined' disabled={disabled} onClick={onCancel}>
-            {t('cancel')}
+            取消
           </Button>
-          &nbsp;
+          &emsp;
           <Button
             type='submit'
             color='primary'
             variant='contained'
             disabled={disabled}
           >
-            {t('submit')}
+            添加
           </Button>
         </Grid>
       </Grid>
     </form>
   );
-};
+}
 
 export default RecordForm;
