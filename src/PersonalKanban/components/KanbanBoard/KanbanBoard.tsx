@@ -22,10 +22,14 @@ type KanbanBoardProps = {
   onAllRecordDelete?: any;
   ColumnComponent?: any;
   handleOpenAddColumnDialog?: Function;
-
+  forceBoardUpdate?: Function;
 };
 
-const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
+/**
+ * * 在Board组件外层加上了DragDropContext和Droppable。
+ * * 看板中每列分组组件使用的是KanbanColumn，而不是默认的Column。
+ */
+export function KanbanBoard(props: KanbanBoardProps) {
   const {
     columns,
     onCardMove,
@@ -37,7 +41,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
     onRecordDelete,
     onAllRecordDelete,
     ColumnComponent = KanbanColumn,
-    handleOpenAddColumnDialog
+    handleOpenAddColumnDialog,
+    forceBoardUpdate,
   } = props;
 
   const getColumnById = useCallback(
@@ -52,7 +57,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
       const { source, destination, type } = result;
 
       if (!destination) {
-        // Invalid Destination
         return;
       }
 
@@ -91,6 +95,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
           <>
             <Board
               innerRef={provided.innerRef}
+              // * 这里使用了自定义组件KanbanColumn，而不是Column
               ColumnComponent={ColumnComponent}
               {...provided.droppableProps}
               columns={columns}
@@ -102,12 +107,13 @@ const KanbanBoard: React.FC<KanbanBoardProps> = (props) => {
               onRecordEdit={onRecordEdit}
               onRecordDelete={onRecordDelete}
               onAllRecordDelete={onAllRecordDelete}
+              forceBoardUpdate={forceBoardUpdate}
             />
           </>
         )}
       </Droppable>
     </DragDropContext>
   );
-};
+}
 
 export default KanbanBoard;

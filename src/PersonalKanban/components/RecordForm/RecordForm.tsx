@@ -64,7 +64,6 @@ export function RecordForm(props: RecordFormProps) {
         <Grid item xs={12}>
           <TextField
             name='title'
-            // label={t('title')}
             label={'任务名称'}
             value={values.title}
             error={Boolean(errors.title)}
@@ -78,8 +77,7 @@ export function RecordForm(props: RecordFormProps) {
             multiline
             rows={3}
             name='description'
-            // label={t('description')}
-            label={'任务描述'}
+            label={'任务描述(选填)'}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}

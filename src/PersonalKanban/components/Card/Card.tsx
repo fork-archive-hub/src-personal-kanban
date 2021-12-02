@@ -109,12 +109,15 @@ type CardProps = {
   showDeleteAction?: boolean;
   onDelete?: any;
   onEdit?: any;
+  forceColumnUpdate?: Function;
 };
 
 /**
  * 看板中一个面板列上的一个卡片
  */
 export function Card(props: CardProps) {
+  const classes = useStyles();
+
   const {
     record,
     className,
@@ -124,6 +127,7 @@ export function Card(props: CardProps) {
     showDeleteAction,
     onDelete,
     onEdit,
+    forceColumnUpdate,
     ...rest
   } = props;
   const {
@@ -143,23 +147,24 @@ export function Card(props: CardProps) {
     comments,
   } = record;
 
-  const classes = useStyles();
-
   const handleEdit = useCallback(() => onEdit(record), [record, onEdit]);
   const handleDelete = useCallback(() => onDelete(record), [record, onDelete]);
 
   const doesSubTaskListExist =
     subTaskList && subTaskList['records'] && subTaskList['records'].length > 0;
   let cardSubTasksTotalCount = 0;
-  let cardSubTasksTodoCount = 0;
+  let cardSubTasksDoneCount = 0;
   if (doesSubTaskListExist) {
     cardSubTasksTotalCount = subTaskList['records'].length;
     subTaskList['records'].forEach((record) => {
-      if (record.taskStatus === 'todo') {
-        cardSubTasksTodoCount++;
+      // console.log(';;subTask-record ', record);
+
+      if (record.taskStatus === 'done') {
+        cardSubTasksDoneCount++;
       }
     });
   }
+  console.log(';;cardSubTasksDoneCount ', cardSubTasksDoneCount);
 
   const doesRelatedDocsExist =
     relatedDocs && relatedDocs['docList'] && relatedDocs['docList'].length > 0;
@@ -196,14 +201,7 @@ export function Card(props: CardProps) {
             <MoreHorizOutlinedIcon />
           </MIconButton>
         </Grid>
-        {/* <Typography
-        variant='subtitle1'
-        title={description}
-        className={classes.description}
-        gutterBottom
-      >
-        {description}
-      </Typography> */}
+
         <Grid item container>
           {tags && tags.length > 0 ? (
             <Grid item>
@@ -242,9 +240,11 @@ export function Card(props: CardProps) {
                 disableElevation
                 className={classes.subTaskListBtn}
                 startIcon={<AssignmentTurnedInOutlinedIcon />}
-                title={`待办事项: 已完成 ${cardSubTasksTodoCount} / 总事项 ${cardSubTasksTotalCount}`}
+                title={`待办事件(子任务)清单: 已完成 ${cardSubTasksDoneCount} / 总事项 ${cardSubTasksTotalCount};    未完成 ${
+                  Number(cardSubTasksTotalCount) - Number(cardSubTasksDoneCount)
+                } `}
               >
-                {cardSubTasksTodoCount}/{cardSubTasksTotalCount}
+                {cardSubTasksDoneCount}/{cardSubTasksTotalCount}
               </Button>
             </Grid>
           ) : null}
@@ -258,7 +258,7 @@ export function Card(props: CardProps) {
                 disableElevation
                 // className={classes.subTaskListBtn}
                 startIcon={<SortOutlinedIcon />}
-                title={`当前卡片任务优先级: ${taskPriority}，任务默认优先级为普通-10`}
+                title={`当前优先级: ${taskPriority}，任务默认优先级为普通-10`}
               >
                 优先级: {taskPriority}
               </Button>
@@ -319,8 +319,8 @@ export function Card(props: CardProps) {
                               title={docTitle}
                             >
                               {docTitle.length > 24
-                            ? docTitle.slice(0, 24) + '...'
-                            : docTitle}
+                                ? docTitle.slice(0, 24) + '...'
+                                : docTitle}
                             </a>
                             {/* </Link> */}
                           </ListItemText>

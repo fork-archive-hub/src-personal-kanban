@@ -1,10 +1,9 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Draggable, Droppable } from "react-beautiful-dnd";
-
-import KanbanCard from "PersonalKanban/components/KanbanCard";
-import Column, { ColumnCardList } from "PersonalKanban/components/Column";
-import { Column as ColumnType } from "PersonalKanban/types";
+import Column, { ColumnCardList } from 'PersonalKanban/components/Column';
+import KanbanCard from 'PersonalKanban/components/KanbanCard';
+import { Column as ColumnType } from 'PersonalKanban/types';
+import React from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 
 type KanbanInnerColumnCardListProps = {
   column: ColumnType;
@@ -12,8 +11,8 @@ type KanbanInnerColumnCardListProps = {
   onRecordDelete?: any;
 };
 
-const KanbanInnerColumnCardList: React.FC<KanbanInnerColumnCardListProps> = React.memo(
-  (props) => {
+const KanbanInnerColumnCardList: React.FC<KanbanInnerColumnCardListProps> =
+  React.memo((props) => {
     const { column, onRecordEdit, onRecordDelete } = props;
     return (
       <ColumnCardList
@@ -23,8 +22,7 @@ const KanbanInnerColumnCardList: React.FC<KanbanInnerColumnCardListProps> = Reac
         onRecordDelete={onRecordDelete}
       />
     );
-  }
-);
+  });
 
 type KanbanColumnCardListProps = {
   column: ColumnType;
@@ -62,9 +60,13 @@ type KanbanColumnProps = {
   onRecordEdit?: any;
   onRecordDelete?: any;
   onAllRecordDelete?: any;
+  forceBoardUpdate?: Function;
 };
 
-const KanbanColumn: React.FC<KanbanColumnProps> = (props) => {
+/**
+ * * 在Column组件外层加上了Draggable组件。
+ */
+export function KanbanColumn(props: KanbanColumnProps) {
   const {
     column,
     index,
@@ -75,13 +77,15 @@ const KanbanColumn: React.FC<KanbanColumnProps> = (props) => {
     onRecordEdit,
     onRecordDelete,
     onAllRecordDelete,
+    forceBoardUpdate,
   } = props;
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const _column = Object.assign({}, column, {
     caption: column.wipEnabled
-      ? `${t("wipLimit")} :${column.wipLimit}`
+      ? // ? `${t('wipLimit')} :${column.wipLimit}`
+        ` wipLimit :${column.wipLimit}`
       : column.createdAt,
   });
 
@@ -99,12 +103,13 @@ const KanbanColumn: React.FC<KanbanColumnProps> = (props) => {
           onRecordEdit={onRecordEdit}
           onRecordDelete={onRecordDelete}
           onAllRecordDelete={onAllRecordDelete}
+          forceBoardUpdate={forceBoardUpdate}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         />
       )}
     </Draggable>
   );
-};
+}
 
 export default KanbanColumn;

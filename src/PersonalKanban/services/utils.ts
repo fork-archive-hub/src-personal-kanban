@@ -97,19 +97,22 @@ export const getInitialState = () => {
           subTaskList: {
             id: getId(),
             title: 'checklist1 子任务',
-            // color: "Red",
             records: [
               {
                 id: getId(),
-                // color: "Purple",
                 title: '子任务1 Give ratings',
                 createdAt: getCreatedAt(),
               },
               {
-                id: getId() + 'aa',
-                // color: "Purple",
+                id: getId(),
                 title: '子任务2 Give ratings',
                 createdAt: getCreatedAt(),
+              },
+              {
+                id: getId(),
+                title: '子任务3 Give ratings',
+                createdAt: getCreatedAt(),
+                taskStatus: 'done',
               },
             ],
             createdAt: getCreatedAt(),

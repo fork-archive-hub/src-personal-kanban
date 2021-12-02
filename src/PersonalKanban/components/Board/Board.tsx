@@ -2,7 +2,14 @@ import Column from 'PersonalKanban/components/Column';
 import { COLUMN_WIDTH } from 'PersonalKanban/constants';
 import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
 import { Column as ColumnType } from 'PersonalKanban/types';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Box,
@@ -50,10 +57,11 @@ type BoardProps = {
   onRecordDelete?: any;
   onAllRecordDelete?: any;
   handleOpenAddColumnDialog?: Function;
+  forceBoardUpdate?: Function;
 };
 
 /** 高度100vh的仪表板 */
-const Board: React.FC<BoardProps> = (props) => {
+export function Board(props: BoardProps) {
   const {
     columns,
     innerRef,
@@ -66,12 +74,14 @@ const Board: React.FC<BoardProps> = (props) => {
     onRecordDelete,
     onAllRecordDelete,
     handleOpenAddColumnDialog,
+    forceBoardUpdate,
     ...rest
   } = props;
 
   const classes = useBoardStyles();
 
-  const { t } = useTranslation();
+  // const [__, forceUpdate] = useReducer((x) => x + 1, 0);
+  // console.log(';;Board-forceUpdate ', forceUpdate);
 
   return (
     <div className={classes.root} ref={innerRef} {...rest}>
@@ -88,6 +98,7 @@ const Board: React.FC<BoardProps> = (props) => {
             onRecordEdit={onRecordEdit}
             onRecordDelete={onRecordDelete}
             onAllRecordDelete={onAllRecordDelete}
+            forceBoardUpdate={forceBoardUpdate}
           />
         ))
       ) : (
@@ -107,6 +118,6 @@ const Board: React.FC<BoardProps> = (props) => {
       </Button>
     </div>
   );
-};
+}
 
 export default Board;

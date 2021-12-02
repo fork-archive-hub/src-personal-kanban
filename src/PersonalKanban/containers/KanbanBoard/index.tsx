@@ -13,6 +13,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useReducer,
   useRef,
   useState,
 } from 'react';
@@ -34,10 +35,14 @@ if (!initialState) {
   initialState = getInitialState();
 }
 
-const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
-  const [columns, setColumns] = useState<Column[]>(initialState);
-
+/**
+ * * 创建看板数据的state，将更新逻辑setState传下去。
+ */
+export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
   const classes = useKanbanBoardStyles();
+  const [__, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const [columns, setColumns] = useState<Column[]>(initialState);
 
   const cloneColumns = useCallback((columns: Column[]) => {
     return columns.map((column: Column) => ({
@@ -158,16 +163,19 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
     [cloneColumns, getColumnIndex],
   );
 
+  /**
+   * * 更新一个任务卡片的信息。
+   */
   const handleRecordEdit = useCallback(
     ({ column, record }: { column: Column; record: Record }) => {
       const columnIndex = getColumnIndex(column.id);
       const recordIndex = getRecordIndex(record.id, column.id);
+
       setColumns((_columns) => {
         const columns = cloneColumns(_columns);
         const _record = columns[columnIndex].records[recordIndex!];
-        _record.title = record.title;
-        _record.description = record.description;
-        _record.color = record.color;
+
+        Object.assign(_record, record);
         return columns;
       });
     },
@@ -231,6 +239,7 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
           onRecordEdit={handleRecordEdit}
           onRecordDelete={handleRecordDelete}
           onAllRecordDelete={handleAllRecordDelete}
+          forceBoardUpdate={forceUpdate}
         />
       </Box>
       <AddColumnDialog
@@ -240,6 +249,6 @@ const KanbanBoardContainer = (props: KanbanBoardContainerProps) => {
       />
     </>
   );
-};
+}
 
 export default KanbanBoardContainer;

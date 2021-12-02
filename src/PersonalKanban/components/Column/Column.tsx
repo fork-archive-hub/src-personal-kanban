@@ -11,6 +11,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useReducer,
   useRef,
   useState,
 } from 'react';
@@ -171,6 +172,7 @@ type ColumnCardListProps = {
   CardComponent?: any;
   onRecordEdit?: any;
   onRecordDelete?: any;
+  forceColumnUpdate?: Function;
 };
 
 export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
@@ -180,12 +182,11 @@ export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
     CardComponent = Card,
     onRecordEdit,
     onRecordDelete,
+    forceColumnUpdate,
   } = props;
-  const { records = [] } = column;
-
-  const { t } = useTranslation();
-
   const classes = useColumnCardListStyles();
+
+  const { records = [] } = column;
 
   return (
     <div ref={innerRef}>
@@ -200,6 +201,7 @@ export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
               onDelete={onRecordDelete}
               showEditAction={false}
               showDeleteAction={false}
+              forceColumnUpdate={forceColumnUpdate}
             />
           ))
         : // <Typography>{t('noRecord')}</Typography>
@@ -290,6 +292,7 @@ type ColumnProps = {
   ColumnActionComponent?: any;
   ColumnCardListComponent?: any;
   ColumnFooterComponent?: any;
+  forceBoardUpdate?: Function;
 };
 
 /** 看板的一列，是一个面板，上面可以放置小卡片 */
@@ -308,6 +311,7 @@ export function Column(props: ColumnProps) {
     onRecordDelete,
     showAddRecordAction,
     showDeleteAllRecordAction,
+    forceBoardUpdate,
     ColumnHeaderComponent = ColumnHeader,
     ColumnActionComponent = ColumnAction,
     ColumnCardListComponent = ColumnCardList,
@@ -324,6 +328,9 @@ export function Column(props: ColumnProps) {
     wipEnabled,
     wipLimit = Infinity,
   } = column;
+
+  const [__, forceColumnUpdate] = useReducer((x) => x + 1, 0);
+  // console.log(';;Column-forceBoardUpdate ', forceBoardUpdate, column);
 
   const disableAddRecordAction = wipEnabled && wipLimit <= records.length;
 
@@ -369,6 +376,7 @@ export function Column(props: ColumnProps) {
     [column, onAddRecord],
   );
 
+  /** 更新看板数据的方法，会传入column和record */
   const handleRecordEdit = useCallback(
     (record: Record) => {
       onRecordEdit({ column, record });
@@ -449,22 +457,31 @@ export function Column(props: ColumnProps) {
     handleOpenDialog({ content });
   }, [handleOpenDialog, handleCloseDialog, handleAddRecord]);
 
+  /**
+   * * 打开弹窗，编辑一个任务卡片的字段信息
+   */
   const handleOpenEditRecordDialog = useCallback(
     (record: Record) => {
       const content = (
         <RecordDetails
           record={record}
           onSubmit={(record: Record) => {
+            // console.log(';;RecordDetails-onSubmit ', record);
             handleCloseDialog();
             handleRecordEdit(record);
           }}
+          onSubmitDataWithDialogOpen={(record: Record) => {
+            // console.log(';;RecordDetails-onSubmit ', record);
+            handleRecordEdit(record);
+          }}
           onCancel={handleCloseDialog}
+          forceBoardUpdate={forceBoardUpdate}
         ></RecordDetails>
       );
 
       handleOpenDialog({ content });
     },
-    [handleOpenDialog, handleCloseDialog, handleRecordEdit],
+    [handleCloseDialog, forceBoardUpdate, handleOpenDialog, handleRecordEdit],
   );
 
   const handleOpenDeleteRecordDialog = useCallback(
@@ -550,6 +567,7 @@ export function Column(props: ColumnProps) {
         column={column}
         onRecordEdit={handleOpenEditRecordDialog}
         onRecordDelete={handleOpenDeleteRecordDialog}
+        forceBoardUpdate={forceBoardUpdate}
       />
       <ColumnFooterComponent
         content={caption}
