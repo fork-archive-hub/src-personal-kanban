@@ -164,7 +164,7 @@ export function Card(props: CardProps) {
       }
     });
   }
-  console.log(';;cardSubTasksDoneCount ', cardSubTasksDoneCount);
+  // console.log(';;cardSubTasksDoneCount ', cardSubTasksDoneCount);
 
   const doesRelatedDocsExist =
     relatedDocs && relatedDocs['docList'] && relatedDocs['docList'].length > 0;
@@ -223,10 +223,10 @@ export function Card(props: CardProps) {
               <Button
                 onClick={(e) => e.stopPropagation()}
                 variant='contained'
-                disableElevation
                 className={classes.taskDueTimeBtn}
                 startIcon={<AlarmOutlinedIcon />}
                 title='截止日期'
+                disableElevation
               >
                 {taskDueTime}
               </Button>

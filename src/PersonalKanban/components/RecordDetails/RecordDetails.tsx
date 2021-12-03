@@ -1,6 +1,10 @@
+import 'date-fns';
+
 import Radio from 'PersonalKanban/components/Radio';
 import { RecordColor } from 'PersonalKanban/enums';
 import type { Record } from 'PersonalKanban/types';
+import cx from 'clsx';
+import localeCN from 'date-fns/locale/zh-CN';
 import { useFormik } from 'formik';
 import React, {
   useCallback,
@@ -11,8 +15,8 @@ import React, {
   useState,
 } from 'react';
 
+import DateFnsUtils from '@date-io/date-fns';
 import {
-  Box,
   Button,
   Checkbox,
   Collapse,
@@ -46,6 +50,11 @@ import LinkIcon from '@material-ui/icons/Link';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
+import {
+  DatePicker,
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
@@ -89,6 +98,18 @@ const useStyles = makeStyles<Theme>((theme) =>
       '&+span': {
         color: theme.palette.text.secondary,
       },
+    },
+    dueDatePicker: {
+      width: 120,
+      marginRight: '2rem',
+      '& .MuiInputBase-input': {
+        border: 'none',
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    },
+    visibilityHidden: {
+      visibility: 'hidden',
     },
   }),
 );
@@ -262,9 +283,34 @@ export function RecordDetails(props: RecordFormProps) {
     },
   });
 
+  const [isSelectingDueDate, setIsSelectingDueDate] = useState(false);
+  // todo 传入的截止日期应该作为初始值
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>();
+  // new Date('2014-08-18T21:11:54'),
+  // new Date(),
+  const handleDueDateChange = (date: Date | null) => {
+    setSelectedDueDate(date);
+    setIsSelectingDueDate(false);
+    onSubmitDataWithDialogOpen({
+      ...record,
+      taskDueTime: date.toISOString().slice(0, 10),
+    });
+    forceUpdate();
+  };
+  let dueDateContent = '';
+  if (taskDueTime) {
+    dueDateContent = taskDueTime;
+  }
+  if (selectedDueDate) {
+    dueDateContent = selectedDueDate.toISOString().slice(0, 10);
+  }
+  if (isSelectingDueDate) {
+    dueDateContent = '';
+  }
+
   return (
     <form onSubmit={handleCardFormSubmit}>
-      <Grid container spacing={3}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           {isEditingCardTitle ? (
             <TextField
@@ -304,11 +350,31 @@ export function RecordDetails(props: RecordFormProps) {
           </Button>
           <Button
             variant='text'
-            className={classes.taskCommonActionsBtn}
+            // className={`${
+            //   isSelectingDueDate ? '' : classes.taskCommonActionsBtn
+            // }`}
             startIcon={<EventAvailableOutlinedIcon />}
+            onClick={() => setIsSelectingDueDate(true)}
           >
-            截止日期
+            截止日期 &ensp; {dueDateContent}
           </Button>
+          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeCN}>
+            <DatePicker
+              open={isSelectingDueDate}
+              onOpen={() => setIsSelectingDueDate(true)}
+              onClose={() => setIsSelectingDueDate(false)}
+              value={selectedDueDate}
+              onChange={handleDueDateChange}
+              disableToolbar
+              variant='inline'
+              format='yyyy-MM-dd'
+              id='date-picker-inline'
+              className={cx(classes.dueDatePicker, {
+                [classes.visibilityHidden]: !isSelectingDueDate,
+              })}
+              // label='选择截止日期/到期时间'
+            />
+          </MuiPickersUtilsProvider>
           <Button
             variant='text'
             className={classes.taskCommonActionsBtn}
