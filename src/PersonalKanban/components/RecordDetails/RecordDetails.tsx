@@ -60,7 +60,7 @@ const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     taskCommonActionsBtn: {
       // color: '#777',
-      marginRight: '8rem',
+      marginRight: '4rem',
     },
     configItemFormControl: {
       width: '100%',
@@ -101,7 +101,7 @@ const useStyles = makeStyles<Theme>((theme) =>
     },
     dueDatePicker: {
       width: 120,
-      marginRight: '2rem',
+      marginRight: '1rem',
       '& .MuiInputBase-input': {
         border: 'none',
         outline: 'none',
@@ -168,8 +168,55 @@ export function RecordDetails(props: RecordFormProps) {
     comments,
   } = record;
 
-  const [isEditingCardTitle, setIsEditingCardTitle] = useState(false);
   const [isEditingCardDesc, setIsEditingCardDesc] = useState(false);
+
+  /** 更新卡片数据到全局，同时不关闭卡片弹窗 */
+  const updateCardData = useCallback(
+    (subField) => {
+      onSubmitDataWithDialogOpen({ ...record, ...subField });
+      forceUpdate();
+    },
+    [onSubmitDataWithDialogOpen, record],
+  );
+
+  const {
+    values,
+    errors,
+    handleChange: handleCardFormChange,
+    handleSubmit: handleCardFormSubmit,
+  } = useFormik({
+    initialValues: Object.assign(
+      {
+        title: '',
+        description: '',
+        color: '',
+      },
+      record,
+    ),
+    onSubmit: (values) => {
+      onSubmit && onSubmit(values);
+    },
+    validate: (values) => {
+      const errors: any = {};
+      if (!values.title) {
+        errors.title = '* 必填项';
+      }
+      return errors;
+    },
+  });
+  // console.log(';;handleCardFormChange ', handleCardFormChange);
+
+  const [isEditingCardTitle, setIsEditingCardTitle] = useState(false);
+  const [cardTitle, setCardTitle] = useState(title);
+  const handleCardTitleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCardTitle(event.target.value);
+      // if (!event.target.value || !event.target.value.trim()) return;
+      // todo 显示不能为空的提示信息
+      updateCardData({ title: event.target.value });
+    },
+    [updateCardData],
+  );
 
   const doesSubTaskListExist =
     subTaskList && subTaskList['records'] && subTaskList['records'].length > 0;
@@ -177,7 +224,6 @@ export function RecordDetails(props: RecordFormProps) {
   if (doesSubTaskListExist) {
     subTasksChecklist = convertSubTasksDataToViewChecklist(subTaskList);
   }
-  // console.log(';;subTasksData ', subTaskList, subTasksChecklist);
   const handleChecklistChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       // console.log(';;checkbox-click ', event.target.name, event.target);
@@ -194,14 +240,11 @@ export function RecordDetails(props: RecordFormProps) {
         ),
       };
       // console.log(';;latestSubTaskList ', latestSubTaskList.records);
-      onSubmitDataWithDialogOpen({ ...record, subTaskList: latestSubTaskList });
-      forceUpdate();
-      // forceBoardUpdate();
+      updateCardData({ subTaskList: latestSubTaskList });
     },
-    [onSubmitDataWithDialogOpen, record, subTaskList],
+    [subTaskList, updateCardData],
   );
   const handleAddSubTasksChecklistItem = useCallback(() => {
-    // if (!docName || !docName.trim()) return;
     let _subTaskList = {};
     if (subTaskList) {
       _subTaskList = subTaskList;
@@ -253,35 +296,9 @@ export function RecordDetails(props: RecordFormProps) {
         },
       ],
     };
-    onSubmitDataWithDialogOpen({ ...record, relatedDocs: latestRelatedDocs });
-    forceUpdate();
-  }, [docName, onSubmitDataWithDialogOpen, record, relatedDocs]);
 
-  const {
-    values,
-    errors,
-    handleChange: handleCardFormChange,
-    handleSubmit: handleCardFormSubmit,
-  } = useFormik({
-    initialValues: Object.assign(
-      {
-        title: '',
-        description: '',
-        color: '',
-      },
-      record,
-    ),
-    onSubmit: (values) => {
-      onSubmit && onSubmit(values);
-    },
-    validate: (values) => {
-      const errors: any = {};
-      if (!values.title) {
-        errors.title = '* 必填项';
-      }
-      return errors;
-    },
-  });
+    updateCardData({ relatedDocs: latestRelatedDocs });
+  }, [docName, relatedDocs, updateCardData]);
 
   const [isSelectingDueDate, setIsSelectingDueDate] = useState(false);
   // todo 传入的截止日期应该作为初始值
@@ -309,286 +326,288 @@ export function RecordDetails(props: RecordFormProps) {
   }
 
   return (
-    <form onSubmit={handleCardFormSubmit}>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          {isEditingCardTitle ? (
+    // <form onSubmit={handleCardFormSubmit}>
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        {isEditingCardTitle ? (
+          <TextField
+            name='title'
+            label={'名称或标题'}
+            multiline={values.title.length > 20 ? true : false}
+            // value={values.title}
+            value={cardTitle}
+            // error={Boolean(errors.title)}
+            // helperText={errors.title}
+            // disabled={disabled}
+            // onChange={handleCardFormChange}
+            onChange={handleCardTitleChange}
+            onBlur={() => {
+              setIsEditingCardTitle(false);
+            }}
+          />
+        ) : (
+          <Typography
+            gutterBottom
+            variant='h6'
+            onClick={() => {
+              setIsEditingCardTitle(true);
+            }}
+          >
+            {cardTitle}
+          </Typography>
+        )}
+        <Divider />
+      </Grid>
+      <Grid item xs={12}>
+        <Button
+          variant='text'
+          className={classes.taskCommonActionsBtn}
+          startIcon={<PersonOutlineOutlinedIcon />}
+        >
+          无负责人
+        </Button>
+        <Button
+          variant='text'
+          // className={`${
+          //   isSelectingDueDate ? '' : classes.taskCommonActionsBtn
+          // }`}
+          startIcon={<EventAvailableOutlinedIcon />}
+          onClick={() => setIsSelectingDueDate(true)}
+        >
+          截止日期 &ensp; {dueDateContent}
+        </Button>
+        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeCN}>
+          <DatePicker
+            open={isSelectingDueDate}
+            onOpen={() => setIsSelectingDueDate(true)}
+            onClose={() => setIsSelectingDueDate(false)}
+            value={selectedDueDate}
+            onChange={handleDueDateChange}
+            disableToolbar
+            variant='inline'
+            format='yyyy-MM-dd'
+            id='date-picker-inline'
+            className={cx(classes.dueDatePicker, {
+              [classes.visibilityHidden]: !isSelectingDueDate,
+            })}
+            // label='选择截止日期/到期时间'
+          />
+        </MuiPickersUtilsProvider>
+        <Button
+          variant='text'
+          className={classes.taskCommonActionsBtn}
+          startIcon={<SortOutlinedIcon />}
+        >
+          优先级
+        </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend' className={classes.configItemTitle}>
+            标签
+          </FormLabel>
+          <Grid container wrap='nowrap'>
+            <TextField id='addDocNewOrLinked' label='输入标签名' />
+            <Button
+              // disabled
+              variant='outlined'
+              // color='default'
+              className={classes.addTagBtn}
+              startIcon={<AddIcon />}
+            >
+              添加标签
+            </Button>
+          </Grid>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl
+          component='fieldset'
+          className={classes.configItemFormControl}
+        >
+          <FormLabel
+            onClick={() => {
+              setIsEditingCardDesc(true);
+            }}
+            component='legend'
+            className={classes.configItemTitle}
+          >
+            任务描述或内容描述
+            {values.description ? (
+              <IconButton aria-label='edit'>
+                <EditOutlinedIcon style={{ fontSize: '1rem' }} />
+              </IconButton>
+            ) : (
+              <IconButton aria-label='add'>
+                <AddIcon style={{ fontSize: '1rem' }} />
+              </IconButton>
+            )}
+          </FormLabel>
+          {isEditingCardDesc ? (
             <TextField
-              name='title'
-              multiline={values.title.length > 20 ? true : false}
-              label={'名称或标题'}
-              value={values.title}
-              error={Boolean(errors.title)}
-              helperText={errors.title}
+              multiline
+              // rows={3}
+              name='description'
+              label={'内容描述'}
+              value={values.description}
+              error={Boolean(errors.description)}
+              helperText={errors.description}
               disabled={disabled}
               onChange={handleCardFormChange}
               onBlur={() => {
-                setIsEditingCardTitle(false);
+                setIsEditingCardDesc(false);
               }}
             />
           ) : (
             <Typography
+              // variant='body2'
+              // title={description}
+              className={classes.cardDesc}
               gutterBottom
-              variant='h6'
-              onClick={() => {
-                setIsEditingCardTitle(true);
-              }}
+              // onClick={() => {
+              //   setIsEditingCardDesc(true);
+              // }}
             >
-              {/* {formTitle} */}
-              {values.title}
+              {values.description}
             </Typography>
           )}
-          <Divider />
-        </Grid>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend' className={classes.configItemTitle}>
+            子任务/待办事项
+          </FormLabel>
+          <FormGroup>
+            {doesSubTaskListExist
+              ? subTasksChecklist.map((task) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={handleChecklistChange}
+                        checked={task.status}
+                        name={task.id}
+                        disableRipple
+                        className={classes.subTaskCheckbox}
+                        color='primary'
+                      />
+                    }
+                    label={task.title}
+                    key={task.id}
+                  />
+                ))
+              : null}
+          </FormGroup>
+        </FormControl>
         <Grid item xs={12}>
           <Button
             variant='text'
-            className={classes.taskCommonActionsBtn}
-            startIcon={<PersonOutlineOutlinedIcon />}
-          >
-            无负责人
-          </Button>
-          <Button
-            variant='text'
-            // className={`${
-            //   isSelectingDueDate ? '' : classes.taskCommonActionsBtn
-            // }`}
-            startIcon={<EventAvailableOutlinedIcon />}
-            onClick={() => setIsSelectingDueDate(true)}
-          >
-            截止日期 &ensp; {dueDateContent}
-          </Button>
-          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={localeCN}>
-            <DatePicker
-              open={isSelectingDueDate}
-              onOpen={() => setIsSelectingDueDate(true)}
-              onClose={() => setIsSelectingDueDate(false)}
-              value={selectedDueDate}
-              onChange={handleDueDateChange}
-              disableToolbar
-              variant='inline'
-              format='yyyy-MM-dd'
-              id='date-picker-inline'
-              className={cx(classes.dueDatePicker, {
-                [classes.visibilityHidden]: !isSelectingDueDate,
-              })}
-              // label='选择截止日期/到期时间'
-            />
-          </MuiPickersUtilsProvider>
-          <Button
-            variant='text'
-            className={classes.taskCommonActionsBtn}
-            startIcon={<SortOutlinedIcon />}
-          >
-            优先级
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend' className={classes.configItemTitle}>
-              标签
-            </FormLabel>
-            <Grid container wrap='nowrap'>
-              <TextField id='addDocNewOrLinked' label='输入标签名' />
-              <Button
-                // disabled
-                variant='outlined'
-                // color='default'
-                className={classes.addTagBtn}
-                startIcon={<AddIcon />}
-              >
-                添加标签
-              </Button>
-            </Grid>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl
-            component='fieldset'
-            className={classes.configItemFormControl}
-          >
-            <FormLabel
-              onClick={() => {
-                setIsEditingCardDesc(true);
-              }}
-              component='legend'
-              className={classes.configItemTitle}
-            >
-              任务描述或内容描述
-              {values.description ? (
-                <IconButton aria-label='edit'>
-                  <EditOutlinedIcon style={{ fontSize: '1rem' }} />
-                </IconButton>
-              ) : (
-                <IconButton aria-label='add'>
-                  <AddIcon style={{ fontSize: '1rem' }} />
-                </IconButton>
-              )}
-            </FormLabel>
-            {isEditingCardDesc ? (
-              <TextField
-                multiline
-                // rows={3}
-                name='description'
-                label={'内容描述'}
-                value={values.description}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
-                disabled={disabled}
-                onChange={handleCardFormChange}
-                onBlur={() => {
-                  setIsEditingCardDesc(false);
-                }}
-              />
-            ) : (
-              <Typography
-                // variant='body2'
-                // title={description}
-                className={classes.cardDesc}
-                gutterBottom
-                onClick={() => {
-                  setIsEditingCardDesc(true);
-                }}
-              >
-                {values.description}
-              </Typography>
-            )}
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend' className={classes.configItemTitle}>
-              子任务/待办事项
-            </FormLabel>
-            <FormGroup>
-              {doesSubTaskListExist
-                ? subTasksChecklist.map((task) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={handleChecklistChange}
-                          checked={task.status}
-                          name={task.id}
-                          disableRipple
-                          className={classes.subTaskCheckbox}
-                          color='primary'
-                        />
-                      }
-                      label={task.title}
-                      key={task.id}
-                    />
-                  ))
-                : null}
-            </FormGroup>
-          </FormControl>
-          <Grid item xs={12}>
-            <Button
-              variant='text'
-              color='default'
-              className={classes.button}
-              startIcon={<AddIcon />}
-              onClick={handleAddSubTasksChecklistItem}
-            >
-              添加子任务
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl component='fieldset' className={classes.formControl}>
-            <FormLabel component='legend' className={classes.configItemTitle}>
-              相关文档
-            </FormLabel>
-          </FormControl>
-          <TextField
-            id='addDocNewOrLinked'
-            label='先输入文档名，然后选择创建新文档或链接已有文档'
-            value={docName}
-            onChange={handleDocNameChange}
-          />
-          <Button
-            onClick={handleAddRelatedDocs}
-            // disabled
-            variant='contained'
-            color='primary'
-            startIcon={<AddIcon />}
-            disableRipple
-            disableElevation
-          >
-            创建并添加文档
-          </Button>
-          &emsp;
-          <Button
-            disabled
-            variant='contained'
-            // color='default'
+            color='default'
             className={classes.button}
-            startIcon={<LinkIcon />}
+            startIcon={<AddIcon />}
+            onClick={handleAddSubTasksChecklistItem}
           >
-            添加已有文档的链接
+            添加子任务
           </Button>
-          <List aria-label='相关文档列表'>
-            {doesRelatedDocsExist
-              ? relatedDocs['docList'].map((doc) => {
-                  const { docId, docTitle } = doc;
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend' className={classes.configItemTitle}>
+            相关文档
+          </FormLabel>
+        </FormControl>
+        <TextField
+          id='addDocNewOrLinked'
+          // label='先输入文档名，然后选择创建新文档或链接已有文档'
+          label='输入文档名'
+          value={docName}
+          onChange={handleDocNameChange}
+        />
+        <Button
+          onClick={handleAddRelatedDocs}
+          // disabled
+          variant='contained'
+          color='primary'
+          startIcon={<AddIcon />}
+          disableRipple
+          disableElevation
+        >
+          创建并添加文档
+        </Button>
+        &emsp;
+        <Button
+          disabled
+          variant='contained'
+          // color='default'
+          className={classes.button}
+          startIcon={<LinkIcon />}
+        >
+          添加已有文档的链接
+        </Button>
+        <List aria-label='相关文档列表'>
+          {doesRelatedDocsExist
+            ? relatedDocs['docList'].map((doc) => {
+                const { docId, docTitle } = doc;
 
-                  return (
-                    <ListItem
-                      onClick={(e) => e.stopPropagation()}
-                      key={docId}
-                      button
-                      disableGutters
-                      className={classes.relatedDocListItem}
-                    >
-                      <ListItemIcon className={classes.relatedDocsItemIcon}>
-                        <DescriptionOutlinedIcon
-                          className={classes.relatedDocsDocIcon}
-                        />
-                      </ListItemIcon>
-                      <ListItemText>
-                        {/* <Link
+                return (
+                  <ListItem
+                    onClick={(e) => e.stopPropagation()}
+                    key={docId}
+                    button
+                    disableGutters
+                    className={classes.relatedDocListItem}
+                  >
+                    <ListItemIcon className={classes.relatedDocsItemIcon}>
+                      <DescriptionOutlinedIcon
+                        className={classes.relatedDocsDocIcon}
+                      />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {/* <Link
                             href={`/doc2/${
                               Math.floor(Math.random() * (20000 - 1 + 1)) + 1
                             }`}
                           > */}
-                        <a className={classes.textSecondary} title={docTitle}>
-                          {docTitle.length > 120
-                            ? docTitle.slice(0, 120) + '...'
-                            : docTitle}
-                        </a>
-                        {/* </Link> */}
-                      </ListItemText>
-                    </ListItem>
-                  );
-                })
-              : null}
-          </List>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl component='fieldset'>
-            <FormLabel component='legend' className={classes.configItemTitle}>
-              卡片背景色
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-label='background'
-              name='color'
-              value={values.color}
-              onChange={handleCardFormChange}
-            >
-              {Object.keys(RecordColor).map((key) => {
-                const colorKey = key as keyof typeof RecordColor;
-                return (
-                  <Radio
-                    key={colorKey}
-                    value={colorKey}
-                    color={RecordColor[colorKey]}
-                  />
+                      <a className={classes.textSecondary} title={docTitle}>
+                        {docTitle.length > 120
+                          ? docTitle.slice(0, 120) + '...'
+                          : docTitle}
+                      </a>
+                      {/* </Link> */}
+                    </ListItemText>
+                  </ListItem>
                 );
-              })}
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        {/* <Grid item xs={12}>
+              })
+            : null}
+        </List>
+      </Grid>
+      <Grid item xs={12}>
+        <FormControl component='fieldset'>
+          <FormLabel component='legend' className={classes.configItemTitle}>
+            卡片背景色
+          </FormLabel>
+          <RadioGroup
+            row
+            aria-label='background'
+            name='color'
+            value={values.color}
+            onChange={handleCardFormChange}
+          >
+            {Object.keys(RecordColor).map((key) => {
+              const colorKey = key as keyof typeof RecordColor;
+              return (
+                <Radio
+                  key={colorKey}
+                  value={colorKey}
+                  color={RecordColor[colorKey]}
+                />
+              );
+            })}
+          </RadioGroup>
+        </FormControl>
+      </Grid>
+      {/* <Grid item xs={12}>
           <Button
             variant='outlined'
             disabled={disabled}
@@ -606,8 +625,8 @@ export function RecordDetails(props: RecordFormProps) {
             保存
           </Button>
         </Grid> */}
-      </Grid>
-    </form>
+    </Grid>
+    // </form>
   );
 }
 
