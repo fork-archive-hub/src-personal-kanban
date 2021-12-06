@@ -1,4 +1,4 @@
-import { Column } from 'PersonalKanban/types';
+import type { Column } from 'PersonalKanban/types';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -89,7 +89,7 @@ export const getInitialState = () => {
           createdAt: getCreatedAt(),
           // 任务负责人
           taskStatus: 'done',
-          taskMembers: [{ userId: 'id1', username: '用户名1' }],
+          taskMembers: ['userId1'],
           taskStartTime: getDateNowISOStrWithTimezone().slice(0, 10),
           taskDueTime: getDateNowISOStrWithTimezone().slice(0, 10),
           taskPriority: 11,

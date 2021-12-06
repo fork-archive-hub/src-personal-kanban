@@ -57,7 +57,7 @@ const useStyles = makeStyles<Theme>((theme) =>
       whiteSpace: 'pre-line',
     },
     cardTitle: {},
-    cardTagBtn: {
+    tagBtn: {
       backgroundColor: '#d4c5f9',
       textTransform: 'none',
       // backgroundColor: '#a2eeef',
@@ -209,7 +209,7 @@ export function Card(props: CardProps) {
                 onClick={(e) => e.stopPropagation()}
                 variant='contained'
                 disableElevation
-                className={classes.cardTagBtn}
+                className={classes.tagBtn}
                 // title=''
               >
                 {tags[0]['tagName']}

@@ -111,15 +111,15 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
             <Grid item xs={12}>
               <Typography gutterBottom variant='h6'>
                 {/* {t('clearBoard')} */}
-                删除所有分组和卡片
+                是否删除所有分组和所有卡片 ？
               </Typography>
               <Divider />
             </Grid>
             <Grid item xs={12}>
-              <Typography gutterBottom>
-                {/* {t('clearBoardConfirmation')} */}
+              {/* <Typography gutterBottom>
+                {t('clearBoardConfirmation')}
                 是否要删除所有分组和所有卡片？
-              </Typography>
+              </Typography> */}
             </Grid>
             <Grid item xs={12}>
               <Button variant='outlined' onClick={handleCloseDialog}>
