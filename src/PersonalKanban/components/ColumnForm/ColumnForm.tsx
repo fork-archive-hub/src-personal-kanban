@@ -1,6 +1,3 @@
-import Radio from 'PersonalKanban/components/Radio';
-import { ColumnColor } from 'PersonalKanban/enums/index';
-import { Column } from 'PersonalKanban/types';
 import { useFormik } from 'formik';
 import React from 'react';
 
@@ -14,6 +11,10 @@ import Grid from '@material-ui/core/Grid';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
+import Radio from '../../components/Radio';
+import { ColumnColor } from '../../constants';
+import type { Column } from '../../types';
 
 type ColumnFormProps = {
   column?: Partial<Column>;

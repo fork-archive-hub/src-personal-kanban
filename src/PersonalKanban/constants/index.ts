@@ -1,10 +1,12 @@
-import purple from "@material-ui/core/colors/purple";
-import indigo from "@material-ui/core/colors/indigo";
-import blue from "@material-ui/core/colors/blue";
-import green from "@material-ui/core/colors/green";
-import yellow from "@material-ui/core/colors/yellow";
-import orange from "@material-ui/core/colors/orange";
-import red from "@material-ui/core/colors/red";
+import blue from '@material-ui/core/colors/blue';
+import green from '@material-ui/core/colors/green';
+import indigo from '@material-ui/core/colors/indigo';
+import orange from '@material-ui/core/colors/orange';
+import purple from '@material-ui/core/colors/purple';
+import red from '@material-ui/core/colors/red';
+import yellow from '@material-ui/core/colors/yellow';
+
+export const COLUMN_WIDTH = 280;
 
 const RECORD_SHADE = 200;
 
@@ -16,7 +18,7 @@ export const RecordColor = {
   Yellow: yellow[RECORD_SHADE],
   Orange: orange[RECORD_SHADE],
   Red: red[RECORD_SHADE],
-  Default: "",
+  Default: '',
 };
 
 export const DARK_RECORD_SHADE = 500;
@@ -29,7 +31,7 @@ export const DarkRecordColor = {
   Yellow: yellow[700],
   Orange: orange[DARK_RECORD_SHADE],
   Red: red[DARK_RECORD_SHADE],
-  Default: "",
+  Default: '',
 };
 
 const COLUMN_SHADE = 100;
@@ -42,7 +44,7 @@ export const ColumnColor = {
   Yellow: yellow[COLUMN_SHADE],
   Orange: orange[COLUMN_SHADE],
   Red: red[COLUMN_SHADE],
-  Default: "",
+  Default: '',
 };
 
 export const DARK_COLUMN_SHADE = 400;
@@ -55,5 +57,5 @@ export const DarkColumnColor = {
   Yellow: yellow[700],
   Orange: orange[DARK_COLUMN_SHADE],
   Red: red[DARK_COLUMN_SHADE],
-  Default: "",
+  Default: '',
 };

@@ -1,10 +1,10 @@
-import React from "react";
-import { Draggable } from "react-beautiful-dnd";
+import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
-import Card from "PersonalKanban/components/Card";
-import { Record } from "PersonalKanban/types";
-import { RecordColor, DarkRecordColor } from "PersonalKanban/enums";
-import { useTheme } from "PersonalKanban/providers/ThemeProvider";
+import Card from '../../components/Card';
+import { DarkRecordColor, RecordColor } from '../../constants';
+import { useTheme } from '../../providers/ThemeProvider';
+import type { Record } from '../../types';
 
 type KanbanCardProps = {
   record: Record;

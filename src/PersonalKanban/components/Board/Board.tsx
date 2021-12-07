@@ -1,6 +1,3 @@
-import Column from 'PersonalKanban/components/Column';
-import { COLUMN_WIDTH } from 'PersonalKanban/constants';
-import { Column as ColumnType } from 'PersonalKanban/types';
 import React, {
   useCallback,
   useEffect,
@@ -20,6 +17,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+
+import { COLUMN_WIDTH } from '../../constants';
+import { Column as ColumnType } from '../../types';
+import Column from '../Column';
 
 const useBoardStyles = makeStyles((theme) => ({
   root: {

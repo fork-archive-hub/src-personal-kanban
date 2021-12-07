@@ -1,6 +1,3 @@
-import Board from 'PersonalKanban/components/Board';
-import KanbanColumn from 'PersonalKanban/components/KanbanColumn';
-import { Column } from 'PersonalKanban/types';
 import React, {
   useCallback,
   useEffect,
@@ -9,6 +6,10 @@ import React, {
   useState,
 } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
+import Board from '../../components/Board';
+import KanbanColumn from '../../components/KanbanColumn';
+import type { Column } from '../../types';
 
 type KanbanBoardProps = {
   columns: Column[];

@@ -1,4 +1,3 @@
-import StorageService from 'PersonalKanban/services/StorageService';
 import React from 'react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +14,8 @@ import {
   yellow,
 } from '@material-ui/core/colors';
 import { MuiThemeProvider, Theme, createTheme } from '@material-ui/core/styles';
+
+import StorageService from '../services/StorageService';
 
 declare module '@material-ui/core/styles/createTheme' {
   interface Theme {

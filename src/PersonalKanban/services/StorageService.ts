@@ -1,4 +1,4 @@
-import { Column } from "PersonalKanban/types";
+import type { Column } from "../types";
 
 const DARK_MODE = "dark_mode";
 const COLUMNS = "columns";

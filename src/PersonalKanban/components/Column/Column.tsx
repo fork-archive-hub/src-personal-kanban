@@ -1,11 +1,3 @@
-import Card from 'PersonalKanban/components/Card';
-import ColumnForm from 'PersonalKanban/components/ColumnForm';
-import IconButton from 'PersonalKanban/components/IconButton';
-import RecordForm from 'PersonalKanban/components/RecordForm';
-import { ColumnColor, DarkColumnColor } from 'PersonalKanban/enums';
-import { useTheme } from 'PersonalKanban/providers/ThemeProvider';
-import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
-import { Column as ColumnType, Record } from 'PersonalKanban/types';
 import clsx from 'clsx';
 import React, {
   useCallback,
@@ -34,225 +26,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
+import Card from '../../components/Card';
+import ColumnForm from '../../components/ColumnForm';
+import IconButton from '../../components/IconButton';
+import RecordForm from '../../components/RecordForm';
+import { ColumnColor, DarkColumnColor } from '../../constants';
+import { useTheme } from '../../providers/ThemeProvider';
+import { useTranslation } from '../../providers/TranslationProvider';
+import type { Column as ColumnType, Record } from '../../types';
 import { RecordDetails } from '../RecordDetails';
-
-const useColumnHeaderStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: '#fff',
-  },
-  divider: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(1),
-  },
-}));
-
-type ColumnHeaderProps = {
-  title: string;
-  description?: string;
-  onEdit?: any;
-  onDelete?: any;
-  showEditAction?: boolean;
-  showDeleteAction?: boolean;
-};
-
-export const ColumnHeader: React.FC<ColumnHeaderProps> = (props) => {
-  const {
-    title,
-    description,
-    showEditAction,
-    showDeleteAction,
-    onEdit,
-    onDelete,
-  } = props;
-
-  const classes = useColumnHeaderStyles();
-  return (
-    <>
-      <Box
-        bgcolor='#fff'
-        display='flex'
-        alignItems='center'
-        justifyContent='space-between'
-        padding='0 0 0 12px'
-        // marginBottom={Boolean(description) ? 0.5 : 0}
-        // marginBottom={1.5}
-        marginBottom='12px'
-      >
-        <Typography
-          // variant='h6'
-          title={title}
-          noWrap
-          style={{ fontWeight: 500 }}
-        >
-          {title}
-        </Typography>
-        <Box display='flex' alignItems='center'>
-          {/* {showEditAction && <IconButton icon='edit' onClick={onEdit} />}
-          {showDeleteAction && (
-            <IconButton icon='deleteForever' onClick={onDelete} />
-          )} */}
-          <MIconButton aria-label='更多任务分组操作' disableRipple>
-            <MoreHorizIcon />
-          </MIconButton>
-        </Box>
-      </Box>
-      {/* <Typography title={description} noWrap gutterBottom>
-            {description}
-        </Typography> */}
-      {/* <Divider className={classes.divider} /> */}
-    </>
-  );
-};
-
-ColumnHeader.defaultProps = { showEditAction: true, showDeleteAction: true };
-
-const useColumnActionStyles = makeStyles((theme) => ({
-  divider: {
-    marginTop: theme.spacing(0.5),
-    marginBottom: theme.spacing(1),
-  },
-}));
-
-type ColumnActionProps = {
-  onAddRecord?: any;
-  onDeleteAllRecord?: any;
-  showAddRecordAction?: boolean;
-  showAllRecordDeleteAction?: boolean;
-  disableAllRecordDeleteAction?: boolean;
-  disableAddRecordAction?: boolean;
-};
-
-export const ColumnAction: React.FC<ColumnActionProps> = (props) => {
-  const {
-    showAddRecordAction,
-    showAllRecordDeleteAction,
-    disableAllRecordDeleteAction,
-    disableAddRecordAction,
-    onAddRecord,
-    onDeleteAllRecord,
-  } = props;
-  const classes = useColumnActionStyles();
-  return (
-    <>
-      {showAddRecordAction && (
-        <IconButton
-          icon='add'
-          disabled={disableAddRecordAction}
-          onClick={onAddRecord}
-        />
-      )}
-      {showAllRecordDeleteAction && (
-        <IconButton
-          icon='delete'
-          disabled={disableAllRecordDeleteAction}
-          onClick={onDeleteAllRecord}
-        />
-      )}
-
-      <Divider className={classes.divider} />
-    </>
-  );
-};
-
-ColumnAction.defaultProps = {
-  showAddRecordAction: true,
-  showAllRecordDeleteAction: true,
-};
-
-const useColumnCardListStyles = makeStyles((theme) => ({
-  card: {
-    // marginBottom: theme.spacing(2),
-    marginBottom: 12,
-  },
-}));
-
-type ColumnCardListProps = {
-  column: ColumnType;
-  innerRef?: any;
-  CardComponent?: any;
-  onRecordEdit?: any;
-  onRecordDelete?: any;
-  forceColumnUpdate?: Function;
-};
-
-export const ColumnCardList: React.FC<ColumnCardListProps> = (props) => {
-  const {
-    column,
-    innerRef,
-    CardComponent = Card,
-    onRecordEdit,
-    onRecordDelete,
-    forceColumnUpdate,
-  } = props;
-  const classes = useColumnCardListStyles();
-
-  const { records = [] } = column;
-
-  return (
-    <div ref={innerRef}>
-      {records && records.length
-        ? records.map((record: Record, index) => (
-            <CardComponent
-              key={record.id}
-              record={record}
-              className={classes.card}
-              index={index}
-              onEdit={onRecordEdit}
-              onDelete={onRecordDelete}
-              showEditAction={false}
-              showDeleteAction={false}
-              forceColumnUpdate={forceColumnUpdate}
-            />
-          ))
-        : // <Typography>{t('noRecord')}</Typography>
-          null}
-    </div>
-  );
-};
-
-const useColumnFooterStyles = makeStyles((theme) => ({
-  divider: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(0.5),
-  },
-  addCardButton: {
-    width: 264,
-    height: 36,
-    color: theme.palette.text.secondary,
-    backgroundColor: '#fff',
-    border: 'none',
-  },
-}));
-
-type ColumnFooterProps = {
-  content?: string;
-  handleOpenAddRecordDialog?: Function;
-};
-
-export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
-  const { content, handleOpenAddRecordDialog } = props;
-
-  const classes = useColumnFooterStyles();
-  return (
-    <>
-      {/* <Divider className={classes.divider} /> */}
-      <Typography variant='caption' component='p' title={content} noWrap>
-        {/* {content} */}
-      </Typography>
-
-      <Button
-        onClick={handleOpenAddRecordDialog as any}
-        variant='outlined'
-        size='large'
-        // color='secondary'
-        className={classes.addCardButton}
-        startIcon={<AddIcon />}
-      >
-        {/* 添加新任务卡片 */}
-      </Button>
-    </>
-  );
-};
+import { ColumnCardList } from './ColumnCardList';
+import { ColumnFooter } from './ColumnFooter';
+import { ColumnHeader } from './ColumnHeader';
 
 const useColumnStyles = makeStyles(() => ({
   paper: (props: any) => {
@@ -295,7 +80,7 @@ type ColumnProps = {
   forceBoardUpdate?: Function;
 };
 
-/** 看板的一列，是一个面板，上面可以放置小卡片 */
+/** 看板的一列，是一个面板，上面可以放置多个卡片 */
 export function Column(props: ColumnProps) {
   const {
     column,
@@ -313,7 +98,7 @@ export function Column(props: ColumnProps) {
     showDeleteAllRecordAction,
     forceBoardUpdate,
     ColumnHeaderComponent = ColumnHeader,
-    ColumnActionComponent = ColumnAction,
+    ColumnActionComponent,
     ColumnCardListComponent = ColumnCardList,
     ColumnFooterComponent = ColumnFooter,
     ...rest
@@ -329,7 +114,7 @@ export function Column(props: ColumnProps) {
     wipLimit = Infinity,
   } = column;
 
-  const [__, forceColumnUpdate] = useReducer((x) => x + 1, 0);
+  // const [__, forceColumnUpdate] = useReducer((x) => x + 1, 0);
   // console.log(';;Column-forceBoardUpdate ', forceBoardUpdate, column);
 
   const disableAddRecordAction = wipEnabled && wipLimit <= records.length;
@@ -555,14 +340,6 @@ export function Column(props: ColumnProps) {
         onEdit={handleOpenEditDialog}
         onDelete={handleOpenDeleteDialog}
       />
-      {/* <ColumnActionComponent
-        showAddRecordAction={showAddRecordAction}
-        showDeleteAllRecordAction={showDeleteAllRecordAction}
-        disableAddRecordAction={disableAddRecordAction}
-        disableAllRecordDeleteAction={disableAllRecordDeleteAction}
-        onAddRecord={handleOpenAddRecordDialog}
-        onDeleteAllRecord={handleOpenDeleteAllRecordDialog}
-      /> */}
       <ColumnCardListComponent
         column={column}
         onRecordEdit={handleOpenEditRecordDialog}

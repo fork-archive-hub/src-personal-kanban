@@ -1,7 +1,3 @@
-import ColumnForm from 'PersonalKanban/components/ColumnForm';
-import IconButton from 'PersonalKanban/components/IconButton';
-import { useTheme } from 'PersonalKanban/providers/ThemeProvider';
-import { useTranslation } from 'PersonalKanban/providers/TranslationProvider';
 import React, { useState } from 'react';
 
 import {
@@ -26,6 +22,10 @@ import { makeStyles, useTheme as useMuiTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
+import ColumnForm from '../../components/ColumnForm';
+import IconButton from '../../components/IconButton';
+import { useTheme } from '../../providers/ThemeProvider';
+import { useTranslation } from '../../providers/TranslationProvider';
 import type { Column } from '../../types';
 
 type AddColumnButtonProps = {
@@ -338,7 +338,7 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
           </MIconButton>
           &nbsp;
           <Typography variant={isMobile ? 'body1' : 'h6'}>
-            示例看板 - 任务管理
+            示例看板 - 任务管理 (👉看板内容就是使用教程)
           </Typography>
         </Box>
         <Box display='flex' flexGrow={1} />

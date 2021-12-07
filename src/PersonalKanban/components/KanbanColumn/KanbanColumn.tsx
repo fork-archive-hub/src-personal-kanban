@@ -1,9 +1,9 @@
-import Column, { ColumnCardList } from 'PersonalKanban/components/Column';
-import KanbanCard from 'PersonalKanban/components/KanbanCard';
-import { Column as ColumnType } from 'PersonalKanban/types';
 import React from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { useTranslation } from 'react-i18next';
+
+import Column, { ColumnCardList } from '../../components/Column';
+import KanbanCard from '../../components/KanbanCard';
+import { Column as ColumnType } from '../../types';
 
 type KanbanInnerColumnCardListProps = {
   column: ColumnType;

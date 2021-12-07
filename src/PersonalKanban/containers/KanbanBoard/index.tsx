@@ -1,14 +1,3 @@
-import KanbanBoard from 'PersonalKanban/components/KanbanBoard';
-import Toolbar from 'PersonalKanban/containers/Toolbar';
-import StorageService from 'PersonalKanban/services/StorageService';
-import {
-  getCreatedAt,
-  getId,
-  getInitialState,
-  reorder,
-  reorderCards,
-} from 'PersonalKanban/services/utils';
-import { Column, Record } from 'PersonalKanban/types';
 import React, {
   useCallback,
   useEffect,
@@ -21,19 +10,29 @@ import React, {
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 
+import KanbanBoard from '../../components/KanbanBoard';
+import Toolbar from '../../containers/Toolbar';
+import StorageService from '../../services/StorageService';
+import {
+  getCreatedAt,
+  getId,
+  getInitialState,
+  reorder,
+  reorderCards,
+} from '../../services/utils';
+import type { Column, Record } from '../../types';
 import AddColumnDialog from './AddColumnDialog';
 
 const useKanbanBoardStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
 }));
 
-type KanbanBoardContainerProps = {};
-
 let initialState = StorageService.getColumns();
-
 if (!initialState) {
   initialState = getInitialState();
 }
+
+type KanbanBoardContainerProps = {};
 
 /**
  * * 创建看板数据的state，将更新逻辑setState传下去。

@@ -1,6 +1,3 @@
-import Radio from 'PersonalKanban/components/Radio';
-import { RecordColor } from 'PersonalKanban/enums';
-import { Record } from 'PersonalKanban/types';
 import { useFormik } from 'formik';
 import React from 'react';
 
@@ -12,6 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+
+import Radio from '../../components/Radio';
+import { RecordColor } from '../../constants';
+import type { Record } from '../../types';
 
 type RecordFormProps = {
   record?: Record;

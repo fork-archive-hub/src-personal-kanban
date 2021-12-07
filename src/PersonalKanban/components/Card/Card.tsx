@@ -1,5 +1,3 @@
-import IconButton from 'PersonalKanban/components/IconButton';
-import { Record } from 'PersonalKanban/types';
 import clsx from 'clsx';
 import React, {
   useCallback,
@@ -15,11 +13,11 @@ import {
   Collapse,
   Container,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  IconButton as MIconButton,
   Paper,
   Typography,
 } from '@material-ui/core';
@@ -33,6 +31,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
 
+import type { Record } from '../../types';
+
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     paper: {
@@ -40,19 +40,17 @@ const useStyles = makeStyles<Theme>((theme) =>
       maxHeight: 480,
       padding: '8px 0 8px 12px',
       '&:hover .cardMoreActionsIcon': {
-        display: 'flex',
+        visibility: 'visible',
+        // color: theme.palette.primary.main,
       },
       '& .cardMoreActionsIcon': {
-        display: 'none',
+        visibility: 'hidden',
       },
     },
     description: {
       color: theme.palette.text.secondary,
       maxHeight: '5rem',
       minHeight: '5rem',
-      // display: '-webkit-box',
-      // '-webkit-line-clamp': 4,
-      // '-webkit-box-orient': 'vertical',
       overflow: 'hidden',
       whiteSpace: 'pre-line',
     },
@@ -64,6 +62,8 @@ const useStyles = makeStyles<Theme>((theme) =>
       '&:hover': {
         backgroundColor: '#d4c5f9',
       },
+      marginRight: theme.spacing(0.5),
+      marginBottom: theme.spacing(0.5),
     },
     taskDueTimeBtn: {
       backgroundColor: '#eef3fc',
@@ -90,7 +90,7 @@ const useStyles = makeStyles<Theme>((theme) =>
     relatedDocsCollapseBtn: {
       color: theme.palette.text.secondary,
     },
-    cardOwnerMemberBtn: {
+    cardBottomIconBtn: {
       paddingTop: 0,
       paddingBottom: 0,
       '&:hover': {
@@ -192,163 +192,162 @@ export function Card(props: CardProps) {
               {title}
             </Typography>
           </Box>
-          <MIconButton
-            onClick={(e) => e.stopPropagation()}
-            disableRipple
-            aria-label='更多任务卡片操作'
-            className='cardMoreActionsIcon'
-          >
-            <MoreHorizOutlinedIcon />
-          </MIconButton>
         </Grid>
 
-        <Grid item container>
-          {tags && tags.length > 0 ? (
+        {tags && tags.length > 0 ? (
+          <Grid item container>
             <Grid item>
-              <Button
-                onClick={(e) => e.stopPropagation()}
-                variant='contained'
-                disableElevation
-                className={classes.tagBtn}
-                // title=''
-              >
-                {tags[0]['tagName']}
-              </Button>
+              {tags.map((tag) => {
+                const { tagName } = tag;
+                return tagName && tagName.trim() ? (
+                  <Button
+                    onClick={(e) => e.stopPropagation()}
+                    variant='contained'
+                    className={classes.tagBtn}
+                    disableElevation
+                    disableRipple
+                    key={tagName}
+                  >
+                    {tagName}
+                  </Button>
+                ) : null;
+              })}
             </Grid>
-          ) : null}
-        </Grid>
-        <Grid item container>
-          {taskDueTime ? (
-            <Grid item>
-              <Button
-                onClick={(e) => e.stopPropagation()}
-                variant='contained'
-                className={classes.taskDueTimeBtn}
-                startIcon={<AlarmOutlinedIcon />}
-                title='截止日期'
-                disableElevation
-              >
-                {taskDueTime}
-              </Button>
-            </Grid>
-          ) : null}
-          {doesSubTaskListExist ? (
+          </Grid>
+        ) : null}
+
+        {taskDueTime || doesSubTaskListExist ? (
+          <Grid item container>
+            {taskDueTime ? (
+              <Grid item>
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  variant='contained'
+                  className={classes.taskDueTimeBtn}
+                  startIcon={<AlarmOutlinedIcon />}
+                  title='截止日期'
+                  disableElevation
+                >
+                  {taskDueTime}
+                </Button>
+              </Grid>
+            ) : null}
+            {doesSubTaskListExist ? (
+              <Grid item>
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  // variant='contained'
+                  disableElevation
+                  className={classes.subTaskListBtn}
+                  startIcon={<AssignmentTurnedInOutlinedIcon />}
+                  title={`待办事件(子任务)清单: 已完成 ${cardSubTasksDoneCount} / 总事项 ${cardSubTasksTotalCount};    未完成 ${
+                    Number(cardSubTasksTotalCount) -
+                    Number(cardSubTasksDoneCount)
+                  } `}
+                >
+                  {cardSubTasksDoneCount}/{cardSubTasksTotalCount}
+                </Button>
+              </Grid>
+            ) : null}
+          </Grid>
+        ) : null}
+
+        {taskPriority ? (
+          <Grid item container>
             <Grid item>
               <Button
                 onClick={(e) => e.stopPropagation()}
                 // variant='contained'
                 disableElevation
                 className={classes.subTaskListBtn}
-                startIcon={<AssignmentTurnedInOutlinedIcon />}
-                title={`待办事件(子任务)清单: 已完成 ${cardSubTasksDoneCount} / 总事项 ${cardSubTasksTotalCount};    未完成 ${
-                  Number(cardSubTasksTotalCount) - Number(cardSubTasksDoneCount)
-                } `}
-              >
-                {cardSubTasksDoneCount}/{cardSubTasksTotalCount}
-              </Button>
-            </Grid>
-          ) : null}
-        </Grid>
-        <Grid item container>
-          {taskPriority ? (
-            <Grid item>
-              <Button
-                onClick={(e) => e.stopPropagation()}
-                // variant='contained'
-                disableElevation
-                // className={classes.subTaskListBtn}
                 startIcon={<SortOutlinedIcon />}
                 title={`当前优先级: ${taskPriority}，任务默认优先级为普通-10`}
               >
                 优先级: {taskPriority}
               </Button>
             </Grid>
-          ) : null}
-        </Grid>
-        <Grid item container>
-          {doesRelatedDocsExist ? (
-            <>
-              <Grid item container>
-                <Button
-                  onClick={handleToggleRelatedDocsListOpen}
-                  variant='text'
-                  // color='textSecondary'
-                  className={classes.relatedDocsCollapseBtn}
-                  startIcon={
-                    isRelatedDocsListOpen ? (
-                      <ExpandMore />
-                    ) : (
-                      <ChevronRightIcon />
-                    )
-                  }
-                >
-                  相关文档/文献
-                </Button>
-              </Grid>
-              <Grid item container>
-                <Collapse
-                  in={isRelatedDocsListOpen}
-                  timeout='auto'
-                  unmountOnExit
-                >
-                  <List aria-label='相关文档列表' disablePadding>
-                    {relatedDocs['docList'].map((doc) => {
-                      const { docId, docTitle } = doc;
+          </Grid>
+        ) : null}
 
-                      return (
-                        <ListItem
-                          onClick={(e) => e.stopPropagation()}
-                          key={docId}
-                          button
-                          disableGutters
-                          className={classes.relatedDocListItem}
-                        >
-                          <ListItemIcon className={classes.relatedDocsItemIcon}>
-                            <DescriptionOutlinedIcon
-                              className={classes.relatedDocsDocIcon}
-                            />
-                          </ListItemIcon>
-                          <ListItemText>
-                            {/* <Link
-                            href={`/doc2/${
-                              Math.floor(Math.random() * (20000 - 1 + 1)) + 1
-                            }`}
-                          > */}
-                            <a
-                              className={classes.relatedDocsTitle}
-                              title={docTitle}
-                            >
-                              {docTitle.length > 24
-                                ? docTitle.slice(0, 24) + '...'
-                                : docTitle}
-                            </a>
-                            {/* </Link> */}
-                          </ListItemText>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </Collapse>
-              </Grid>
-            </>
-          ) : null}
-        </Grid>
+        {doesRelatedDocsExist ? (
+          <Grid item container>
+            <Grid item container>
+              <Button
+                onClick={handleToggleRelatedDocsListOpen}
+                variant='text'
+                className={classes.relatedDocsCollapseBtn}
+                startIcon={
+                  isRelatedDocsListOpen ? <ExpandMore /> : <ChevronRightIcon />
+                }
+              >
+                相关文档/文献
+              </Button>
+            </Grid>
+            <Grid item container>
+              <Collapse in={isRelatedDocsListOpen} timeout='auto' unmountOnExit>
+                <List aria-label='相关文档列表' disablePadding>
+                  {relatedDocs['docList'].map((doc) => {
+                    const { docId, docTitle } = doc;
+
+                    return (
+                      <ListItem
+                        onClick={(e) => e.stopPropagation()}
+                        key={docId}
+                        button
+                        disableGutters
+                        className={classes.relatedDocListItem}
+                      >
+                        <ListItemIcon className={classes.relatedDocsItemIcon}>
+                          <DescriptionOutlinedIcon
+                            className={classes.relatedDocsDocIcon}
+                          />
+                        </ListItemIcon>
+                        <ListItemText>
+                          <a
+                            className={classes.relatedDocsTitle}
+                            title={docTitle}
+                          >
+                            {docTitle.length > 24
+                              ? docTitle.slice(0, 24) + '...'
+                              : docTitle}
+                          </a>
+                        </ListItemText>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </Collapse>
+            </Grid>
+          </Grid>
+        ) : null}
+
         <Grid item container alignItems='center' justifyContent='space-between'>
-          <Box display='flex'>
-            <Typography title={title} gutterBottom noWrap>
-              {/* {title} */}
-            </Typography>
-          </Box>
           {taskMembers && taskMembers.length > 0 ? (
-            <MIconButton
-              onClick={(e) => e.stopPropagation()}
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                alert('选择其他成员，开发中...');
+              }}
               aria-label='任务负责人 owner member'
               disableRipple
-              className={classes.cardOwnerMemberBtn}
+              className={classes.cardBottomIconBtn}
             >
               <AccountCircleOutlinedIcon />
-            </MIconButton>
-          ) : null}
+            </IconButton>
+          ) : (
+            <span></span>
+          )}
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              alert('更多卡片操作，开发中...');
+            }}
+            disableRipple
+            aria-label='更多任务卡片操作'
+            className={`cardMoreActionsIcon ${classes.cardBottomIconBtn}`}
+          >
+            <MoreHorizOutlinedIcon />
+          </IconButton>
         </Grid>
       </Grid>
     </Paper>
