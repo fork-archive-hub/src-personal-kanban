@@ -32,7 +32,6 @@ import IconButton from '../../components/IconButton';
 import RecordForm from '../../components/RecordForm';
 import { ColumnColor, DarkColumnColor } from '../../constants';
 import { useTheme } from '../../providers/ThemeProvider';
-import { useTranslation } from '../../providers/TranslationProvider';
 import type { Column as ColumnType, Record } from '../../types';
 import { RecordDetails } from '../RecordDetails';
 import { ColumnCardList } from './ColumnCardList';
@@ -125,7 +124,6 @@ export function Column(props: ColumnProps) {
 
   const { darkTheme } = useTheme();
 
-  const { t } = useTranslation();
 
   const classes = useColumnStyles({
     backgroundColor: darkTheme
@@ -189,11 +187,19 @@ export function Column(props: ColumnProps) {
   }, []);
 
   const handleOpenDeleteDialog = useCallback(() => {
-    const content = <Typography>{t('deleteColumnConfirmation')}</Typography>;
+    const content = (
+      <Typography>
+        {
+          // t('deleteColumnConfirmation')
+          '是否要删除列？'
+        }
+      </Typography>
+    );
     const actions = (
       <>
         <Button variant='outlined' onClick={handleCloseDialog}>
-          {t('cancel')}
+          {/* {t('cancel')} */}
+          取消
         </Button>
         &nbsp;
         <Button
@@ -204,19 +210,25 @@ export function Column(props: ColumnProps) {
             handleDelete(e);
           }}
         >
-          {t('delete')}
+          删除
+          {/* {t('delete')} */}
         </Button>
       </>
     );
 
-    handleOpenDialog({ content, actions, title: t('deleteColumn') });
-  }, [t, handleOpenDialog, handleDelete, handleCloseDialog]);
+    handleOpenDialog({
+      content,
+      actions,
+      title: '删除分组', // t('deleteColumn')
+    });
+  }, [handleOpenDialog, handleDelete, handleCloseDialog]);
 
   const handleOpenEditDialog = useCallback(() => {
     const content = (
       <ColumnForm
         column={column}
-        formTitle={t('editColumn')}
+        // formTitle={t('editColumn')}
+        formTitle='编辑分组'
         onSubmit={(column: any) => {
           handleCloseDialog();
           handleEdit(column);
@@ -226,7 +238,7 @@ export function Column(props: ColumnProps) {
     );
 
     handleOpenDialog({ content });
-  }, [column, t, handleOpenDialog, handleCloseDialog, handleEdit]);
+  }, [column, handleOpenDialog, handleCloseDialog, handleEdit]);
 
   const handleOpenAddRecordDialog = useCallback(() => {
     const content = (
@@ -271,7 +283,14 @@ export function Column(props: ColumnProps) {
 
   const handleOpenDeleteRecordDialog = useCallback(
     (record: Record) => {
-      const content = <Typography>{t('deleteRecordConfirmation')}</Typography>;
+      const content = (
+        <Typography>
+          {
+            // t('deleteRecordConfirmation')
+            '确定要删除当前卡片？'
+          }
+        </Typography>
+      );
       const actions = (
         <>
           <Button variant='outlined' onClick={handleCloseDialog}>
@@ -291,20 +310,31 @@ export function Column(props: ColumnProps) {
         </>
       );
 
-      handleOpenDialog({ content, actions, title: t('deleteRecord') });
+      handleOpenDialog({
+        content,
+        actions,
+        title: '删除卡片',
+        // t('deleteRecord')
+      });
     },
-    [t, handleOpenDialog, handleCloseDialog, handleRecordDelete],
+    [handleOpenDialog, handleCloseDialog, handleRecordDelete],
   );
 
   const handleOpenDeleteAllRecordDialog = useCallback(
     (record: Record) => {
       const content = (
-        <Typography>{t('deleteAllRecordConfirmation')}</Typography>
+        <Typography>
+          {
+            // t('deleteAllRecordConfirmation')
+            '确定要删除所有卡片？'
+          }
+        </Typography>
       );
       const actions = (
         <>
           <Button variant='outlined' onClick={handleCloseDialog}>
-            {t('cancel')}
+            {/* {t('cancel')} */}
+            取消
           </Button>
           &nbsp;
           <Button
@@ -315,14 +345,19 @@ export function Column(props: ColumnProps) {
               handleAllRecordDelete();
             }}
           >
-            {t('delete')}
+            {/* {t('delete')} */}
+            删除
           </Button>
         </>
       );
 
-      handleOpenDialog({ content, actions, title: t('deleteAllRecord') });
+      handleOpenDialog({
+        content,
+        actions,
+        title: '删除所有卡片', // t('deleteAllRecord')
+      });
     },
-    [t, handleOpenDialog, handleCloseDialog, handleAllRecordDelete],
+    [handleOpenDialog, handleCloseDialog, handleAllRecordDelete],
   );
 
   return (

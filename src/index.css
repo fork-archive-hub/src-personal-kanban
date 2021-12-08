@@ -17,11 +17,11 @@ code {
     monospace;
 }
 
-#root {
-  /* width: fit-content; */
-  /* width: 100wh; */
+/* #root {
+  width: fit-content;
+  width: 100wh;
   width: 100%;
   height: 100vh;
   background-color: #eef3fc;
-  /* background-color: #f6f8fa; */
-}
+  background-color: #f6f8fa;
+} */

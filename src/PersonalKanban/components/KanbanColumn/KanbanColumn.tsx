@@ -80,7 +80,6 @@ export function KanbanColumn(props: KanbanColumnProps) {
     forceBoardUpdate,
   } = props;
 
-  // const { t } = useTranslation();
 
   const _column = Object.assign({}, column, {
     caption: column.wipEnabled

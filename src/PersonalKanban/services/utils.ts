@@ -77,14 +77,14 @@ export const getInitialState = () => {
     // 这里是一个分组/面板
     {
       id: getId(),
-      title: '看板概述',
+      title: '看板示例',
       // color: "Orange",
       // records包含一个分组面板中的所有卡片
       records: [
         // 这里是一个卡片
         {
           id: getId(),
-          title: '这是一个全功能的卡片示例，其他卡片是使用说明',
+          title: '这是一个全功能的卡片示例，其他卡片是使用教程',
           taskEmoji: '✨',
           description:
             'Make a fresh start by erasing this board. Click delete button on main toolbar.',
@@ -138,7 +138,7 @@ export const getInitialState = () => {
         },
         {
           id: getId(),
-          title: '看板结构：分组列(代表任务分组) + 卡片(代表一个任务)',
+          title: '看板结构：分组列(代表一组任务) + 卡片(代表一个任务)',
           description: 'Rate and Star Personal Kanban',
           tags: [
             { tagName: '每个分组列可向下添加多个卡片' },
@@ -158,13 +158,21 @@ export const getInitialState = () => {
       records: [
         {
           id: getId(),
-          title: '一个很短的标题',
+          title: '紫色块是标签，可在卡片详情弹窗中添加标签',
           taskEmoji: '💡',
           description: 'Rate and Star Personal Kanban',
           tags: [{ tagName: '教程' }, { tagName: '这里是标签' }],
           createdAt: getCreatedAt(),
         },
-
+        {
+          id: getId(),
+          title: '在卡片详情弹窗中设置卡片负责人后，卡片右下角会显示负责人头像',
+          taskEmoji: '💡',
+          description: 'Rock the world with your creativity !',
+          taskMembers: ['userId1'],
+          tags: [{ tagName: '教程' }, { tagName: '添加成员/负责人' }],
+          createdAt: getCreatedAt(),
+        },
         {
           id: getId(),
           title: '标签下面是 截止日期 + 任务进度，鼠标悬浮会提示意义',
@@ -229,23 +237,20 @@ export const getInitialState = () => {
           },
           createdAt: getCreatedAt(),
         },
-        {
-          id: getId(),
-          title: '在卡片详情弹窗中设置卡片负责人后，卡片右下角会显示负责人头像',
-          taskEmoji: '💡',
-          description: 'Rock the world with your creativity !',
-          taskMembers: ['userId1'],
-          tags: [{ tagName: '教程' }, { tagName: '添加成员/负责人' }],
-          createdAt: getCreatedAt(),
-        },
       ],
       createdAt: getCreatedAt(),
     },
     {
       id: getId(),
-      title: '看板使用体验',
+      title: '看板使用小技巧',
       // color: "Green",
       records: [
+        {
+          id: getId(),
+          title: '在卡片详情弹窗中点击标题文字可直接编辑标题',
+          description: 'Rock the world with your creativity !',
+          createdAt: getCreatedAt(),
+        },
         {
           id: getId(),
           title: '标题文字前放个emoji更醒目',
@@ -262,16 +267,10 @@ export const getInitialState = () => {
         },
         {
           id: getId(),
-          title: '在卡片详情弹窗中点击标题文字可直接编辑标题',
-          description: 'Rock the world with your creativity !',
-          createdAt: getCreatedAt(),
-        },
-        {
-          id: getId(),
           // color: "Indigo",
           title:
             '一个很长很长的标题，长到必须要换行了，甚至超过2行，显示更多行，也超过了详情弹窗中标题输入框的长度； ',
-          tags: [{ tagName: '可将内容全部放在标题部分，而不是描述部分' }],
+          tags: [{ tagName: '可将内容全放在标题，而不是描述' }],
           description: 'Rock the world with your creativity !',
           createdAt: getCreatedAt(),
         },

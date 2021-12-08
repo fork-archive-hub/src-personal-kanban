@@ -5,7 +5,7 @@ import ThemeProvider from './providers/ThemeProvider';
 
 interface PersonalKanbanProps {}
 
-export function PersonalKanban() {
+export function PersonalKanban(props) {
   return (
     <ThemeProvider>
       <KanbanBoardContainer />

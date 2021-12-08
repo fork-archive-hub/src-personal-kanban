@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 import KanbanBoard from '../../components/KanbanBoard';
 import Toolbar from '../../containers/Toolbar';
@@ -23,14 +23,21 @@ import {
 import type { Column, Record } from '../../types';
 import AddColumnDialog from './AddColumnDialog';
 
-const useKanbanBoardStyles = makeStyles((theme) => ({
-  toolbar: theme.mixins.toolbar,
-}));
-
 let initialState = StorageService.getColumns();
 if (!initialState) {
   initialState = getInitialState();
 }
+
+const useKanbanBoardStyles = makeStyles<Theme>((theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+      height: '100vh',
+      backgroundColor: '#eef3fc',
+    },
+    toolbar: theme.mixins.toolbar,
+  }),
+);
 
 type KanbanBoardContainerProps = {};
 
@@ -219,7 +226,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
   }, [columns]);
 
   return (
-    <>
+    <div className={classes.root}>
       <Toolbar
         clearButtonDisabled={!columns.length}
         onNewColumn={handleAddColumn}
@@ -246,7 +253,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         onClose={handleCloseAddColumnDialog}
         onSubmit={handleAddColumn}
       />
-    </>
+    </div>
   );
 }
 

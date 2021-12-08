@@ -25,7 +25,6 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ColumnForm from '../../components/ColumnForm';
 import IconButton from '../../components/IconButton';
 import { useTheme } from '../../providers/ThemeProvider';
-import { useTranslation } from '../../providers/TranslationProvider';
 import type { Column } from '../../types';
 
 type AddColumnButtonProps = {
@@ -34,8 +33,6 @@ type AddColumnButtonProps = {
 
 const AddColumnButton: React.FC<AddColumnButtonProps> = (props) => {
   const { onSubmit } = props;
-
-  const { t } = useTranslation();
 
   const [open, setOpen] = React.useState(false);
 
@@ -58,7 +55,8 @@ const AddColumnButton: React.FC<AddColumnButtonProps> = (props) => {
   return (
     <Box display='block'>
       <IconButton icon='add' color='primary' onClick={handleOpenDialog}>
-        {t('addColumn')}
+        {/* {t('addColumn')} */}
+        添加分组
       </IconButton>
       <Dialog onClose={handleCloseDialog} open={open}>
         <DialogContent>
@@ -76,8 +74,6 @@ type ClearBoardButtonProps = {
 
 const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
   const { disabled, onClear } = props;
-
-  const { t } = useTranslation();
 
   const [open, setOpen] = React.useState(false);
 
@@ -142,7 +138,7 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
 type LanguageButtonProps = {};
 
 const LanguageButton: React.FC<LanguageButtonProps> = (props) => {
-  const { i18n } = useTranslation();
+  // const { i18n } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -155,7 +151,7 @@ const LanguageButton: React.FC<LanguageButtonProps> = (props) => {
   };
 
   const handleChangeLanguage = (lng: string) => () => {
-    i18n.changeLanguage(lng);
+    // i18n.changeLanguage(lng);
     handleClose();
   };
 
@@ -317,7 +313,7 @@ type ToolbarProps = {
 const Toolbar: React.FC<ToolbarProps> = (props) => {
   const { clearButtonDisabled, onNewColumn, onClearBoard } = props;
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const classes = useToolbarStyles();
 
@@ -338,7 +334,7 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
           </MIconButton>
           &nbsp;
           <Typography variant={isMobile ? 'body1' : 'h6'}>
-            示例看板 - 任务管理 (👉看板内容就是使用教程)
+            示例看板 - 任务管理 ( 👉 看板内容就是使用教程)
           </Typography>
         </Box>
         <Box display='flex' flexGrow={1} />

@@ -32,7 +32,6 @@ import IconButton from '../../components/IconButton';
 import RecordForm from '../../components/RecordForm';
 import { ColumnColor, DarkColumnColor } from '../../constants';
 import { useTheme } from '../../providers/ThemeProvider';
-import { useTranslation } from '../../providers/TranslationProvider';
 import type { Column as ColumnType, Record } from '../../types';
 import { RecordDetails } from '../RecordDetails';
 import { ColumnCardList } from './ColumnCardList';

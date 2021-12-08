@@ -27,7 +27,7 @@ export function AddColumnDialog(props: AddColumnDialogProps) {
       onSubmit({ column });
       handleCloseDialog();
     },
-    [onSubmit, handleCloseDialog],
+    [handleCloseDialog, onSubmit],
   );
 
   return (
