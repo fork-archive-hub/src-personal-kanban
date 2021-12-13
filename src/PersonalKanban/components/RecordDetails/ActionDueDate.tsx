@@ -1,5 +1,5 @@
-import cx from 'clsx';
-import localeCN from 'date-fns/locale/zh-CN';
+import cx from "clsx";
+import localeCN from "date-fns/locale/zh-CN";
 import React, {
   useCallback,
   useEffect,
@@ -7,9 +7,9 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from "@date-io/date-fns";
 import {
   Avatar,
   Button,
@@ -34,26 +34,26 @@ import {
   Select,
   TextField,
   Typography,
-} from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+} from "@material-ui/core";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import EventAvailableOutlinedIcon from "@material-ui/icons/EventAvailableOutlined";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     dueDatePicker: {
       width: 120,
-      marginRight: '2rem',
-      '& .MuiInputBase-input': {
-        border: 'none',
-        outline: 'none',
-        boxShadow: 'none',
+      marginRight: "2rem",
+      "& .MuiInputBase-input": {
+        border: "none",
+        outline: "none",
+        boxShadow: "none",
       },
     },
     visibilityHidden: {
-      visibility: 'hidden',
+      visibility: "hidden",
     },
-  }),
+  })
 );
 
 export function ActionDueDate(props) {
@@ -70,7 +70,7 @@ export function ActionDueDate(props) {
   return (
     <>
       <Button
-        variant='text'
+        variant="text"
         // className={`${
         //   isSelectingDueDate ? '' : classes.taskCommonActionsBtn
         // }`}
@@ -87,9 +87,9 @@ export function ActionDueDate(props) {
           value={selectedDueDate}
           onChange={handleDueDateChange}
           disableToolbar
-          variant='inline'
-          format='yyyy-MM-dd'
-          id='date-picker-inline'
+          variant="inline"
+          format="yyyy-MM-dd"
+          id="date-picker-inline"
           className={cx(classes.dueDatePicker, {
             [classes.visibilityHidden]: !isSelectingDueDate,
           })}
@@ -98,11 +98,11 @@ export function ActionDueDate(props) {
       </MuiPickersUtilsProvider>
       {isSelectingDueDate ? (
         <Button
-          variant='text'
+          variant="text"
           // startIcon={<EventAvailableOutlinedIcon />}
           onClick={() => {
             setIsSelectingDueDate(true);
-            console.log(';; 清除日期');
+            console.log(";; 清除日期");
           }}
         >
           清除日期

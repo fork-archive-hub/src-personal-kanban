@@ -1,4 +1,4 @@
-import cx from 'clsx';
+import cx from "clsx";
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Button,
@@ -36,29 +36,29 @@ import {
   Select,
   TextField,
   Typography,
-} from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+} from "@material-ui/core";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     configItemFormControl: {
-      width: '100%',
+      width: "100%",
       // paddingBottom: 0,
     },
     configItemTitle: {
-      margin: '8px 0 4px',
+      margin: "8px 0 4px",
     },
 
     subTaskCheckbox: {
-      '& svg': {
-        fontSize: '1.3rem',
+      "& svg": {
+        fontSize: "1.3rem",
       },
-      '&+span': {
+      "&+span": {
         color: theme.palette.text.secondary,
       },
     },
-  }),
+  })
 );
 
 export function ItemChecklist(props) {
@@ -77,8 +77,11 @@ export function ItemChecklist(props) {
 
   return (
     <>
-      <FormControl component='fieldset' className={classes.configItemFormControl}>
-        <FormLabel component='legend' className={classes.configItemTitle}>
+      <FormControl
+        component="fieldset"
+        className={classes.configItemFormControl}
+      >
+        <FormLabel component="legend" className={classes.configItemTitle}>
           子任务/待办事项
         </FormLabel>
         <FormGroup>
@@ -92,7 +95,7 @@ export function ItemChecklist(props) {
                       name={task.id}
                       disableRipple
                       className={classes.subTaskCheckbox}
-                      color='primary'
+                      color="primary"
                     />
                   }
                   label={task.title}
@@ -108,12 +111,12 @@ export function ItemChecklist(props) {
             <TextField
               value={newSubTaskChecklistItemName}
               onChange={handleInputSubTaskChecklistItemName}
-              id='newSubTaskChecklistItemName'
-              label='输入子任务名称或待办事件名称'
+              id="newSubTaskChecklistItemName"
+              label="输入子任务名称或待办事件名称"
             />
             <Button
-              variant='contained'
-              color='primary'
+              variant="contained"
+              color="primary"
               // className={classes.button}
               startIcon={<AddIcon />}
               onClick={handleUpdateSubTasksData}
@@ -123,8 +126,8 @@ export function ItemChecklist(props) {
           </>
         ) : (
           <Button
-            variant='text'
-            color='default'
+            variant="text"
+            color="default"
             // className={classes.button}
             startIcon={<AddIcon />}
             onClick={handleAddSubTaskChecklistItem}

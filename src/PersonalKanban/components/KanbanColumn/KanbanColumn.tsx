@@ -1,9 +1,9 @@
-import React from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import React from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
-import Column, { ColumnCardList } from '../../components/Column';
-import KanbanCard from '../../components/KanbanCard';
-import { Column as ColumnType } from '../../types';
+import Column, { ColumnCardList } from "../../components/Column";
+import KanbanCard from "../../components/KanbanCard";
+import { Column as ColumnType } from "../../types";
 
 type KanbanInnerColumnCardListProps = {
   column: ColumnType;
@@ -79,7 +79,6 @@ export function KanbanColumn(props: KanbanColumnProps) {
     onAllRecordDelete,
     forceBoardUpdate,
   } = props;
-
 
   const _column = Object.assign({}, column, {
     caption: column.wipEnabled

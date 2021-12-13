@@ -6,8 +6,8 @@ export function generateUserList(userCount) {
   for (let i = 0; i < userCount; i++) {
     retUsers.push({
       userId: i,
-      username: i % 2 === 0 ? 'User Name' + i : '用户名' + i,
-      avatar: 'avatar',
+      username: i % 2 === 0 ? "User Name" + i : "用户名" + i,
+      avatar: "avatar",
     });
   }
 

@@ -1,11 +1,11 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 import React, {
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Box,
@@ -20,53 +20,53 @@ import {
   ListItemText,
   Paper,
   Typography,
-} from '@material-ui/core';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import AlarmOutlinedIcon from '@material-ui/icons/AlarmOutlined';
-import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
-import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
+} from "@material-ui/core";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
+import AlarmOutlinedIcon from "@material-ui/icons/AlarmOutlined";
+import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import MoreHorizOutlinedIcon from "@material-ui/icons/MoreHorizOutlined";
+import SortOutlinedIcon from "@material-ui/icons/SortOutlined";
 
-import type { Record } from '../../types';
+import type { Record } from "../../types";
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     paper: {
       minHeight: 80,
       maxHeight: 480,
-      padding: '8px 0 8px 12px',
-      '&:hover .cardMoreActionsIcon': {
-        visibility: 'visible',
+      padding: "8px 0 8px 12px",
+      "&:hover .cardMoreActionsIcon": {
+        visibility: "visible",
         // color: theme.palette.primary.main,
       },
-      '& .cardMoreActionsIcon': {
-        visibility: 'hidden',
+      "& .cardMoreActionsIcon": {
+        visibility: "hidden",
       },
     },
     description: {
       color: theme.palette.text.secondary,
-      maxHeight: '5rem',
-      minHeight: '5rem',
-      overflow: 'hidden',
-      whiteSpace: 'pre-line',
+      maxHeight: "5rem",
+      minHeight: "5rem",
+      overflow: "hidden",
+      whiteSpace: "pre-line",
     },
     cardTitle: {},
     tagBtn: {
-      backgroundColor: '#d4c5f9',
-      textTransform: 'none',
+      backgroundColor: "#d4c5f9",
+      textTransform: "none",
       // backgroundColor: '#a2eeef',
-      '&:hover': {
-        backgroundColor: '#d4c5f9',
+      "&:hover": {
+        backgroundColor: "#d4c5f9",
       },
       marginRight: theme.spacing(0.5),
       marginBottom: theme.spacing(0.5),
     },
     taskDueTimeBtn: {
-      backgroundColor: '#eef3fc',
+      backgroundColor: "#eef3fc",
     },
     subTaskListBtn: {
       // backgroundColor: '#eef3fc',
@@ -81,11 +81,11 @@ const useStyles = makeStyles<Theme>((theme) =>
       // fontSize: '1rem',
     },
     relatedDocsDocIcon: {
-      fontSize: '1rem',
+      fontSize: "1rem",
     },
     relatedDocListItem: {
       // paddingLeft: theme.spacing(2),
-      padding: '0 0 0 16px',
+      padding: "0 0 0 16px",
     },
     relatedDocsCollapseBtn: {
       color: theme.palette.text.secondary,
@@ -93,11 +93,11 @@ const useStyles = makeStyles<Theme>((theme) =>
     cardBottomIconBtn: {
       paddingTop: 0,
       paddingBottom: 0,
-      '&:hover': {
-        backgroundColor: '#fff',
+      "&:hover": {
+        backgroundColor: "#fff",
       },
     },
-  }),
+  })
 );
 
 type CardProps = {
@@ -151,15 +151,15 @@ export function Card(props: CardProps) {
   const handleDelete = useCallback(() => onDelete(record), [record, onDelete]);
 
   const doesSubTaskListExist =
-    subTaskList && subTaskList['records'] && subTaskList['records'].length > 0;
+    subTaskList && subTaskList["records"] && subTaskList["records"].length > 0;
   let cardSubTasksTotalCount = 0;
   let cardSubTasksDoneCount = 0;
   if (doesSubTaskListExist) {
-    cardSubTasksTotalCount = subTaskList['records'].length;
-    subTaskList['records'].forEach((record) => {
+    cardSubTasksTotalCount = subTaskList["records"].length;
+    subTaskList["records"].forEach((record) => {
       // console.log(';;subTask-record ', record);
 
-      if (record.taskStatus === 'done') {
+      if (record.taskStatus === "done") {
         cardSubTasksDoneCount++;
       }
     });
@@ -167,7 +167,7 @@ export function Card(props: CardProps) {
   // console.log(';;cardSubTasksDoneCount ', cardSubTasksDoneCount);
 
   const doesRelatedDocsExist =
-    relatedDocs && relatedDocs['docList'] && relatedDocs['docList'].length > 0;
+    relatedDocs && relatedDocs["docList"] && relatedDocs["docList"].length > 0;
   const [isRelatedDocsListOpen, setIsRelatedDocsListOpen] = useState(true);
   const handleToggleRelatedDocsListOpen = useCallback((e) => {
     setIsRelatedDocsListOpen((prev) => !prev);
@@ -185,10 +185,10 @@ export function Card(props: CardProps) {
       {...rest}
     >
       <Grid container spacing={1}>
-        <Grid item container alignItems='center' justifyContent='space-between'>
-          <Box display='flex' style={{ padding: `12px 12px 12px 8px` }}>
+        <Grid item container alignItems="center" justifyContent="space-between">
+          <Box display="flex" style={{ padding: `12px 12px 12px 8px` }}>
             <Typography title={title} className={classes.cardTitle}>
-              {taskEmoji && taskEmoji.trim() ? taskEmoji + ' ' : null}
+              {taskEmoji && taskEmoji.trim() ? taskEmoji + " " : null}
               {title}
             </Typography>
           </Box>
@@ -202,7 +202,7 @@ export function Card(props: CardProps) {
                 return tagName && tagName.trim() ? (
                   <Button
                     onClick={(e) => e.stopPropagation()}
-                    variant='contained'
+                    variant="contained"
                     className={classes.tagBtn}
                     disableElevation
                     disableRipple
@@ -222,10 +222,10 @@ export function Card(props: CardProps) {
               <Grid item>
                 <Button
                   onClick={(e) => e.stopPropagation()}
-                  variant='contained'
+                  variant="contained"
                   className={classes.taskDueTimeBtn}
                   startIcon={<AlarmOutlinedIcon />}
-                  title='截止日期'
+                  title="截止日期"
                   disableElevation
                 >
                   {taskDueTime}
@@ -274,7 +274,7 @@ export function Card(props: CardProps) {
             <Grid item container>
               <Button
                 onClick={handleToggleRelatedDocsListOpen}
-                variant='text'
+                variant="text"
                 className={classes.relatedDocsCollapseBtn}
                 startIcon={
                   isRelatedDocsListOpen ? <ExpandMore /> : <ChevronRightIcon />
@@ -284,9 +284,9 @@ export function Card(props: CardProps) {
               </Button>
             </Grid>
             <Grid item container>
-              <Collapse in={isRelatedDocsListOpen} timeout='auto' unmountOnExit>
-                <List aria-label='相关文档列表' disablePadding>
-                  {relatedDocs['docList'].map((doc) => {
+              <Collapse in={isRelatedDocsListOpen} timeout="auto" unmountOnExit>
+                <List aria-label="相关文档列表" disablePadding>
+                  {relatedDocs["docList"].map((doc) => {
                     const { docId, docTitle } = doc;
 
                     return (
@@ -308,7 +308,7 @@ export function Card(props: CardProps) {
                             title={docTitle}
                           >
                             {docTitle.length > 24
-                              ? docTitle.slice(0, 24) + '...'
+                              ? docTitle.slice(0, 24) + "..."
                               : docTitle}
                           </a>
                         </ListItemText>
@@ -321,14 +321,14 @@ export function Card(props: CardProps) {
           </Grid>
         ) : null}
 
-        <Grid item container alignItems='center' justifyContent='space-between'>
+        <Grid item container alignItems="center" justifyContent="space-between">
           {taskMembers && taskMembers.length > 0 ? (
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
-                alert('选择其他成员，开发中...');
+                alert("选择其他成员，开发中...");
               }}
-              aria-label='任务负责人 owner member'
+              aria-label="任务负责人 owner member"
               disableRipple
               className={classes.cardBottomIconBtn}
             >
@@ -340,10 +340,10 @@ export function Card(props: CardProps) {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              alert('更多卡片操作，开发中...');
+              alert("更多卡片操作，开发中...");
             }}
             disableRipple
-            aria-label='更多任务卡片操作'
+            aria-label="更多任务卡片操作"
             className={`cardMoreActionsIcon ${classes.cardBottomIconBtn}`}
           >
             <MoreHorizOutlinedIcon />

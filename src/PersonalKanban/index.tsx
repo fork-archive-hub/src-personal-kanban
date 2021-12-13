@@ -1,16 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import KanbanBoardContainer from './containers/KanbanBoard';
-import ThemeProvider from './providers/ThemeProvider';
+import KanbanBoardContainer from "./containers/KanbanBoard";
 
 interface PersonalKanbanProps {}
 
 export function PersonalKanban(props) {
-  return (
-    <ThemeProvider>
-      <KanbanBoardContainer />
-    </ThemeProvider>
-  );
+  return <KanbanBoardContainer />;
 }
 
 export default PersonalKanban;

@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Box,
@@ -20,22 +20,22 @@ import {
   IconButton,
   Paper,
   Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useColumnHeaderStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   divider: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(1),
   },
   columnMoreActionsBtn: {
-    '&:hover': {
-      backgroundColor: '#fff',
+    "&:hover": {
+      backgroundColor: "#fff",
       color: theme.palette.primary.main,
     },
   },
@@ -64,14 +64,14 @@ export function ColumnHeader(props: ColumnHeaderProps) {
   return (
     <>
       <Box
-        bgcolor='#fff'
-        display='flex'
-        alignItems='center'
-        justifyContent='space-between'
-        padding='0 0 0 12px'
+        bgcolor="#fff"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        padding="0 0 0 12px"
         // marginBottom={Boolean(description) ? 0.5 : 0}
         // marginBottom={1.5}
-        marginBottom='12px'
+        marginBottom="12px"
       >
         <Typography
           // variant='h6'
@@ -81,14 +81,14 @@ export function ColumnHeader(props: ColumnHeaderProps) {
         >
           {title}
         </Typography>
-        <Box display='flex' alignItems='center'>
+        <Box display="flex" alignItems="center">
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              alert('更多分组操作，开发中...');
+              alert("更多分组操作，开发中...");
             }}
             className={classes.columnMoreActionsBtn}
-            aria-label='更多分组操作'
+            aria-label="更多分组操作"
             disableRipple
           >
             <MoreHorizIcon />

@@ -1,20 +1,20 @@
-import { useFormik } from 'formik';
-import React from 'react';
+import { useFormik } from "formik";
+import React from "react";
 
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import Grid from '@material-ui/core/Grid';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import Divider from "@material-ui/core/Divider";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Grid from "@material-ui/core/Grid";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
-import Radio from '../../components/Radio';
-import { ColumnColor } from '../../constants';
-import type { Column } from '../../types';
+import Radio from "../../components/Radio";
+import { ColumnColor } from "../../constants";
+import type { Column } from "../../types";
 
 type ColumnFormProps = {
   column?: Partial<Column>;
@@ -29,7 +29,7 @@ export function ColumnForm(props: ColumnFormProps) {
   const {
     column,
     disabled,
-    formTitle = '添加分组 (任务清单)',
+    formTitle = "添加分组 (任务清单)",
     onSubmit,
     onCancel,
     enableWipLimit = false,
@@ -38,13 +38,13 @@ export function ColumnForm(props: ColumnFormProps) {
   const { values, errors, handleChange, handleSubmit } = useFormik({
     initialValues: Object.assign(
       {
-        title: '',
-        description: '',
-        color: '',
+        title: "",
+        description: "",
+        color: "",
         wipEnabled: false,
         wipLimit: 0,
       },
-      column,
+      column
     ),
     onSubmit: (values) => {
       onSubmit && onSubmit(values);
@@ -53,12 +53,12 @@ export function ColumnForm(props: ColumnFormProps) {
       const errors: any = {};
       if (!values.title) {
         // errors.title = t('titleRequired');
-        errors.title = '* 必填项';
+        errors.title = "* 必填项";
       }
 
       if (values.wipEnabled && !values.wipLimit) {
         // errors.wipLimit = t('limitRequired');
-        errors.wipLimit = '* 必填项 卡片数量上限';
+        errors.wipLimit = "* 必填项 卡片数量上限";
       }
 
       return errors;
@@ -76,22 +76,22 @@ export function ColumnForm(props: ColumnFormProps) {
 
       handleChange(e);
     },
-    [handleChange],
+    [handleChange]
   );
 
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Typography gutterBottom variant='h6'>
+          <Typography gutterBottom variant="h6">
             {formTitle}
           </Typography>
           <Divider />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            name='title'
-            label={'分组名称'}
+            name="title"
+            label={"分组名称"}
             value={values.title}
             error={Boolean(errors.title)}
             helperText={errors.title}
@@ -103,8 +103,8 @@ export function ColumnForm(props: ColumnFormProps) {
           <TextField
             multiline
             rows={3}
-            name='description'
-            label={'分组描述或任务清单描述'}
+            name="description"
+            label={"分组描述或任务清单描述"}
             value={values.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
@@ -119,18 +119,18 @@ export function ColumnForm(props: ColumnFormProps) {
                 <Checkbox
                   checked={values.wipEnabled}
                   onChange={handleChange}
-                  name='wipEnabled'
+                  name="wipEnabled"
                 />
               }
-              label={'wipLimitEnabled'}
+              label={"wipLimitEnabled"}
             />
           ) : null}
         </Grid>
         <Grid item xs={12}>
           {enableWipLimit ? (
             <TextField
-              name='wipLimit'
-              label={'wipLimit'}
+              name="wipLimit"
+              label={"wipLimit"}
               value={values.wipLimit}
               error={Boolean(errors.wipLimit)}
               helperText={errors.wipLimit}
@@ -141,12 +141,12 @@ export function ColumnForm(props: ColumnFormProps) {
         </Grid>
 
         <Grid item xs={12}>
-          <FormControl component='fieldset'>
-            <FormLabel component='legend'>背景色</FormLabel>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">背景色</FormLabel>
             <RadioGroup
               row
-              aria-label='background'
-              name='color'
+              aria-label="background"
+              name="color"
               value={values.color}
               onChange={handleChange}
             >
@@ -164,14 +164,14 @@ export function ColumnForm(props: ColumnFormProps) {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant='outlined' disabled={disabled} onClick={onCancel}>
+          <Button variant="outlined" disabled={disabled} onClick={onCancel}>
             取消
           </Button>
           &emsp;
           <Button
-            type='submit'
-            color='primary'
-            variant='contained'
+            type="submit"
+            color="primary"
+            variant="contained"
             disabled={disabled}
           >
             添加

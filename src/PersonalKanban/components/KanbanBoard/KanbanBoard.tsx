@@ -4,12 +4,12 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+} from "react";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import Board from '../../components/Board';
-import KanbanColumn from '../../components/KanbanColumn';
-import type { Column } from '../../types';
+import Board from "../../components/Board";
+import KanbanColumn from "../../components/KanbanColumn";
+import type { Column } from "../../types";
 
 type KanbanBoardProps = {
   columns: Column[];
@@ -48,7 +48,7 @@ export function KanbanBoard(props: KanbanBoardProps) {
 
   const getColumnById = useCallback(
     (columnId) => columns.find((column) => column.id === columnId),
-    [columns],
+    [columns]
   );
 
   const getColumnByIndex = useCallback((index) => columns[index], [columns]);
@@ -69,7 +69,7 @@ export function KanbanBoard(props: KanbanBoardProps) {
         return;
       }
 
-      if (type === 'COLUMN') {
+      if (type === "COLUMN") {
         onColumnMove({
           column: getColumnByIndex(source.index),
           index: destination.index,
@@ -86,12 +86,12 @@ export function KanbanBoard(props: KanbanBoardProps) {
         index: destination.index,
       });
     },
-    [onColumnMove, onCardMove, getColumnByIndex, getColumnById],
+    [onColumnMove, onCardMove, getColumnByIndex, getColumnById]
   );
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId='BOARD' type='COLUMN' direction='horizontal'>
+      <Droppable droppableId="BOARD" type="COLUMN" direction="horizontal">
         {(provided) => (
           <>
             <Board

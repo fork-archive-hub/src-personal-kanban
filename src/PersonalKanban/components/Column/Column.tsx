@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Box,
@@ -21,39 +21,39 @@ import {
   IconButton as MIconButton,
   Paper,
   Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-import Card from '../../components/Card';
-import ColumnForm from '../../components/ColumnForm';
-import IconButton from '../../components/IconButton';
-import RecordForm from '../../components/RecordForm';
-import { ColumnColor, DarkColumnColor } from '../../constants';
-import { useTheme } from '../../providers/ThemeProvider';
-import type { Column as ColumnType, Record } from '../../types';
-import { RecordDetails } from '../RecordDetails';
-import { ColumnCardList } from './ColumnCardList';
-import { ColumnFooter } from './ColumnFooter';
-import { ColumnHeader } from './ColumnHeader';
+import Card from "../../components/Card";
+import ColumnForm from "../../components/ColumnForm";
+import IconButton from "../../components/IconButton";
+import RecordForm from "../../components/RecordForm";
+import { ColumnColor, DarkColumnColor } from "../../constants";
+import { useTheme } from "../../providers/ThemeProvider";
+import type { Column as ColumnType, Record } from "../../types";
+import { RecordDetails } from "../RecordDetails";
+import { ColumnCardList } from "./ColumnCardList";
+import { ColumnFooter } from "./ColumnFooter";
+import { ColumnHeader } from "./ColumnHeader";
 
 const useColumnStyles = makeStyles(() => ({
   paper: (props: any) => {
     // console.log(';;col-props ', props);
-    const bgColor = props.backgroundColor || 'transparent';
+    const bgColor = props.backgroundColor || "transparent";
     return {
       backgroundColor: bgColor,
     };
   },
 
   dialogPaper: {
-    maxHeight: '80vh',
-    maxWidth: '65vh',
+    maxHeight: "80vh",
+    maxWidth: "65vh",
     // overflow: 'hidden',
   },
   dialogContent: {
-    overflow: 'hidden',
+    overflow: "hidden",
     // minHeight: 860,
   },
 }));
@@ -124,7 +124,6 @@ export function Column(props: ColumnProps) {
 
   const { darkTheme } = useTheme();
 
-
   const classes = useColumnStyles({
     backgroundColor: darkTheme
       ? DarkColumnColor[columnColor]
@@ -133,7 +132,7 @@ export function Column(props: ColumnProps) {
 
   const [dialog, setDialog] = useState({
     open: false,
-    title: '',
+    title: "",
     content: null,
     actions: null,
   });
@@ -142,21 +141,21 @@ export function Column(props: ColumnProps) {
     (e) => {
       onDelete && onDelete({ column, e });
     },
-    [column, onDelete],
+    [column, onDelete]
   );
 
   const handleEdit = useCallback(
     (column: ColumnType) => {
       onEdit && onEdit({ column });
     },
-    [onEdit],
+    [onEdit]
   );
 
   const handleAddRecord = useCallback(
     (record: Record) => {
       onAddRecord && onAddRecord({ column, record });
     },
-    [column, onAddRecord],
+    [column, onAddRecord]
   );
 
   /** 更新看板数据的方法，会传入column和record */
@@ -164,14 +163,14 @@ export function Column(props: ColumnProps) {
     (record: Record) => {
       onRecordEdit({ column, record });
     },
-    [column, onRecordEdit],
+    [column, onRecordEdit]
   );
 
   const handleRecordDelete = useCallback(
     (record: Record) => {
       onRecordDelete({ column, record });
     },
-    [column, onRecordDelete],
+    [column, onRecordDelete]
   );
 
   const handleAllRecordDelete = useCallback(() => {
@@ -183,7 +182,7 @@ export function Column(props: ColumnProps) {
   }, []);
 
   const handleCloseDialog = useCallback(() => {
-    setDialog(() => ({ content: null, title: '', actions: null, open: false }));
+    setDialog(() => ({ content: null, title: "", actions: null, open: false }));
   }, []);
 
   const handleOpenDeleteDialog = useCallback(() => {
@@ -191,20 +190,20 @@ export function Column(props: ColumnProps) {
       <Typography>
         {
           // t('deleteColumnConfirmation')
-          '是否要删除列？'
+          "是否要删除列？"
         }
       </Typography>
     );
     const actions = (
       <>
-        <Button variant='outlined' onClick={handleCloseDialog}>
+        <Button variant="outlined" onClick={handleCloseDialog}>
           {/* {t('cancel')} */}
           取消
         </Button>
         &nbsp;
         <Button
-          variant='contained'
-          color='primary'
+          variant="contained"
+          color="primary"
           onClick={(e) => {
             handleCloseDialog();
             handleDelete(e);
@@ -219,7 +218,7 @@ export function Column(props: ColumnProps) {
     handleOpenDialog({
       content,
       actions,
-      title: '删除分组', // t('deleteColumn')
+      title: "删除分组", // t('deleteColumn')
     });
   }, [handleOpenDialog, handleDelete, handleCloseDialog]);
 
@@ -228,7 +227,7 @@ export function Column(props: ColumnProps) {
       <ColumnForm
         column={column}
         // formTitle={t('editColumn')}
-        formTitle='编辑分组'
+        formTitle="编辑分组"
         onSubmit={(column: any) => {
           handleCloseDialog();
           handleEdit(column);
@@ -272,13 +271,13 @@ export function Column(props: ColumnProps) {
             handleRecordEdit(record);
           }}
           onCancel={handleCloseDialog}
-          forceBoardUpdate={forceBoardUpdate}
+          // forceBoardUpdate={forceBoardUpdate}
         ></RecordDetails>
       );
 
       handleOpenDialog({ content });
     },
-    [handleCloseDialog, forceBoardUpdate, handleOpenDialog, handleRecordEdit],
+    [handleCloseDialog, handleOpenDialog, handleRecordEdit]
   );
 
   const handleOpenDeleteRecordDialog = useCallback(
@@ -287,19 +286,19 @@ export function Column(props: ColumnProps) {
         <Typography>
           {
             // t('deleteRecordConfirmation')
-            '确定要删除当前卡片？'
+            "确定要删除当前卡片？"
           }
         </Typography>
       );
       const actions = (
         <>
-          <Button variant='outlined' onClick={handleCloseDialog}>
+          <Button variant="outlined" onClick={handleCloseDialog}>
             取消
           </Button>
           &nbsp;
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             onClick={(e) => {
               handleCloseDialog();
               handleRecordDelete(record);
@@ -313,11 +312,11 @@ export function Column(props: ColumnProps) {
       handleOpenDialog({
         content,
         actions,
-        title: '删除卡片',
+        title: "删除卡片",
         // t('deleteRecord')
       });
     },
-    [handleOpenDialog, handleCloseDialog, handleRecordDelete],
+    [handleOpenDialog, handleCloseDialog, handleRecordDelete]
   );
 
   const handleOpenDeleteAllRecordDialog = useCallback(
@@ -326,20 +325,20 @@ export function Column(props: ColumnProps) {
         <Typography>
           {
             // t('deleteAllRecordConfirmation')
-            '确定要删除所有卡片？'
+            "确定要删除所有卡片？"
           }
         </Typography>
       );
       const actions = (
         <>
-          <Button variant='outlined' onClick={handleCloseDialog}>
+          <Button variant="outlined" onClick={handleCloseDialog}>
             {/* {t('cancel')} */}
             取消
           </Button>
           &nbsp;
           <Button
-            variant='contained'
-            color='primary'
+            variant="contained"
+            color="primary"
             onClick={(e) => {
               handleCloseDialog();
               handleAllRecordDelete();
@@ -354,10 +353,10 @@ export function Column(props: ColumnProps) {
       handleOpenDialog({
         content,
         actions,
-        title: '删除所有卡片', // t('deleteAllRecord')
+        title: "删除所有卡片", // t('deleteAllRecord')
       });
     },
-    [handleOpenDialog, handleCloseDialog, handleAllRecordDelete],
+    [handleOpenDialog, handleCloseDialog, handleAllRecordDelete]
   );
 
   return (

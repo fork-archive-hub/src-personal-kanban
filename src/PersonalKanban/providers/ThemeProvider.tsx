@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from "@material-ui/core/CssBaseline";
 import {
   blue,
   blueGrey,
@@ -12,12 +12,12 @@ import {
   purple,
   red,
   yellow,
-} from '@material-ui/core/colors';
-import { MuiThemeProvider, Theme, createTheme } from '@material-ui/core/styles';
+} from "@material-ui/core/colors";
+import { MuiThemeProvider, Theme, createTheme } from "@material-ui/core/styles";
 
-import StorageService from '../services/StorageService';
+import StorageService from "../services/StorageService";
 
-declare module '@material-ui/core/styles/createTheme' {
+declare module "@material-ui/core/styles/createTheme" {
   interface Theme {
     custom?: any;
   }
@@ -38,7 +38,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
   const { children } = props;
 
   const [darkTheme, setDarkTheme] = React.useState(
-    props.darkTheme || StorageService.getDarkMode(),
+    props.darkTheme || StorageService.getDarkMode()
   );
 
   const handleToggleDarkTheme = React.useCallback(() => {
@@ -52,18 +52,18 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
     palette: {
       // primary: darkTheme ? lightGreen : brown,
       // secondary: blueGrey,
-      type: darkTheme ? 'dark' : 'light',
+      type: darkTheme ? "dark" : "light",
     },
     overrides: {
       MuiPaper: {
         root: {
-          cursor: 'pointer',
+          cursor: "pointer",
           padding: 8,
         },
       },
       MuiDivider: {
         root: {
-          backgroundColor: 'rgba(255,255,255,0.5)',
+          backgroundColor: "rgba(255,255,255,0.5)",
         },
       },
     },
@@ -79,15 +79,15 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
         light: darkTheme ? false : true,
       },
       MuiTextField: {
-        variant: 'outlined',
-        margin: 'dense',
+        variant: "outlined",
+        margin: "dense",
         fullWidth: true,
       },
       MuiButton: {
-        size: 'small',
+        size: "small",
       },
       MuiRadio: {
-        size: 'small',
+        size: "small",
       },
     },
     custom: {
@@ -110,7 +110,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
       darkTheme,
       handleToggleDarkTheme,
     }),
-    [darkTheme, handleToggleDarkTheme],
+    [darkTheme, handleToggleDarkTheme]
   );
 
   return (

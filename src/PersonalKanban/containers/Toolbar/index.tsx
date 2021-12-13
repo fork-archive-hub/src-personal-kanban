@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import {
   AppBar,
@@ -16,16 +16,16 @@ import {
   Paper,
   Popover,
   Typography,
-} from '@material-ui/core';
-import MuiToolbar from '@material-ui/core/Toolbar';
-import { makeStyles, useTheme as useMuiTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+} from "@material-ui/core";
+import MuiToolbar from "@material-ui/core/Toolbar";
+import { makeStyles, useTheme as useMuiTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 
-import ColumnForm from '../../components/ColumnForm';
-import IconButton from '../../components/IconButton';
-import { useTheme } from '../../providers/ThemeProvider';
-import type { Column } from '../../types';
+import ColumnForm from "../../components/ColumnForm";
+import IconButton from "../../components/IconButton";
+import { useTheme } from "../../providers/ThemeProvider";
+import type { Column } from "../../types";
 
 type AddColumnButtonProps = {
   onSubmit: any;
@@ -49,12 +49,12 @@ const AddColumnButton: React.FC<AddColumnButtonProps> = (props) => {
       onSubmit({ column });
       handleCloseDialog();
     },
-    [onSubmit, handleCloseDialog],
+    [onSubmit, handleCloseDialog]
   );
 
   return (
-    <Box display='block'>
-      <IconButton icon='add' color='primary' onClick={handleOpenDialog}>
+    <Box display="block">
+      <IconButton icon="add" color="primary" onClick={handleOpenDialog}>
         {/* {t('addColumn')} */}
         添加分组
       </IconButton>
@@ -90,14 +90,14 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
       onClear({ e });
       handleCloseDialog();
     },
-    [onClear, handleCloseDialog],
+    [onClear, handleCloseDialog]
   );
 
   return (
-    <Box display='flex'>
+    <Box display="flex">
       <IconButton
-        icon='delete'
-        color='primary'
+        icon="delete"
+        color="primary"
         disabled={disabled}
         onClick={handleOpenDialog}
       ></IconButton>
@@ -105,7 +105,7 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
         <DialogContent>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography gutterBottom variant='h6'>
+              <Typography gutterBottom variant="h6">
                 {/* {t('clearBoard')} */}
                 是否删除所有分组和所有卡片 ？
               </Typography>
@@ -118,12 +118,12 @@ const ClearBoardButton: React.FC<ClearBoardButtonProps> = (props) => {
               </Typography> */}
             </Grid>
             <Grid item xs={12}>
-              <Button variant='outlined' onClick={handleCloseDialog}>
+              <Button variant="outlined" onClick={handleCloseDialog}>
                 {/* {t('cancel')} */}
                 取消
               </Button>
               &emsp;
-              <Button color='primary' variant='contained' onClick={handleClear}>
+              <Button color="primary" variant="contained" onClick={handleClear}>
                 {/* {t('clear')} */}
                 确认删除
               </Button>
@@ -156,29 +156,29 @@ const LanguageButton: React.FC<LanguageButtonProps> = (props) => {
   };
 
   return (
-    <Box display='block'>
+    <Box display="block">
       <IconButton
-        icon={'language'}
-        aria-controls='language-menu'
-        aria-haspopup='true'
-        color='inherit'
+        icon={"language"}
+        aria-controls="language-menu"
+        aria-haspopup="true"
+        color="inherit"
         onClick={handleClick}
       />
       <Menu
-        id='language-menu'
+        id="language-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleChangeLanguage('en')}>English</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('fr')}>Français</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('es')}>Español</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('ru')}>Pусский</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('de')}>Deutsch</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('in')}>हिंदी</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('jp')}>日本語</MenuItem>
-        <MenuItem onClick={handleChangeLanguage('cn')}>中文</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("en")}>English</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("fr")}>Français</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("es")}>Español</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("ru")}>Pусский</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("de")}>Deutsch</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("in")}>हिंदी</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("jp")}>日本語</MenuItem>
+        <MenuItem onClick={handleChangeLanguage("cn")}>中文</MenuItem>
       </Menu>
     </Box>
   );
@@ -189,8 +189,8 @@ const DarkThemeButton: React.FC<{}> = () => {
 
   return (
     <IconButton
-      color='inherit'
-      icon={darkTheme ? 'invertColors' : 'invertColorsOff'}
+      color="inherit"
+      icon={darkTheme ? "invertColors" : "invertColorsOff"}
       onClick={handleToggleDarkTheme}
     />
   );
@@ -199,11 +199,11 @@ const DarkThemeButton: React.FC<{}> = () => {
 const GitHubButton: React.FC<{}> = () => {
   return (
     <IconButton
-      color='inherit'
-      icon='gitHub'
+      color="inherit"
+      icon="gitHub"
       component={Link}
-      href='https://github.com/nishantpainter/personal-kanban'
-      target='_blank'
+      href="https://github.com/nishantpainter/personal-kanban"
+      target="_blank"
     />
   );
 };
@@ -217,7 +217,7 @@ const useInfoButtonStyles = makeStyles((theme) => ({
     padding: theme.spacing(),
   },
   buttonGridItem: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 }));
 
@@ -235,57 +235,57 @@ const InfoButton: React.FC<{}> = () => {
 
   const open = Boolean(anchorEl);
 
-  const id = open ? 'info-popover' : undefined;
+  const id = open ? "info-popover" : undefined;
 
   return (
     <>
-      <IconButton icon='info' color='primary' onClick={openInfo} />
+      <IconButton icon="info" color="primary" onClick={openInfo} />
       <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={closeInfo}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
         PaperProps={{ className: classes.paper }}
       >
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Box marginTop={2} textAlign='center'>
+            <Box marginTop={2} textAlign="center">
               <img
-                src='https://stacks.rocks/site/templates/assets/images/stacks-logo-dark.svg'
-                height='30'
-                alt='Stacks'
+                src="https://stacks.rocks/site/templates/assets/images/stacks-logo-dark.svg"
+                height="30"
+                alt="Stacks"
               />
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='body2'>
-              <Link href='https://stacks.rocks/' target='_blank'>
+            <Typography variant="body2">
+              <Link href="https://stacks.rocks/" target="_blank">
                 Stacks
               </Link>
               &nbsp;is a cross-platform all-in-one project management tool that
               works on top of a local folder.
               <br />
               <br />
-              Get 20% off on your order by applying coupon{' '}
+              Get 20% off on your order by applying coupon{" "}
               <strong>NISHANT20</strong>
               <br />
               <br />
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.buttonGridItem}>
-            <Button variant='contained' color='primary'>
+            <Button variant="contained" color="primary">
               <Link
-                color='inherit'
-                href='https://stacks.rocks/store/?coupon=NISHANT20'
-                target='_blank'
+                color="inherit"
+                href="https://stacks.rocks/store/?coupon=NISHANT20"
+                target="_blank"
               >
                 Order Now
               </Link>
@@ -299,7 +299,7 @@ const InfoButton: React.FC<{}> = () => {
 const useToolbarStyles = makeStyles((theme) => ({
   paper: {
     padding: 0,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     color: theme.palette.text.primary,
   },
 }));
@@ -319,26 +319,26 @@ const Toolbar: React.FC<ToolbarProps> = (props) => {
 
   const muiTheme = useMuiTheme();
 
-  const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
 
   return (
     <AppBar elevation={0} className={classes.paper}>
       <MuiToolbar>
-        <Box display='flex' alignItems='center'>
+        <Box display="flex" alignItems="center">
           <MIconButton
-            size='medium'
-            color='primary'
-            aria-label='taskBoardLogoIcon'
+            size="medium"
+            color="primary"
+            aria-label="taskBoardLogoIcon"
           >
             <DashboardIcon />
           </MIconButton>
           &nbsp;
-          <Typography variant={isMobile ? 'body1' : 'h6'}>
+          <Typography variant={isMobile ? "body1" : "h6"}>
             示例看板 - 任务管理 ( 👉 看板内容就是使用教程)
           </Typography>
         </Box>
-        <Box display='flex' flexGrow={1} />
-        <Box display='flex'>
+        <Box display="flex" flexGrow={1} />
+        <Box display="flex">
           <AddColumnButton onSubmit={onNewColumn} />
           &emsp;
           <ClearBoardButton

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Box,
@@ -21,20 +21,20 @@ import {
   IconButton as MIconButton,
   Paper,
   Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-import Card from '../../components/Card';
-import ColumnForm from '../../components/ColumnForm';
-import IconButton from '../../components/IconButton';
-import RecordForm from '../../components/RecordForm';
-import { ColumnColor, DarkColumnColor } from '../../constants';
-import { useTheme } from '../../providers/ThemeProvider';
-import type { Column as ColumnType, Record } from '../../types';
-import { RecordDetails } from '../RecordDetails';
-import { ColumnHeader } from './ColumnHeader';
+import Card from "../../components/Card";
+import ColumnForm from "../../components/ColumnForm";
+import IconButton from "../../components/IconButton";
+import RecordForm from "../../components/RecordForm";
+import { ColumnColor, DarkColumnColor } from "../../constants";
+import { useTheme } from "../../providers/ThemeProvider";
+import type { Column as ColumnType, Record } from "../../types";
+import { RecordDetails } from "../RecordDetails";
+import { ColumnHeader } from "./ColumnHeader";
 
 const useColumnActionStyles = makeStyles((theme) => ({
   divider: {
@@ -66,14 +66,14 @@ export const ColumnAction: React.FC<ColumnActionProps> = (props) => {
     <>
       {showAddRecordAction && (
         <IconButton
-          icon='add'
+          icon="add"
           disabled={disableAddRecordAction}
           onClick={onAddRecord}
         />
       )}
       {showAllRecordDeleteAction && (
         <IconButton
-          icon='delete'
+          icon="delete"
           disabled={disableAllRecordDeleteAction}
           onClick={onDeleteAllRecord}
         />

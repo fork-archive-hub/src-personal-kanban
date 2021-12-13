@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from 'react';
+} from "react";
 
 import {
   Box,
@@ -14,24 +14,24 @@ import {
   Grid,
   Paper,
   Typography,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
 
-import { COLUMN_WIDTH } from '../../constants';
-import { Column as ColumnType } from '../../types';
-import Column from '../Column';
+import { COLUMN_WIDTH } from "../../constants";
+import { Column as ColumnType } from "../../types";
+import Column from "../Column";
 
 const useBoardStyles = makeStyles((theme) => ({
   root: {
-    display: 'inline-flex',
+    display: "inline-flex",
     // width: 'fit-content',
     // width: '100wh',
     // height: '100vh',
   },
   column: {
     width: COLUMN_WIDTH,
-    height: 'fit-content',
+    height: "fit-content",
     // margin: theme.spacing(),
   },
   addColButton: {
@@ -39,9 +39,9 @@ const useBoardStyles = makeStyles((theme) => ({
     height: 48,
     margin: theme.spacing(1),
     // margin: '8px 16px',
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     color: theme.palette.text.secondary,
-    border: 'none',
+    border: "none",
   },
 }));
 
@@ -102,15 +102,15 @@ export function Board(props: BoardProps) {
           />
         ))
       ) : (
-        <Box display='flex' justifyContent='center'>
+        <Box display="flex" justifyContent="center">
           {/* <Typography>{t('noColumn')}</Typography> */}
         </Box>
       )}
       {placeholder}
       <Button
         onClick={handleOpenAddColumnDialog as any}
-        variant='outlined'
-        size='large'
+        variant="outlined"
+        size="large"
         className={classes.addColButton}
         startIcon={<AddIcon />}
       >
