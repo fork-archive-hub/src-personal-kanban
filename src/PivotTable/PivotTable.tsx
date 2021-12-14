@@ -1,3 +1,5 @@
+import './pivot-table.css';
+
 import React, { useCallback, useMemo, useState } from 'react';
 import { useExpanded, useGroupBy } from 'react-table';
 
@@ -62,9 +64,35 @@ export function PivotTableFull() {
     useExpandAll,
   );
 
+  const renderRowSubComponent = React.useCallback(
+    ({ row }) => (
+      // <pre
+      //   style={{
+      //     fontSize: '10px',
+      //   }}
+      // >
+      //   <code>
+      //     {JSON.stringify(row ? { values: row.values } : null, null, 2)}
+      //   </code>
+      // </pre>
+      <td> &nbsp;</td>
+    ),
+    [],
+  );
+
   return (
-    <div style={{ height: '100vh', width: '100vw' }}>
-      <Table instance={tableInstance} />
+    <div
+      style={{
+        //  height: '100vh', width: '100vw' ,
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <Table
+        instance={tableInstance}
+        renderRowSubComponent={renderRowSubComponent}
+        isRowSubComponentAboveRow={true}
+      />
     </div>
   );
 }

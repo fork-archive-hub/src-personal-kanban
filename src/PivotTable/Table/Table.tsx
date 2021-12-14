@@ -1,10 +1,12 @@
 import { isString } from 'lodash';
 import * as React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 
 import { Icon, SearchBar, Tooltip } from '@habx/ui-core';
 
+import { Toolbar } from '../Toolbar';
 import { useMergedRef } from '../_internal/useMergedRef';
 import { ColumnInstance } from '../types/Table';
 import { LoadingOverlay } from './LoadingOverlay';
@@ -43,6 +45,7 @@ export const Table = <D extends {}>({
   onRowClick,
   getRowCharacteristics,
   renderRowSubComponent,
+  isRowSubComponentAboveRow,
   rowsHeight: rawRowsHeight,
   virtualized = false,
 }: React.PropsWithChildren<TableProps<D>>) => {
@@ -105,9 +108,16 @@ export const Table = <D extends {}>({
       : tableBodyRef?.current) as HTMLElement,
   );
 
+  const handleInputChangeGlobalSearch = useCallback(
+    (event) => instance.setGlobalFilter(event.target.value),
+    [instance],
+  );
+
+  console.log(';;rows, ', rows);
+
   return (
     <TableContainer
-      // 传的只是css变量，内层才是 display: grid
+      // 传的只是css变量，内层布局是 display: grid
       style={
         {
           '--table-grid-template-columns': gridTemplateColumns,
@@ -116,13 +126,15 @@ export const Table = <D extends {}>({
       }
       data-scrollable={!!scrollbarWidth}
       data-virtualized={virtualized}
+      className='pvt'
     >
-      {showToolbar ? <h1>toolbar 表格工具条</h1> : null}
+      <Toolbar showToolbar={showToolbar} />
 
+      {/* todo 将搜索筛选移到toolbar，SearchBar来自ui-core */}
       {instance.setGlobalFilter && (
         <SearchBarContainer>
           <SearchBar
-            placeholder='Rechercher...'
+            placeholder='全局搜索，请输入'
             onChange={(e) => instance.setGlobalFilter(e.target.value)}
             value={instance.state.globalFilter}
           />
@@ -157,30 +169,30 @@ export const Table = <D extends {}>({
                       size={column.columns?.length ?? 1}
                     >
                       {renderHeader && (
-                        <Tooltip
-                          title={renderHeader as string}
-                          disabled={!isString(renderHeader) || isBig}
+                        // <Tooltip
+                        //   title={renderHeader as string}
+                        //   disabled={!isString(renderHeader) || isBig}
+                        // >
+                        <TableHeaderCellContainer
+                          data-align={column.align ?? 'flex-start'}
                         >
-                          <TableHeaderCellContainer
-                            data-align={column.align ?? 'flex-start'}
+                          <TableHeadCellContent
+                            variation='lowContrast'
+                            {...headerProps}
                           >
-                            <TableHeadCellContent
-                              variation='lowContrast'
-                              {...headerProps}
-                            >
-                              {renderHeader}
-                            </TableHeadCellContent>
-                            {column.isSorted && (
-                              <Icon
-                                icon={
-                                  column.isSortedDesc
-                                    ? 'arrow-south'
-                                    : 'arrow-north'
-                                }
-                              />
-                            )}
-                          </TableHeaderCellContainer>
-                        </Tooltip>
+                            {renderHeader}
+                          </TableHeadCellContent>
+                          {column.isSorted && (
+                            <Icon
+                              icon={
+                                column.isSortedDesc
+                                  ? 'arrow-south'
+                                  : 'arrow-north'
+                              }
+                            />
+                          )}
+                        </TableHeaderCellContainer>
+                        // </Tooltip>
                       )}
                       {column.canFilter ? (
                         <TableHeaderCellSort>
@@ -234,6 +246,7 @@ export const Table = <D extends {}>({
                 onClick={onRowClick}
                 prepareRow={prepareRow}
                 renderRowSubComponent={renderRowSubComponent}
+                isRowSubComponentAboveRow={isRowSubComponentAboveRow}
                 key={`row-${rowIndex}`}
               />
             ))
@@ -241,6 +254,7 @@ export const Table = <D extends {}>({
         </TableBody>
         <TableFooter<D> footerGroups={footerGroups} />
       </TableContent>
+
       {(hasPagination || hasDensity) && (
         <TableOptionBar>
           {hasPagination && (

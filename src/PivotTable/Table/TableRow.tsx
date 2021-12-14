@@ -1,16 +1,16 @@
-import * as React from "react";
+import cx from 'clsx';
+import * as React from 'react';
 
-import { Icon, Text } from "@habx/ui-core";
+import { Icon, Text } from '@habx/ui-core';
 
-import { ColumnInstance, Row, TableInstance } from "../types/Table";
-
-import { RowCharacteristics } from "./Table.interface";
+import type { ColumnInstance, Row, TableInstance } from '../types/Table';
+import type { RowCharacteristics } from './Table.interface';
 import {
   ExpandToggleContainer,
   TableBodyRow,
   TableBodySubRow,
-} from "./Table.style";
-import { TableCell } from "./TableCell";
+} from './Table.style';
+import { TableCell } from './TableCell';
 
 export const TableRow = React.forwardRef<
   HTMLTableRowElement,
@@ -25,8 +25,10 @@ export const TableRow = React.forwardRef<
     onClick,
 
     renderRowSubComponent,
+    isRowSubComponentAboveRow,
     ...rest
   } = props;
+
   prepareRow(row);
 
   const {
@@ -51,21 +53,34 @@ export const TableRow = React.forwardRef<
       ...(rowProps.style ?? {}),
       ...(backgroundColor ? { backgroundColor } : {}),
     }),
-    [backgroundColor, rest.style, rowProps.style]
+    [backgroundColor, rest.style, rowProps.style],
   );
 
   return (
     <React.Fragment>
+      {
+        // 每行元素的展开行元素
+        renderRowSubComponent &&
+          (row.isExpanded || (!row.isExpanded && row.isGrouped)) &&
+          isRowSubComponentAboveRow && (
+            <TableBodySubRow className='subRowCompTr'>
+              {renderRowSubComponent(row)}
+            </TableBodySubRow>
+          )
+      }
       <TableBodyRow
         {...rowProps}
         {...rest}
-        style={style}
         ref={ref}
+        style={style}
         key={`row-${index}`}
         onClick={onClick && !row.isGrouped ? (e) => onClick(row, e) : undefined}
         data-clickable={!row.isGrouped && !!onClick && isInteractive}
         data-section={row.isExpanded}
         data-active={isActive}
+        className={cx({
+          'pvt-row-GroupedAndCollapsed': !row.isExpanded && row.isGrouped,
+        })}
       >
         {row.cells.map((cell, cellIndex) => {
           const expandedToggleProps = row.getToggleRowExpandedProps
@@ -76,25 +91,25 @@ export const TableRow = React.forwardRef<
 
           const cellProps = {
             ...cell.getCellProps(),
-            "data-density": instance.state.density,
-            "data-align": column.align ?? "flex-start",
+            'data-density': instance.state.density,
+            'data-align': column.align ?? 'flex-start',
           };
 
           if (cell.isGrouped) {
             return (
               <TableCell
-                data-section="true"
+                data-section='true'
                 {...cellProps}
                 key={`cell-${cellIndex}`}
               >
                 <ExpandToggleContainer {...expandedToggleProps}>
                   {row.isExpanded ? (
-                    <Icon icon="chevron-south" />
+                    <Icon icon='chevron-south' />
                   ) : (
-                    <Icon icon="chevron-east" />
+                    <Icon icon='chevron-east' />
                   )}
                 </ExpandToggleContainer>
-                {cell.render("Cell")}
+                {cell.render('Cell')}
               </TableCell>
             );
           }
@@ -102,11 +117,11 @@ export const TableRow = React.forwardRef<
           if (cell.isAggregated) {
             return (
               <TableCell
-                data-section="true"
+                data-section='true'
                 {...cellProps}
                 key={`cell-${cellIndex}`}
               >
-                {cell.render("Aggregated")}
+                {cell.render('Aggregated')}
               </TableCell>
             );
           }
@@ -117,20 +132,25 @@ export const TableRow = React.forwardRef<
 
           return (
             <TableCell {...cellProps} key={`cell-${cellIndex}`}>
-              <Text variation="title">{cell.render("Cell")}</Text>
+              <Text variation='title'>{cell.render('Cell')}</Text>
             </TableCell>
           );
         })}
       </TableBodyRow>
-      {renderRowSubComponent && row.isExpanded && (
-        <TableBodySubRow>{renderRowSubComponent(row)}</TableBodySubRow>
-      )}
+      {
+        // 每行元素的展开行元素
+        renderRowSubComponent &&
+          !isRowSubComponentAboveRow &&
+          row.isExpanded && (
+            <TableBodySubRow>{renderRowSubComponent(row)}</TableBodySubRow>
+          )
+      }
     </React.Fragment>
   );
 });
 
 interface TableRowProps<D extends {}>
-  extends Omit<React.HTMLAttributes<HTMLTableRowElement>, "onClick"> {
+  extends Omit<React.HTMLAttributes<HTMLTableRowElement>, 'onClick'> {
   prepareRow: (row: Row<D>) => void;
   getRowCharacteristics?: (row: Row<D>) => Partial<RowCharacteristics>;
   row: Row<D>;
@@ -138,4 +158,5 @@ interface TableRowProps<D extends {}>
   index: number;
   onClick?: (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => void;
   renderRowSubComponent?: (row: Row<D>) => React.ReactNode;
+  isRowSubComponentAboveRow?: boolean;
 }

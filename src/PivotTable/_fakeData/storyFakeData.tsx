@@ -1,5 +1,4 @@
 import faker from 'faker';
-import { range } from 'lodash';
 import * as React from 'react';
 
 import { Icon } from '@habx/ui-core';
@@ -8,9 +7,13 @@ import { ImageCell } from '../cell/ImageCell';
 import { BooleanCell, BooleanFilter, IMEXColumn, RangeFilter } from '../index';
 import type { Column } from '../types/Table';
 
-const GROUPS = ['A', 'B', 'C'];
+export function range(length) {
+  return Array(length).fill(1);
+}
 
-export const FAKE_DATA = range(11).map(() => ({
+const GROUPS = ['分组A', '分组B', '分组C'];
+
+export const FAKE_DATA = range(15).map((item, idx) => ({
   ...faker.helpers.createCard(),
   image: faker.helpers.randomize([
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/02e27c05f756816d97983027afe8310a.jpg',
@@ -19,11 +22,16 @@ export const FAKE_DATA = range(11).map(() => ({
   ]),
   done: faker.helpers.randomize([true, false, null, undefined]),
   price: Math.round(Math.random() * 10000),
-  id: Math.random(),
+  // id: Math.random(),
+  id: idx + 1,
   group: GROUPS[Math.floor(Math.random() * Math.floor(3))],
 }));
 
 export const BASIC_COLUMNS = [
+  {
+    Header: 'ID',
+    accessor: 'id',
+  },
   {
     Header: 'Username lorem',
     accessor: (el) => el.name,

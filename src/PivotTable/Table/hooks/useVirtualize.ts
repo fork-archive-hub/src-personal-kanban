@@ -1,7 +1,7 @@
-import { isEmpty } from "lodash";
-import * as React from "react";
+import { isEmpty } from 'lodash';
+import * as React from 'react';
 
-import { TableInstance } from "../../types/Table";
+import type { TableInstance } from '../../types/Table';
 
 interface UseVirtualizeConfig {
   virtualized?: boolean;
@@ -10,7 +10,7 @@ interface UseVirtualizeConfig {
 
 export const useVirtualize = <D extends object>(
   instance: TableInstance<D>,
-  config: UseVirtualizeConfig
+  config: UseVirtualizeConfig,
 ) => {
   const scrollContainerRef = React.useRef<HTMLTableSectionElement>(null);
 
@@ -35,10 +35,10 @@ export const useVirtualize = <D extends object>(
 
     const handleResize = () => setDimensions({});
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, [config.rowsHeight, dimensions, skip]);
 

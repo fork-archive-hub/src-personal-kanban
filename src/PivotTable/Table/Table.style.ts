@@ -20,11 +20,12 @@ const alignItems = css`
 `;
 
 /**
- * * `<table>`元素默认布局是 display: grid
+ * * 这里是`<table>`元素，默认布局是 `display: grid`
  */
 export const TableContent = styled.table`
   position: relative;
   display: grid;
+  border-collapse: collapse;
 
   overflow-y: hidden;
   overflow-x: auto;
@@ -46,18 +47,24 @@ export const TableHeadRow = styled.tr`
   display: grid;
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
+
+  border-left: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
 `;
 
 export const TableHeadCell = styled.th<{ size: number }>`
   display: flex;
   flex-direction: column;
 
-  text-align: left;
   padding: 12px;
   grid-column-end: span ${({ size }) => size};
+  text-align: left;
 
   --table-header-font-size: 12px;
   --table-header-color: ${theme.neutralColor(400)};
+
+  border-top: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+  border-right: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+  border-bottom: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
 
   &[data-big='true'] {
     font-size: 16px;
@@ -73,7 +80,7 @@ export const TableBodyRow = styled.tr`
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
 
-  border-bottom: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
+  /* border-bottom: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })}; */
 
   &[data-active='true'] {
     background-color: ${theme.neutralColor(100)};
@@ -100,7 +107,11 @@ export const TableBodyRow = styled.tr`
     top: 0;
     z-index: 1;
     background-color: ${theme.color('background')};
-    border-bottom: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+    /* border-bottom: solid 1px ${theme.color('secondary', {
+      opacity: 0.1,
+    })}; */
+    border-top: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+    border-left: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
   }
 `;
 
@@ -123,6 +134,10 @@ export const TableBody = styled.tbody<{ rowsHeight?: number }>`
         height: ${rowsHeight}px;
       }
     `}
+
+  & > tr:not(.subRowCompTr) {
+    border-left: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
+  }
 `;
 
 export const TableContainer = styled.div`
@@ -135,7 +150,7 @@ export const TableContainer = styled.div`
   height: 100%;
   width: 100%;
 
-  --table-grid-gap: 0 12px;
+  /* --table-grid-gap: 0 12px; */
 
   &[data-scrollable='true'] {
     ${TableBody} {
@@ -183,13 +198,15 @@ export const TableCellZoom = styled.div`
 `;
 
 export const TableCellContainer = styled.td`
-  padding: 12px;
+  position: relative;
   display: flex;
-  overflow: hidden;
   align-items: center;
-  position: relative;
+  overflow: hidden;
 
-  position: relative;
+  padding: 12px;
+  /* border: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })}; */
+  border-bottom: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
+  border-right: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
 
   &[data-large='true'] {
     align-items: flex-start;
@@ -280,10 +297,10 @@ export const TableOptionBar = styled.div`
 `;
 
 export const ExpandToggleContainer = styled.span`
-  margin-right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 8px;
 `;
 
 export const NoDataContainer = styled.div`

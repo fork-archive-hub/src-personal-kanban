@@ -21,19 +21,16 @@ const EMPTY_DATA: any[] = [];
 const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = ['always'];
 
 /**
- * 
- * @param options 
- * @param plugins 
- * @returns 
+ * 封装了react-table的useTable hook，进行配置预处理。
  */
 export const useTable = <D extends object = {}>(
   options: TableOptions<D>,
   ...plugins: Array<ReactTable.PluginHook<D>>
 ) => {
   const {
+    data: rawData,
     columns: rawColumns,
     defaultColumn: rawDefaultColumn,
-    data: rawData,
     ...restOptions
   } = options;
 
@@ -105,10 +102,10 @@ export const useTable = <D extends object = {}>(
 
   return ReactTable.useTable<D>(
     {
-      ...restOptions,
       data,
       columns,
       defaultColumn: defaultColumn as Partial<ReactTable.Column<D>>,
+      ...restOptions,
     },
     ...plugins,
   ) as any as TableInstance<D>;
