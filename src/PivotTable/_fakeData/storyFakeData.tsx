@@ -13,7 +13,7 @@ export function range(length) {
 
 const GROUPS = ['分组A', '分组B', '分组C'];
 
-export const FAKE_DATA = range(15).map((item, idx) => ({
+export const FAKE_DATA = range(150).map((item, idx) => ({
   ...faker.helpers.createCard(),
   image: faker.helpers.randomize([
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/02e27c05f756816d97983027afe8310a.jpg',

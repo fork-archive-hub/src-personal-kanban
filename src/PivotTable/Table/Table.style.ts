@@ -260,15 +260,14 @@ export const TableHeaderCellContainer = styled.div`
   ${alignItems}
 `;
 
+/* export const TableHeadCellContent = styled.span` */
 export const TableHeadCellContent = styled(Text)`
-  user-select: none;
+  /* user-select: none; */
+  position: relative;
   width: 100%;
-
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  position: relative;
 
   > * {
     display: inline-flex;
@@ -278,8 +277,8 @@ export const TableHeadCellContent = styled(Text)`
     padding-left: 8px;
   }
 
-  font-size: var(--table-header-font-size) !important;
-  color: var(--table-header-color);
+  /* font-size: var(--table-header-font-size) !important; */
+  /* color: var(--table-header-color); */
 `;
 
 export const TableHeaderCellSort = styled.div`

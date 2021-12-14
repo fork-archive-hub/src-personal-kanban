@@ -177,7 +177,7 @@ export const Table = <D extends {}>({
                           data-align={column.align ?? 'flex-start'}
                         >
                           <TableHeadCellContent
-                            variation='lowContrast'
+                            // variation='lowContrast'
                             {...headerProps}
                           >
                             {renderHeader}
