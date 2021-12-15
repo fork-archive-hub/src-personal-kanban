@@ -16,6 +16,7 @@ import type {
   TableOptions,
 } from '../types/Table';
 
+/** 空数组 [] */
 const EMPTY_DATA: any[] = [];
 
 const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = ['always'];

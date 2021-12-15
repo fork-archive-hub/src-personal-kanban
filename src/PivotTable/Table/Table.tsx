@@ -46,6 +46,7 @@ export const Table = <D extends {}>({
   getRowCharacteristics,
   renderRowSubComponent,
   isRowSubComponentAboveRow,
+  setToggleShowGroupedTable,
   rowsHeight: rawRowsHeight,
   virtualized = false,
 }: React.PropsWithChildren<TableProps<D>>) => {
@@ -113,11 +114,11 @@ export const Table = <D extends {}>({
     [instance],
   );
 
-  console.log(';;rows, ', rows);
+  // console.log(';;rows, ', rows);
 
   return (
     <TableContainer
-      // 传的只是css变量，内层布局是 display: grid
+      // 一个简单的div，style只是css变量，传到内层布局，内层是 display: grid
       style={
         {
           '--table-grid-template-columns': gridTemplateColumns,
@@ -128,7 +129,7 @@ export const Table = <D extends {}>({
       data-virtualized={virtualized}
       className='pvt'
     >
-      <Toolbar showToolbar={showToolbar} />
+      <Toolbar showToolbar={showToolbar} setToggleShowGroupedTable={setToggleShowGroupedTable} />
 
       {/* todo 将搜索筛选移到toolbar，SearchBar来自ui-core */}
       {instance.setGlobalFilter && (

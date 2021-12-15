@@ -10,7 +10,7 @@ export interface TableProps<D extends object> {
   ) => void;
   getRowCharacteristics?: (row: Row<D>) => Partial<RowCharacteristics>;
   renderRowSubComponent?: (row: Row<D>) => React.ReactNode;
-  isRowSubComponentAboveRow?:boolean;
+  isRowSubComponentAboveRow?: boolean;
   loading?: boolean;
   noDataText?: React.ReactNode;
   noDataComponent?: React.ComponentType;
@@ -26,6 +26,8 @@ export interface TableProps<D extends object> {
   style?: any;
 
   showToolbar?: boolean;
+
+  [name: string]: any;
 }
 
 export type RowCharacteristics = {
