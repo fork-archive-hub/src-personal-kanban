@@ -3,8 +3,16 @@
   align-items: center;
 }
 
+.pvt .pvt-toolbar:hover .pvt-toolbarActionsMenuButtons {
+  visibility: visible;
+}
+
 .pvt .pvt-toolbarTitle {
   flex-grow: 1;
+}
+
+.pvt .pvt-toolbarActionsMenuButtons {
+  visibility: hidden;
 }
 
 .pvt .pvt-toolbarActionsBtn {

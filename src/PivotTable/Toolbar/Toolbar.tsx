@@ -105,7 +105,7 @@ export function Toolbar(props) {
             表格视图测试 1
           </Button>
         </div>
-        <div className=''>{toolbarActionsMenuButtonsReElem}</div>
+        <div className='pvt-toolbarActionsMenuButtons'>{toolbarActionsMenuButtonsReElem}</div>
       </div>
     );
   }, [toolbarActionsMenuButtonsReElem]);
