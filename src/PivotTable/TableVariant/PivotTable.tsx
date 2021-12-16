@@ -26,9 +26,9 @@ export type PivotTableStandardProps = {
 export function PivotTable(props: PivotTableStandardProps) {
   const [pvtData, setPvtData] = useState({
     data: [
-      { recordId: 1, field1: '第1行', field2: '', fieldN: '' },
-      { recordId: 2, field1: '第2行', field2: '', fieldN: '' },
-      { recordId: 3, field1: '第3行', field2: '', fieldN: '' },
+      { recordId: 1, field1: 'r1c1', field2: 'r1c2', fieldN: 'r1c3' },
+      { recordId: 2, field1: 'r2c1', field2: 'r2c2', fieldN: 'r2c3' },
+      { recordId: 3, field1: 'r3c1', field2: 'r3c2', fieldN: 'r3c3' },
     ],
   });
 
@@ -56,7 +56,7 @@ export function PivotTable(props: PivotTableStandardProps) {
   ] = useState(true);
 
   const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
-  const [groupOptions, setGroupOptions] = useState({});
+  // const [groupOptions, setGroupOptions] = useState({});
 
   console.log(';;rendering PivotTable ');
 
@@ -78,25 +78,53 @@ export function PivotTable(props: PivotTableStandardProps) {
     }
 
     // ------------- 默认会显示表格
+    if (firstView.type === 'table' || !firstView.type) {
+      const tableData = getKanbanDataFromPvtData(pvtData)['data'];
 
-    const tableData = getKanbanDataFromPvtData(pvtData)['data'];
-    const tableColumns = getPivotTableStandardColumns({ showGroupedTable });
-    const tableOptions = {};
+      const dataFields = Object.keys(tableData[0]).slice(1);
+      const groupField = 'recordId';
+      // dataFields[Math.floor(Math.random() * dataFields.length)];
+      console.log(';;dataFields, groupField ', dataFields, groupField);
 
-    console.log(';;tableData, tableColumns ', tableData, tableColumns);
+      const tableColumns = getPivotTableStandardColumns({
+        showGroupedTable,
+        groupOptions: showGroupedTable
+          ? {
+              groupField,
+              groupHeader: '分组列',
+            }
+          : null,
+        // rowData: tableData[0],
+      });
 
-    const tableProps = {
-      tableData,
-      tableColumns,
-      tableOptions,
+      console.log(';;tableColumns ', tableColumns);
 
-      showGroupedTable,
-      setToggleShowGroupedTable,
-      showToolbar,
-      showToolbarActionsMenuButtons,
-    };
+      const tableOptions: any = {
+        initialState: {},
+      };
+      if (showGroupedTable) {
+        tableOptions.initialState.groupBy = [groupField];
+      }
+      const tablePlugins = [];
+      if (showGroupedTable) {
+        tablePlugins.push(useGroupBy, useExpanded, useExpandAll);
+      }
 
-    retView = <PivotTableStandard {...tableProps} key={tableKey} />;
+      const tableProps = {
+        tableData,
+        tableColumns,
+        tableOptions,
+        tablePlugins,
+
+        showGroupedTable,
+        setToggleShowGroupedTable,
+        showToolbar,
+        showToolbarActionsMenuButtons,
+      };
+      console.log(';;tableProps ', tableProps);
+
+      retView = <PivotTableStandard {...tableProps} key={tableKey} />;
+    }
 
     return retView;
   }, [

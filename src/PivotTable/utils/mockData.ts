@@ -10,7 +10,7 @@ export function getKanbanDataFromPvtData(data) {
 }
 
 export function getPivotTableStandardColumns(options) {
-  const { rowData, showGroupedTable } = options;
+  const { rowData, showGroupedTable, groupOptions } = options;
 
   let tableDefaultColumns: any[] = [
     {
@@ -28,16 +28,17 @@ export function getPivotTableStandardColumns(options) {
   ];
 
   if (rowData && Object.keys(rowData).length > 0) {
+    // 将传入数据的各个属性名作为表格的列名
     tableDefaultColumns = Object.keys(rowData).map((field, idx) => ({
       Header: field,
       accessor: field,
     }));
   }
 
-  if (showGroupedTable) {
+  if (showGroupedTable && groupOptions) {
     tableDefaultColumns.unshift({
-      Header: 'Group',
-      accessor: 'group',
+      Header: groupOptions.groupHeader,
+      accessor: groupOptions.groupField,
       Cell: ({ row: { groupByVal } }) => {
         return groupByVal;
       },

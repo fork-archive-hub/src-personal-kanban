@@ -7,8 +7,11 @@ import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
 import { Table, useTable } from '..';
 
 export type PivotTableStandardProps = {
-  tableData?: Array<Record<string, any>>;
-  tableColumns?: Array<Record<string, any>>;
+  tableData?: Array<any>;
+  tableColumns?: Array<any>;
+  tableOptions?: Record<string, any>;
+  tablePlugins?: Array<any>;
+
   updateData?: Function;
   showGroupedTable?: boolean;
   setToggleShowGroupedTable?: Function;
@@ -19,8 +22,10 @@ export type PivotTableStandardProps = {
 
 export function PivotTableStandard(props: PivotTableStandardProps) {
   const {
-    tableData: data,
-    tableColumns: columns,
+    tableData,
+    tableColumns,
+    tableOptions,
+    tablePlugins,
     showGroupedTable = false,
     setToggleShowGroupedTable,
     groupOptions,
@@ -45,30 +50,11 @@ export function PivotTableStandard(props: PivotTableStandardProps) {
   //   [showGroupedTable],
   // );
 
-  const tablePlugins = useMemo(() => {
-    const plugins = [];
-    if (showGroupedTable) {
-      plugins.push(useGroupBy, useExpanded, useExpandAll);
-    }
-
-    return plugins;
-  }, [showGroupedTable]);
-
-  const tableOptions = useMemo(() => {
-    const options: any = {
-      initialState: {},
-    };
-    if (showGroupedTable) {
-      options.initialState.groupBy = ['group'];
-    }
-    return options;
-  }, [showGroupedTable]);
-
   const tableInstance = useTable<Faker.Card>(
     {
       // data: FAKE_DATA,
-      data: data,
-      columns,
+      data: tableData,
+      columns: tableColumns,
       ...tableOptions,
     },
     ...tablePlugins,
