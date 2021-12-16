@@ -1,128 +1,114 @@
 import '../pivot-table.css';
 
+import cx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useExpanded, useGroupBy } from 'react-table';
 
 import { BASIC_COLUMNS, FAKE_DATA } from '../_fakeData/storyFakeData';
 import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
+import {
+  getKanbanDataFromPvtData,
+  getPivotTableStandardColumns,
+} from '../utils/mockData';
+import { PivotTableStandard } from './PivotTableStandard';
 import { Table, useTable } from '..';
 
 export type PivotTableStandardProps = {
+  data?: Record<string, any>;
+  updateData?: Function;
   showGroupedTable?: boolean;
   setToggleShowGroupedTable?: Function;
   groupOptions?: any;
   showToolbar?: boolean;
+  showToolbarActionsMenuButtons?: boolean;
 };
 
 export function PivotTable(props: PivotTableStandardProps) {
+  const [pvtData, setPvtData] = useState({
+    data: [
+      { recordId: 1, field1: '第1行', field2: '', fieldN: '' },
+      { recordId: 2, field1: '第2行', field2: '', fieldN: '' },
+      { recordId: 3, field1: '第3行', field2: '', fieldN: '' },
+    ],
+  });
+
+  const [pvtViews, setPvtViews] = useState([
+    {
+      id: 'idTv',
+      name: 'tableView1',
+      type: 'table',
+      tableColumns: {},
+      tableConfig: {},
+    },
+    {
+      id: 'idKv',
+      name: 'kanbanView1',
+      type: 'kanban',
+      tableColumns: {},
+      tableConfig: {},
+    },
+  ]);
+
+  const [showToolbar, setToggleShowToolbar] = useState(true);
+  const [
+    showToolbarActionsMenuButtons,
+    setToggleShowToolbarActionsMenuButtons,
+  ] = useState(true);
+
   const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
   const [groupOptions, setGroupOptions] = useState({});
 
-  const [showToolbar, setToggleShowToolbar] = useState(true);
+  console.log(';;rendering PivotTable ');
 
-  console.log(';;rendering PivotTableStandard ');
-
+  /** 改变key的时候，会强制重渲染整个table，要慎用，只有需要改变大部分table的时候才建议用 */
   const tableKey = useMemo(
-    () =>
-      JSON.stringify({
-        showGroupedTable,
-      }),
+    () => cx({ showGroupedTable: showGroupedTable }),
     [showGroupedTable],
   );
 
-  return (
-    <PivotTableStandard
-      showGroupedTable={showGroupedTable}
-      setToggleShowGroupedTable={setToggleShowGroupedTable}
-      groupOptions={groupOptions}
-      showToolbar={showToolbar}
-      key={tableKey}
-    />
-  );
-}
+  const currentPvtView = useMemo(() => {
+    const firstView = pvtViews[0];
 
-export function PivotTableStandard(props: PivotTableStandardProps) {
-  const {
-    showGroupedTable = false,
-    setToggleShowGroupedTable,
-    groupOptions,
-    showToolbar = true,
-  } = props;
+    let retView;
 
-  const columns = useMemo(
-    () =>
-      showGroupedTable
-        ? [
-            {
-              Header: 'Group',
-              accessor: 'group',
-              Cell: ({ row: { groupByVal } }) => {
-                return groupByVal;
-              },
-            },
-            ...BASIC_COLUMNS,
-          ]
-        : BASIC_COLUMNS,
-    [showGroupedTable],
-  );
+    if (firstView.type === 'kanban') {
+      const kanbanData = getKanbanDataFromPvtData(pvtData);
 
-  const tablePlugins = useMemo(() => {
-    const plugins = [];
-    if (showGroupedTable) {
-      plugins.push(useGroupBy, useExpanded, useExpandAll);
+      retView = <h1>看板视图 暂未实现</h1>;
     }
 
-    return plugins;
-  }, [showGroupedTable]);
+    // ------------- 默认会显示表格
 
-  const tableOptions = useMemo(() => {
-    const options: any = {
-      initialState: {},
+    const tableData = getKanbanDataFromPvtData(pvtData)['data'];
+    const tableColumns = getPivotTableStandardColumns({ showGroupedTable });
+    const tableOptions = {};
+
+    console.log(';;tableData, tableColumns ', tableData, tableColumns);
+
+    const tableProps = {
+      tableData,
+      tableColumns,
+      tableOptions,
+
+      showGroupedTable,
+      setToggleShowGroupedTable,
+      showToolbar,
+      showToolbarActionsMenuButtons,
     };
-    if (showGroupedTable) {
-      options.initialState.groupBy = ['group'];
-    }
-    return options;
-  }, [showGroupedTable]);
 
-  const tableInstance = useTable<Faker.Card>(
-    {
-      data: FAKE_DATA,
-      columns,
-      ...tableOptions,
-    },
-    ...tablePlugins,
-  );
+    retView = <PivotTableStandard {...tableProps} key={tableKey} />;
 
-  // const tableActions = useMemo(() => {
-  //   const actions: any = {};
-  //   if (showGroupedTable) {
-  //     actions['setToggleShowGroupedTable'] = setToggleShowGroupedTable;
-  //   }
-  //   return actions;
-  // }, []);
+    return retView;
+  }, [
+    pvtData,
+    pvtViews,
+    showGroupedTable,
+    showToolbar,
+    showToolbarActionsMenuButtons,
+    tableKey,
+  ]);
 
-  const renderRowSubComponent = React.useCallback(
-    ({ row }) => <td> &nbsp;</td>,
-    [],
-  );
-
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <Table
-        instance={tableInstance}
-        renderRowSubComponent={renderRowSubComponent}
-        isRowSubComponentAboveRow={true}
-        showToolbar={showToolbar}
-        setToggleShowGroupedTable={setToggleShowGroupedTable}
-      />
-    </div>
-  );
+  return currentPvtView;
 }
 
-export default PivotTableStandard;
+export default PivotTable;

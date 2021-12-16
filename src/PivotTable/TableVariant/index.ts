@@ -1,4 +1,4 @@
-import { PivotTable, PivotTableStandard } from './PivotTable';
+import { PivotTable } from './PivotTable';
 
-export { PivotTableStandard, PivotTable };
-export default PivotTableStandard;
+export { PivotTable };
+export default PivotTable;

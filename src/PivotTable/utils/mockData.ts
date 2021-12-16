@@ -5,6 +5,48 @@ export function generatePivotTableData(count) {
   };
 }
 
+export function getKanbanDataFromPvtData(data) {
+  return data;
+}
+
+export function getPivotTableStandardColumns(options) {
+  const { rowData, showGroupedTable } = options;
+
+  let tableDefaultColumns: any[] = [
+    {
+      Header: '第1列',
+      accessor: 'field1',
+    },
+    {
+      Header: '第2列',
+      accessor: 'field2',
+    },
+    {
+      Header: '第3列',
+      accessor: 'fieldN',
+    },
+  ];
+
+  if (rowData && Object.keys(rowData).length > 0) {
+    tableDefaultColumns = Object.keys(rowData).map((field, idx) => ({
+      Header: field,
+      accessor: field,
+    }));
+  }
+
+  if (showGroupedTable) {
+    tableDefaultColumns.unshift({
+      Header: 'Group',
+      accessor: 'group',
+      Cell: ({ row: { groupByVal } }) => {
+        return groupByVal;
+      },
+    });
+  }
+
+  return tableDefaultColumns;
+}
+
 export function mockTrelloExportJson(len) {
   return {
     id: 'idBoard',

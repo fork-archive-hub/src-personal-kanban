@@ -38,6 +38,7 @@ import { NOOP } from '../utils/constants';
 
 export type ToolbarProps = {
   showToolbar?: boolean;
+  showToolbarActionsMenuButtons?: boolean;
   setToggleShowGroupedTable?: Function;
 };
 
@@ -46,7 +47,11 @@ export type ToolbarProps = {
  * * 更多菜单可考虑：行高、保存模板、复制拷贝、链接拷贝、单元格换行
  */
 export function Toolbar(props) {
-  const { showToolbar = true, setToggleShowGroupedTable } = props;
+  const {
+    showToolbar = true,
+    showToolbarActionsMenuButtons = true,
+    setToggleShowGroupedTable,
+  } = props;
 
   const handleClickGroupTableMenu = useCallback(() => {
     setToggleShowGroupedTable((prev) => !prev);
@@ -87,7 +92,7 @@ export function Toolbar(props) {
     });
   }, [toolbarActionsMenuData]);
 
-  const toolbarReElem = useMemo(() => {
+  const toolbarRootReElem = useMemo(() => {
     return (
       <div className='pvt-toolbar'>
         <div className='pvt-toolbarTitle'>
@@ -105,12 +110,18 @@ export function Toolbar(props) {
             表格视图测试 1
           </Button>
         </div>
-        <div className='pvt-toolbarActionsMenuButtons'>{toolbarActionsMenuButtonsReElem}</div>
+        <div
+          className={cx({
+            'pvt-toolbarActionsMenuButtons': !showToolbarActionsMenuButtons,
+          })}
+        >
+          {toolbarActionsMenuButtonsReElem}
+        </div>
       </div>
     );
-  }, [toolbarActionsMenuButtonsReElem]);
+  }, [showToolbarActionsMenuButtons, toolbarActionsMenuButtonsReElem]);
 
-  return showToolbar ? toolbarReElem : null;
+  return showToolbar ? toolbarRootReElem : null;
 }
 
 export default Toolbar;

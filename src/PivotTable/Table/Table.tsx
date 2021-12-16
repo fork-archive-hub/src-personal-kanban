@@ -41,6 +41,7 @@ export const Table = <D extends {}>({
   instance,
   noDataComponent: NoDataComponent,
   showToolbar = true,
+  showToolbarActionsMenuButtons=true,
   renderHeaderGroups,
   onRowClick,
   getRowCharacteristics,
@@ -129,7 +130,11 @@ export const Table = <D extends {}>({
       data-virtualized={virtualized}
       className='pvt'
     >
-      <Toolbar showToolbar={showToolbar} setToggleShowGroupedTable={setToggleShowGroupedTable} />
+      <Toolbar
+        showToolbar={showToolbar}
+        showToolbarActionsMenuButtons={showToolbarActionsMenuButtons}
+        setToggleShowGroupedTable={setToggleShowGroupedTable}
+      />
 
       {/* todo 将搜索筛选移到toolbar，SearchBar来自ui-core */}
       {instance.setGlobalFilter && (

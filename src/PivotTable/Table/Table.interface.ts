@@ -26,6 +26,7 @@ export interface TableProps<D extends object> {
   style?: any;
 
   showToolbar?: boolean;
+  showToolbarActionsMenuButtons?: boolean;
 
   [name: string]: any;
 }
