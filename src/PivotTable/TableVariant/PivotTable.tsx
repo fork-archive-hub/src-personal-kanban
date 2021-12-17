@@ -6,12 +6,11 @@ import { useExpanded, useGroupBy } from 'react-table';
 
 import { BASIC_COLUMNS, FAKE_DATA } from '../_fakeData/storyFakeData';
 import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
+import { PivotTableStandard } from './PivotTableStandard';
 import {
   getKanbanDataFromPvtData,
   getPivotTableStandardColumns,
-} from '../utils/mockData';
-import { PivotTableStandard } from './PivotTableStandard';
-import { Table, useTable } from '..';
+} from './tableData';
 
 export type PivotTableStandardProps = {
   data?: Record<string, any>;
@@ -26,12 +25,29 @@ export type PivotTableStandardProps = {
 export function PivotTable(props: PivotTableStandardProps) {
   const [pvtData, setPvtData] = useState({
     data: [
-      { recordId: 1, field1: 'r1c1', field2: 'r1c2', fieldN: 'r1c3' },
-      { recordId: 2, field1: 'r2c1', field2: 'r2c2', fieldN: 'r2c3' },
-      { recordId: 3, field1: 'r3c1', field2: 'r3c2', fieldN: 'r3c3' },
+      {
+        recordId: 1,
+        field1: 'r1c1',
+        field2: 'r1c2',
+        fieldN: 'r1c3',
+        group: '分组A',
+      },
+      {
+        recordId: 2,
+        field1: 'r2c1',
+        field2: 'r2c2',
+        fieldN: 'r2c3',
+        group: '分组B',
+      },
+      {
+        recordId: 3,
+        field1: 'r3c1',
+        field2: 'r3c2',
+        fieldN: 'r3c3',
+        group: '分组A',
+      },
     ],
   });
-
   const [pvtViews, setPvtViews] = useState([
     {
       id: 'idTv',
@@ -48,6 +64,8 @@ export function PivotTable(props: PivotTableStandardProps) {
       tableConfig: {},
     },
   ]);
+  // const updatepvtViews = useCallback(() => {}, []);
+  console.log(';;rendering PivotTable ', pvtViews);
 
   const [showToolbar, setToggleShowToolbar] = useState(true);
   const [
@@ -58,8 +76,6 @@ export function PivotTable(props: PivotTableStandardProps) {
   const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
   // const [groupOptions, setGroupOptions] = useState({});
 
-  console.log(';;rendering PivotTable ');
-
   /** 改变key的时候，会强制重渲染整个table，要慎用，只有需要改变大部分table的时候才建议用 */
   const tableKey = useMemo(
     () => cx({ showGroupedTable: showGroupedTable }),
@@ -69,62 +85,69 @@ export function PivotTable(props: PivotTableStandardProps) {
   const currentPvtView = useMemo(() => {
     const firstView = pvtViews[0];
 
-    let retView;
+    let retView = null;
 
-    if (firstView.type === 'kanban') {
-      const kanbanData = getKanbanDataFromPvtData(pvtData);
+    // if (firstView.type === 'kanban') {
+    //   const kanbanData = getKanbanDataFromPvtData(pvtData);
 
-      retView = <h1>看板视图 暂未实现</h1>;
-    }
+    //   retView = <h1>看板视图 暂未实现</h1>;
+    // }
 
     // ------------- 默认会显示表格
-    if (firstView.type === 'table' || !firstView.type) {
-      const tableData = getKanbanDataFromPvtData(pvtData)['data'];
-
-      const dataFields = Object.keys(tableData[0]).slice(1);
-      const groupField = 'recordId';
-      // dataFields[Math.floor(Math.random() * dataFields.length)];
+    // if (firstView.type === 'table' || !firstView.type) {
+    const tableData = getKanbanDataFromPvtData(pvtData)['data'];
+    let groupField = '';
+    if (showGroupedTable) {
+      const dataFields = Object.keys(tableData[0]);
+      groupField =
+        // 'group';
+        dataFields[Math.floor(Math.random() * dataFields.length)];
       console.log(';;dataFields, groupField ', dataFields, groupField);
-
-      const tableColumns = getPivotTableStandardColumns({
-        showGroupedTable,
-        groupOptions: showGroupedTable
-          ? {
-              groupField,
-              groupHeader: '分组列',
-            }
-          : null,
-        // rowData: tableData[0],
-      });
-
-      console.log(';;tableColumns ', tableColumns);
-
-      const tableOptions: any = {
-        initialState: {},
-      };
-      if (showGroupedTable) {
-        tableOptions.initialState.groupBy = [groupField];
-      }
-      const tablePlugins = [];
-      if (showGroupedTable) {
-        tablePlugins.push(useGroupBy, useExpanded, useExpandAll);
-      }
-
-      const tableProps = {
-        tableData,
-        tableColumns,
-        tableOptions,
-        tablePlugins,
-
-        showGroupedTable,
-        setToggleShowGroupedTable,
-        showToolbar,
-        showToolbarActionsMenuButtons,
-      };
-      console.log(';;tableProps ', tableProps);
-
-      retView = <PivotTableStandard {...tableProps} key={tableKey} />;
+    } else {
+      groupField = '';
     }
+
+    // todo 支持添加多个分组列
+    const tableColumns = getPivotTableStandardColumns({
+      rowData: tableData[0],
+      showGroupedTable,
+      groupOptions: showGroupedTable
+        ? {
+            groupField,
+            // groupHeader: '分组列',
+          }
+        : null,
+    });
+    console.log(';;tableColumns ', tableColumns);
+
+    const tableOptions: any = {
+      initialState: {},
+    };
+    if (showGroupedTable) {
+      tableOptions.initialState.groupBy = [groupField];
+    }
+    const tablePlugins = [];
+    if (showGroupedTable) {
+      tablePlugins.push(useGroupBy, useExpanded, useExpandAll);
+    }
+
+    const tableProps = {
+      tableData,
+      tableColumns,
+      tableOptions,
+      tablePlugins,
+
+      showGroupedTable,
+      setToggleShowGroupedTable,
+      showToolbar,
+      showToolbarActionsMenuButtons,
+      pvtViews,
+      setPvtViews,
+    };
+    // console.log(';;tableProps ', tableProps);
+
+    retView = <PivotTableStandard {...tableProps} key={tableKey} />;
+    // }
 
     return retView;
   }, [

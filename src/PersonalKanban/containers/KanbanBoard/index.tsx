@@ -1,3 +1,4 @@
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -5,24 +6,24 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import Box from "@material-ui/core/Box";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import Box from '@material-ui/core/Box';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-import KanbanBoard from "../../components/KanbanBoard";
-import Toolbar from "../../containers/Toolbar";
-import ThemeProvider from "../../providers/ThemeProvider";
-import StorageService from "../../services/StorageService";
+import KanbanBoard from '../../components/KanbanBoard';
+import Toolbar from '../../containers/Toolbar';
+import ThemeProvider from '../../providers/ThemeProvider';
+import StorageService from '../../services/StorageService';
 import {
   getCreatedAt,
   getId,
   getInitialState,
   reorder,
   reorderCards,
-} from "../../services/utils";
-import type { Column, Record } from "../../types";
-import { AddColumnDialog } from "./AddColumnDialog";
+} from '../../services/utils';
+import type { Column, Record } from '../../types';
+import { AddColumnDialog } from './AddColumnDialog';
 
 let initialState = StorageService.getColumns();
 if (!initialState) {
@@ -32,17 +33,20 @@ if (!initialState) {
 const useKanbanBoardStyles = makeStyles<Theme>((theme) =>
   createStyles({
     root: {
-      width: "100%",
-      height: "100vh",
-      backgroundColor: "#eef3fc",
+      width: '100%',
+    },
+    fullHeight: {
+      height: '100vh',
+      backgroundColor: '#eef3fc',
     },
     toolbar: theme.mixins.toolbar,
-  })
+  }),
 );
 
 type KanbanBoardContainerProps = {
   kanbanData?: any;
   updateKanbanData?: Function;
+  variant?: 'kanbanInPvtTable' | 'fullPage';
 };
 
 /**
@@ -50,7 +54,7 @@ type KanbanBoardContainerProps = {
  */
 export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
   const classes = useKanbanBoardStyles();
-  const { kanbanData, updateKanbanData } = props;
+  const { kanbanData, updateKanbanData, variant } = props;
 
   const [columns, setColumns] = useState<Column[]>(initialState);
 
@@ -65,16 +69,16 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
     (id: string) => {
       return columns.findIndex((c: Column) => c.id === id);
     },
-    [columns]
+    [columns],
   );
 
   const getRecordIndex = useCallback(
     (recordId: string, columnId: string) => {
       return columns[getColumnIndex(columnId)]?.records?.findIndex(
-        (r: Record) => r.id === recordId
+        (r: Record) => r.id === recordId,
       );
     },
-    [columns, getColumnIndex]
+    [columns, getColumnIndex],
   );
 
   const handleClearBoard = useCallback(() => {
@@ -86,7 +90,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       ...columns,
       Object.assign(
         { id: getId(), records: [], createdAt: getCreatedAt() },
-        column
+        column,
       ),
     ]);
   }, []);
@@ -96,7 +100,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       const updatedColumns = reorder(columns, getColumnIndex(column.id), index);
       setColumns(updatedColumns);
     },
-    [columns, getColumnIndex]
+    [columns, getColumnIndex],
   );
 
   const handleColumnEdit = useCallback(
@@ -112,7 +116,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [getColumnIndex, cloneColumns]
+    [getColumnIndex, cloneColumns],
   );
 
   const handleColumnDelete = useCallback(
@@ -123,7 +127,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [cloneColumns, getColumnIndex]
+    [cloneColumns, getColumnIndex],
   );
 
   const handleCardMove = useCallback(
@@ -148,7 +152,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
 
       setColumns(updatedColumns);
     },
-    [columns, getRecordIndex]
+    [columns, getRecordIndex],
   );
 
   const handleAddRecord = useCallback(
@@ -170,7 +174,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [cloneColumns, getColumnIndex]
+    [cloneColumns, getColumnIndex],
   );
 
   /**
@@ -189,7 +193,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [getColumnIndex, getRecordIndex, cloneColumns]
+    [getColumnIndex, getRecordIndex, cloneColumns],
   );
 
   const handleRecordDelete = useCallback(
@@ -202,7 +206,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [cloneColumns, getColumnIndex, getRecordIndex]
+    [cloneColumns, getColumnIndex, getRecordIndex],
   );
 
   const handleAllRecordDelete = useCallback(
@@ -214,7 +218,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
         return columns;
       });
     },
-    [cloneColumns, getColumnIndex]
+    [cloneColumns, getColumnIndex],
   );
 
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
@@ -231,13 +235,21 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
 
   return (
     <ThemeProvider>
-      <div className={classes.root}>
-        <Toolbar
-          clearButtonDisabled={!columns.length}
-          onNewColumn={handleAddColumn}
-          onClearBoard={handleClearBoard}
-        />
-        <div className={classes.toolbar} />
+      <div
+        className={cx(classes.root, {
+          [classes.fullPage]: variant === 'fullPage',
+        })}
+      >
+        {variant === 'fullPage' ? (
+          <>
+            <Toolbar
+              clearButtonDisabled={!columns.length}
+              onNewColumn={handleAddColumn}
+              onClearBoard={handleClearBoard}
+            />
+            <div className={classes.toolbar} />
+          </>
+        ) : null}
         <Box padding={1}>
           <KanbanBoard
             columns={columns}

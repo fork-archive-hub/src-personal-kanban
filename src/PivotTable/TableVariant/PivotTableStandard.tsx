@@ -18,6 +18,8 @@ export type PivotTableStandardProps = {
   groupOptions?: any;
   showToolbar?: boolean;
   showToolbarActionsMenuButtons?: boolean;
+  pvtViews?: any[];
+  setPvtViews?: Function;
 };
 
 export function PivotTableStandard(props: PivotTableStandardProps) {
@@ -31,6 +33,8 @@ export function PivotTableStandard(props: PivotTableStandardProps) {
     groupOptions,
     showToolbar = true,
     showToolbarActionsMenuButtons = true,
+    pvtViews,
+    setPvtViews,
   } = props;
 
   // const columns = useMemo(
@@ -52,7 +56,6 @@ export function PivotTableStandard(props: PivotTableStandardProps) {
 
   const tableInstance = useTable<Faker.Card>(
     {
-      // data: FAKE_DATA,
       data: tableData,
       columns: tableColumns,
       ...tableOptions,
@@ -73,23 +76,26 @@ export function PivotTableStandard(props: PivotTableStandardProps) {
     [],
   );
 
+  // <div
+  //   style={{
+  //     width: '100%',
+  //     height: '100%',
+  //   }}
+  // >
+
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <Table
-        instance={tableInstance}
-        renderRowSubComponent={renderRowSubComponent}
-        isRowSubComponentAboveRow={true}
-        showToolbar={showToolbar}
-        showToolbarActionsMenuButtons={showToolbarActionsMenuButtons}
-        setToggleShowGroupedTable={setToggleShowGroupedTable}
-      />
-    </div>
+    <Table
+      instance={tableInstance}
+      renderRowSubComponent={renderRowSubComponent}
+      isRowSubComponentAboveRow={true}
+      showToolbar={showToolbar}
+      showToolbarActionsMenuButtons={showToolbarActionsMenuButtons}
+      setToggleShowGroupedTable={setToggleShowGroupedTable}
+      pvtViews={pvtViews}
+      setPvtViews={setPvtViews}
+    />
   );
+  //  </div>
 }
 
 export default PivotTableStandard;

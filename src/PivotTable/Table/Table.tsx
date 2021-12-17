@@ -1,4 +1,3 @@
-import { isString } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
@@ -6,6 +5,7 @@ import InfiniteLoader from 'react-window-infinite-loader';
 
 import { Icon, SearchBar, Tooltip } from '@habx/ui-core';
 
+import { PersonalKanban } from '../../PersonalKanban';
 import { Toolbar } from '../Toolbar';
 import { useMergedRef } from '../_internal/useMergedRef';
 import { ColumnInstance } from '../types/Table';
@@ -41,7 +41,9 @@ export const Table = <D extends {}>({
   instance,
   noDataComponent: NoDataComponent,
   showToolbar = true,
-  showToolbarActionsMenuButtons=true,
+  showToolbarActionsMenuButtons = true,
+  pvtViews,
+  setPvtViews,
   renderHeaderGroups,
   onRowClick,
   getRowCharacteristics,
@@ -117,6 +119,173 @@ export const Table = <D extends {}>({
 
   // console.log(';;rows, ', rows);
 
+  const currentPvtViewReElem = useMemo(() => {
+    const firstPvtView = pvtViews[0];
+
+    let currPvtView = null;
+    if (firstPvtView.type === 'kanban') {
+      currPvtView = <PersonalKanban />;
+    }
+
+    if (firstPvtView.type === 'table' || !firstPvtView.type) {
+      currPvtView = (
+        <>
+          <TableContent {...getTableProps()}>
+            <TableHead>
+              {renderHeaderGroups?.(headerGroups) ??
+                headerGroups.map((headerGroup, headerGroupIndex) => (
+                  <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((col, headerCellIndex) => {
+                      const column = col as unknown as ColumnInstance<D>;
+
+                      const headerProps = column.getHeaderProps(
+                        ...(column.getSortByToggleProps
+                          ? [column.getSortByToggleProps()]
+                          : []),
+                      );
+
+                      const renderHeader =
+                        column.Header && column.render('Header');
+                      const isBig =
+                        headerGroups.length > 1 &&
+                        headerGroupIndex < headerGroups.length - 1;
+
+                      return (
+                        <TableHeadCell
+                          data-big={isBig}
+                          key={`headerCell-${headerCellIndex}`}
+                          size={column.columns?.length ?? 1}
+                        >
+                          {renderHeader && (
+                            // <Tooltip
+                            //   title={renderHeader as string}
+                            //   disabled={!isString(renderHeader) || isBig}
+                            // >
+                            <TableHeaderCellContainer
+                              data-align={column.align ?? 'flex-start'}
+                            >
+                              <TableHeadCellContent
+                                // variation='lowContrast'
+                                {...headerProps}
+                              >
+                                {renderHeader}
+                              </TableHeadCellContent>
+                              {column.isSorted && (
+                                <Icon
+                                  icon={
+                                    column.isSortedDesc
+                                      ? 'arrow-south'
+                                      : 'arrow-north'
+                                  }
+                                />
+                              )}
+                            </TableHeaderCellContainer>
+                            // </Tooltip>
+                          )}
+                          {column.canFilter ? (
+                            <TableHeaderCellSort>
+                              {column.render('Filter')}
+                            </TableHeaderCellSort>
+                          ) : null}
+                        </TableHeadCell>
+                      );
+                    })}
+                  </TableHeadRow>
+                ))}
+            </TableHead>
+            {!loading && NoDataComponent && rows.length === 0 && (
+              <NoDataContainer>
+                <NoDataComponent />
+              </NoDataContainer>
+            )}
+            <TableBody
+              {...getTableBodyProps()}
+              ref={tableBodyRef}
+              rowsHeight={rowsHeight}
+            >
+              {virtualState.initialized ? (
+                <InfiniteLoader
+                  isItemLoaded={isItemLoaded}
+                  itemCount={instance.total ?? currentRows.length}
+                  loadMoreItems={instance.loadMore ?? DEFAULT_LOAD_MORE}
+                >
+                  {({ onItemsRendered, ref }) => {
+                    return (
+                      <FixedSizeList
+                        ref={ref}
+                        onItemsRendered={onItemsRendered}
+                        width={virtualState.width ?? 0}
+                        itemCount={instance.total ?? currentRows.length}
+                        height={virtualState.height ?? 0}
+                        itemSize={virtualState.itemSize ?? 0}
+                      >
+                        {VirtualRow}
+                      </FixedSizeList>
+                    );
+                  }}
+                </InfiniteLoader>
+              ) : (
+                currentRows.map((row, rowIndex) => (
+                  <TableRow
+                    index={rowIndex}
+                    row={row}
+                    getRowCharacteristics={getRowCharacteristics}
+                    instance={instance}
+                    onClick={onRowClick}
+                    prepareRow={prepareRow}
+                    renderRowSubComponent={renderRowSubComponent}
+                    isRowSubComponentAboveRow={isRowSubComponentAboveRow}
+                    key={`row-${rowIndex}`}
+                  />
+                ))
+              )}
+            </TableBody>
+            <TableFooter<D> footerGroups={footerGroups} />
+          </TableContent>
+
+          {(hasPagination || hasDensity) && (
+            <TableOptionBar>
+              {hasPagination && (
+                <TablePagination instance={instance}>
+                  {hasDensity && <TableDensity instance={instance} />}
+                </TablePagination>
+              )}
+              {!hasPagination && hasDensity && (
+                <TableDensity instance={instance} />
+              )}
+            </TableOptionBar>
+          )}
+        </>
+      );
+    }
+
+    return currPvtView;
+  }, [
+    NoDataComponent,
+    VirtualRow,
+    currentRows,
+    footerGroups,
+    getRowCharacteristics,
+    getTableBodyProps,
+    getTableProps,
+    hasDensity,
+    hasPagination,
+    headerGroups,
+    instance,
+    isItemLoaded,
+    isRowSubComponentAboveRow,
+    loading,
+    onRowClick,
+    prepareRow,
+    pvtViews,
+    renderHeaderGroups,
+    renderRowSubComponent,
+    rows.length,
+    rowsHeight,
+    tableBodyRef,
+    virtualState,
+  ]);
+
   return (
     <TableContainer
       // 一个简单的div，style只是css变量，传到内层布局，内层是 display: grid
@@ -134,6 +303,7 @@ export const Table = <D extends {}>({
         showToolbar={showToolbar}
         showToolbarActionsMenuButtons={showToolbarActionsMenuButtons}
         setToggleShowGroupedTable={setToggleShowGroupedTable}
+        setPvtViews={setPvtViews}
       />
 
       {/* todo 将搜索筛选移到toolbar，SearchBar来自ui-core */}
@@ -149,128 +319,7 @@ export const Table = <D extends {}>({
 
       {loading && <LoadingOverlay />}
 
-      <TableContent {...getTableProps()}>
-        <TableHead>
-          {renderHeaderGroups?.(headerGroups) ??
-            headerGroups.map((headerGroup, headerGroupIndex) => (
-              <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((col, headerCellIndex) => {
-                  const column = col as unknown as ColumnInstance<D>;
-
-                  const headerProps = column.getHeaderProps(
-                    ...(column.getSortByToggleProps
-                      ? [column.getSortByToggleProps()]
-                      : []),
-                  );
-
-                  const renderHeader = column.Header && column.render('Header');
-                  const isBig =
-                    headerGroups.length > 1 &&
-                    headerGroupIndex < headerGroups.length - 1;
-
-                  return (
-                    <TableHeadCell
-                      data-big={isBig}
-                      key={`headerCell-${headerCellIndex}`}
-                      size={column.columns?.length ?? 1}
-                    >
-                      {renderHeader && (
-                        // <Tooltip
-                        //   title={renderHeader as string}
-                        //   disabled={!isString(renderHeader) || isBig}
-                        // >
-                        <TableHeaderCellContainer
-                          data-align={column.align ?? 'flex-start'}
-                        >
-                          <TableHeadCellContent
-                            // variation='lowContrast'
-                            {...headerProps}
-                          >
-                            {renderHeader}
-                          </TableHeadCellContent>
-                          {column.isSorted && (
-                            <Icon
-                              icon={
-                                column.isSortedDesc
-                                  ? 'arrow-south'
-                                  : 'arrow-north'
-                              }
-                            />
-                          )}
-                        </TableHeaderCellContainer>
-                        // </Tooltip>
-                      )}
-                      {column.canFilter ? (
-                        <TableHeaderCellSort>
-                          {column.render('Filter')}
-                        </TableHeaderCellSort>
-                      ) : null}
-                    </TableHeadCell>
-                  );
-                })}
-              </TableHeadRow>
-            ))}
-        </TableHead>
-        {!loading && NoDataComponent && rows.length === 0 && (
-          <NoDataContainer>
-            <NoDataComponent />
-          </NoDataContainer>
-        )}
-        <TableBody
-          {...getTableBodyProps()}
-          ref={tableBodyRef}
-          rowsHeight={rowsHeight}
-        >
-          {virtualState.initialized ? (
-            <InfiniteLoader
-              isItemLoaded={isItemLoaded}
-              itemCount={instance.total ?? currentRows.length}
-              loadMoreItems={instance.loadMore ?? DEFAULT_LOAD_MORE}
-            >
-              {({ onItemsRendered, ref }) => {
-                return (
-                  <FixedSizeList
-                    ref={ref}
-                    onItemsRendered={onItemsRendered}
-                    width={virtualState.width ?? 0}
-                    itemCount={instance.total ?? currentRows.length}
-                    height={virtualState.height ?? 0}
-                    itemSize={virtualState.itemSize ?? 0}
-                  >
-                    {VirtualRow}
-                  </FixedSizeList>
-                );
-              }}
-            </InfiniteLoader>
-          ) : (
-            currentRows.map((row, rowIndex) => (
-              <TableRow
-                index={rowIndex}
-                row={row}
-                getRowCharacteristics={getRowCharacteristics}
-                instance={instance}
-                onClick={onRowClick}
-                prepareRow={prepareRow}
-                renderRowSubComponent={renderRowSubComponent}
-                isRowSubComponentAboveRow={isRowSubComponentAboveRow}
-                key={`row-${rowIndex}`}
-              />
-            ))
-          )}
-        </TableBody>
-        <TableFooter<D> footerGroups={footerGroups} />
-      </TableContent>
-
-      {(hasPagination || hasDensity) && (
-        <TableOptionBar>
-          {hasPagination && (
-            <TablePagination instance={instance}>
-              {hasDensity && <TableDensity instance={instance} />}
-            </TablePagination>
-          )}
-          {!hasPagination && hasDensity && <TableDensity instance={instance} />}
-        </TableOptionBar>
-      )}
+      {currentPvtViewReElem}
     </TableContainer>
   );
 };

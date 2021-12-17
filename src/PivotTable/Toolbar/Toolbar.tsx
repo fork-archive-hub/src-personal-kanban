@@ -40,6 +40,7 @@ export type ToolbarProps = {
   showToolbar?: boolean;
   showToolbarActionsMenuButtons?: boolean;
   setToggleShowGroupedTable?: Function;
+  setPvtViews?: Function;
 };
 
 /**
@@ -51,6 +52,7 @@ export function Toolbar(props) {
     showToolbar = true,
     showToolbarActionsMenuButtons = true,
     setToggleShowGroupedTable,
+    setPvtViews,
   } = props;
 
   const handleClickGroupTableMenu = useCallback(() => {
@@ -72,6 +74,12 @@ export function Toolbar(props) {
     ],
     [handleClickGroupTableMenu],
   );
+
+  const handlePvtTitleClick = useCallback(() => {
+    setPvtViews((prev) => {
+      return [prev[1], prev[0]];
+    });
+  }, [setPvtViews]);
 
   const toolbarActionsMenuButtonsReElem = useMemo(() => {
     return toolbarActionsMenuData.map((actionMenu) => {
@@ -96,12 +104,8 @@ export function Toolbar(props) {
     return (
       <div className='pvt-toolbar'>
         <div className='pvt-toolbarTitle'>
-          {/* <h4>表格视图测试 1</h4>
-          <IconButton aria-label='展开'>
-            <ExpandMoreIcon />
-          </IconButton> */}
-
           <Button
+            onClick={handlePvtTitleClick}
             // variant='contained'
             // color='primary'
             startIcon={<ViewListOutlinedIcon />}
@@ -119,7 +123,11 @@ export function Toolbar(props) {
         </div>
       </div>
     );
-  }, [showToolbarActionsMenuButtons, toolbarActionsMenuButtonsReElem]);
+  }, [
+    handlePvtTitleClick,
+    showToolbarActionsMenuButtons,
+    toolbarActionsMenuButtonsReElem,
+  ]);
 
   return showToolbar ? toolbarRootReElem : null;
 }

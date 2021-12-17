@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Dialog, DialogContent, Grid, Toolbar } from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import { Dialog, DialogContent, Grid, Toolbar } from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
-import ColumnForm from "../../components/ColumnForm/ColumnForm";
-import type { Column } from "../../types";
+import ColumnForm from '../../components/ColumnForm/ColumnForm';
+import type { Column } from '../../types';
 
 export type AddColumnDialogProps = {
   /** 添加分组列的弹窗是否打开 */
@@ -15,6 +15,7 @@ export type AddColumnDialogProps = {
   onSubmit?: Function;
 };
 
+/** 添加分组/任务清单的弹窗 */
 export function AddColumnDialog(props: AddColumnDialogProps) {
   const { open, onClose, onSubmit } = props;
 
@@ -27,7 +28,7 @@ export function AddColumnDialog(props: AddColumnDialogProps) {
       onSubmit({ column });
       handleCloseDialog();
     },
-    [handleCloseDialog, onSubmit]
+    [handleCloseDialog, onSubmit],
   );
 
   return (
