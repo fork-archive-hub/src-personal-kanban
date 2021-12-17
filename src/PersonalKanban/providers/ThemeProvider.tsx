@@ -116,7 +116,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
   return (
     <ThemeContext.Provider value={value}>
       <MuiThemeProvider theme={theme}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         {children}
       </MuiThemeProvider>
     </ThemeContext.Provider>

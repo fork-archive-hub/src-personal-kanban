@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Box,
@@ -21,21 +21,21 @@ import {
   IconButton as MIconButton,
   Paper,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
-import Card from "../../components/Card";
-import ColumnForm from "../../components/ColumnForm";
-import IconButton from "../../components/IconButton";
-import RecordForm from "../../components/RecordForm";
-import { ColumnColor, DarkColumnColor } from "../../constants";
-import { useTheme } from "../../providers/ThemeProvider";
-import type { Column as ColumnType, Record } from "../../types";
-import { RecordDetails } from "../RecordDetails";
-import { ColumnCardList } from "./ColumnCardList";
-import { ColumnHeader } from "./ColumnHeader";
+import Card from '../../components/Card';
+import ColumnForm from '../../components/ColumnForm';
+import IconButton from '../../components/IconButton';
+import RecordForm from '../../components/RecordForm';
+import { ColumnColor, DarkColumnColor } from '../../constants';
+import { useTheme } from '../../providers/ThemeProvider';
+import type { Column as ColumnType, Record } from '../../types';
+import { RecordDetails } from '../RecordDetails';
+import { ColumnCardList } from './ColumnCardList';
+import { ColumnHeader } from './ColumnHeader';
 
 const useColumnFooterStyles = makeStyles((theme) => ({
   divider: {
@@ -43,35 +43,41 @@ const useColumnFooterStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(0.5),
   },
   addCardButton: {
-    width: 264,
+    width: 280,
     height: 36,
     color: theme.palette.text.secondary,
-    backgroundColor: "#fff",
-    border: "none",
+    backgroundColor: '#fff',
+    borderColor: 'rgba(15, 15, 15, 0.12)',
+  },
+  noBorder: {
+    border: 0,
   },
 }));
 
 type ColumnFooterProps = {
   content?: string;
   handleOpenAddRecordDialog?: Function;
+  kanbanVariant?: string;
 };
 
 export const ColumnFooter: React.FC<ColumnFooterProps> = (props) => {
-  const { content, handleOpenAddRecordDialog } = props;
+  const { content, handleOpenAddRecordDialog, kanbanVariant } = props;
 
   const classes = useColumnFooterStyles();
   return (
     <>
-      <Typography variant="caption" component="p" title={content} noWrap>
+      <Typography variant='caption' component='p' title={content} noWrap>
         {/* {content} */}
       </Typography>
 
       <Button
         onClick={handleOpenAddRecordDialog as any}
-        variant="outlined"
-        size="large"
+        variant='outlined'
+        size='large'
         // color='secondary'
-        className={classes.addCardButton}
+        className={cx(classes.addCardButton, {
+          [classes.noBorder]: kanbanVariant === 'fullPage',
+        })}
         startIcon={<AddIcon />}
       >
         {/* 添加新任务卡片 */}

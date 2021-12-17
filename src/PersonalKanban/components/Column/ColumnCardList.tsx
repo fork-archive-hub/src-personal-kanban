@@ -50,6 +50,7 @@ type ColumnCardListProps = {
   onRecordEdit?: any;
   onRecordDelete?: any;
   forceColumnUpdate?: Function;
+  kanbanVariant?: string;
 };
 
 export function ColumnCardList(props: ColumnCardListProps) {
@@ -60,6 +61,7 @@ export function ColumnCardList(props: ColumnCardListProps) {
     onRecordEdit,
     onRecordDelete,
     forceColumnUpdate,
+    kanbanVariant
   } = props;
 
   const classes = useColumnCardListStyles();
@@ -80,6 +82,7 @@ export function ColumnCardList(props: ColumnCardListProps) {
               showEditAction={false}
               showDeleteAction={false}
               forceColumnUpdate={forceColumnUpdate}
+              kanbanVariant={kanbanVariant}
             />
           ))
         : // <Typography>{t('noRecord')}</Typography>

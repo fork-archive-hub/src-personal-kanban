@@ -24,6 +24,7 @@ type KanbanBoardProps = {
   ColumnComponent?: any;
   handleOpenAddColumnDialog?: Function;
   forceBoardUpdate?: Function;
+  kanbanVariant?:string;
 };
 
 /**
@@ -44,6 +45,7 @@ export function KanbanBoard(props: KanbanBoardProps) {
     ColumnComponent = KanbanColumn,
     handleOpenAddColumnDialog,
     forceBoardUpdate,
+    kanbanVariant
   } = props;
 
   const getColumnById = useCallback(
@@ -109,6 +111,7 @@ export function KanbanBoard(props: KanbanBoardProps) {
               onRecordDelete={onRecordDelete}
               onAllRecordDelete={onAllRecordDelete}
               forceBoardUpdate={forceBoardUpdate}
+              kanbanVariant={kanbanVariant}
             />
           </>
         )}

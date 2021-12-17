@@ -77,6 +77,7 @@ type ColumnProps = {
   ColumnCardListComponent?: any;
   ColumnFooterComponent?: any;
   forceBoardUpdate?: Function;
+  kanbanVariant?: string;
 };
 
 /** 看板的一列，是一个面板，上面可以放置多个卡片 */
@@ -100,6 +101,7 @@ export function Column(props: ColumnProps) {
     ColumnActionComponent,
     ColumnCardListComponent = ColumnCardList,
     ColumnFooterComponent = ColumnFooter,
+    kanbanVariant,
     ...rest
   } = props;
 
@@ -117,7 +119,6 @@ export function Column(props: ColumnProps) {
   // console.log(';;Column-forceBoardUpdate ', forceBoardUpdate, column);
 
   const disableAddRecordAction = wipEnabled && wipLimit <= records.length;
-
   const disableAllRecordDeleteAction = !records.length;
 
   const columnColor = color as keyof typeof ColumnColor;
@@ -373,16 +374,19 @@ export function Column(props: ColumnProps) {
         showDeleteAction={showDeleteAction}
         onEdit={handleOpenEditDialog}
         onDelete={handleOpenDeleteDialog}
+        kanbanVariant={kanbanVariant}
       />
       <ColumnCardListComponent
         column={column}
         onRecordEdit={handleOpenEditRecordDialog}
         onRecordDelete={handleOpenDeleteRecordDialog}
         forceBoardUpdate={forceBoardUpdate}
+        kanbanVariant={kanbanVariant}
       />
       <ColumnFooterComponent
         content={caption}
         handleOpenAddRecordDialog={handleOpenAddRecordDialog}
+        kanbanVariant={kanbanVariant}
       />
       <Dialog
         open={dialog.open}

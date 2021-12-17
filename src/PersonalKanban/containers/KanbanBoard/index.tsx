@@ -35,7 +35,7 @@ const useKanbanBoardStyles = makeStyles<Theme>((theme) =>
     root: {
       width: '100%',
     },
-    fullHeight: {
+    fullPageRoot: {
       height: '100vh',
       backgroundColor: '#eef3fc',
     },
@@ -237,7 +237,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
     <ThemeProvider>
       <div
         className={cx(classes.root, {
-          [classes.fullPage]: variant === 'fullPage',
+          [classes.fullPageRoot]: variant === 'fullPage',
         })}
       >
         {variant === 'fullPage' ? (
@@ -250,7 +250,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
             <div className={classes.toolbar} />
           </>
         ) : null}
-        <Box padding={1}>
+        <Box padding={variant === 'fullPage' ? 1 : 0}>
           <KanbanBoard
             columns={columns}
             onColumnMove={handleColumnMove}
@@ -262,6 +262,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
             onRecordEdit={handleRecordEdit}
             onRecordDelete={handleRecordDelete}
             onAllRecordDelete={handleAllRecordDelete}
+            kanbanVariant={variant}
             // forceBoardUpdate={forceUpdate}
           />
         </Box>

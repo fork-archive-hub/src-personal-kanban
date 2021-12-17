@@ -1,3 +1,4 @@
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -5,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Box,
@@ -20,22 +21,32 @@ import {
   IconButton,
   Paper,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useColumnHeaderStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: "#fff",
+    // backgroundColor: '#fff',
+    border: `1px solid rgba(15, 15, 15, 0.12)`,
+    '& .groupMoreActions': {
+      visibility: 'hidden',
+    },
+    '&:hover .groupMoreActions': {
+      visibility: 'visible',
+    },
+  },
+  headerBorder: {
+    border: 0,
   },
   divider: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(1),
   },
   columnMoreActionsBtn: {
-    "&:hover": {
-      backgroundColor: "#fff",
+    '&:hover': {
+      backgroundColor: '#fff',
       color: theme.palette.primary.main,
     },
   },
@@ -48,6 +59,7 @@ type ColumnHeaderProps = {
   onDelete?: any;
   showEditAction?: boolean;
   showDeleteAction?: boolean;
+  kanbanVariant?: string;
 };
 
 export function ColumnHeader(props: ColumnHeaderProps) {
@@ -58,20 +70,22 @@ export function ColumnHeader(props: ColumnHeaderProps) {
     showDeleteAction = true,
     onEdit,
     onDelete,
+    kanbanVariant,
   } = props;
 
   const classes = useColumnHeaderStyles();
   return (
     <>
       <Box
-        bgcolor="#fff"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        padding="0 0 0 12px"
-        // marginBottom={Boolean(description) ? 0.5 : 0}
-        // marginBottom={1.5}
-        marginBottom="12px"
+        className={cx(classes.root, {
+          [classes.headerBorder]: kanbanVariant === 'fullPage',
+        })}
+        bgcolor='#fff'
+        display='flex'
+        alignItems='center'
+        justifyContent='space-between'
+        padding='0 0 0 12px'
+        marginBottom='12px'
       >
         <Typography
           // variant='h6'
@@ -81,14 +95,14 @@ export function ColumnHeader(props: ColumnHeaderProps) {
         >
           {title}
         </Typography>
-        <Box display="flex" alignItems="center">
+        <Box display='flex' alignItems='center'>
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              alert("更多分组操作，开发中...");
+              alert('更多分组操作，开发中...');
             }}
-            className={classes.columnMoreActionsBtn}
-            aria-label="更多分组操作"
+            className={cx('groupMoreActions', classes.columnMoreActionsBtn)}
+            aria-label='更多分组操作'
             disableRipple
           >
             <MoreHorizIcon />
