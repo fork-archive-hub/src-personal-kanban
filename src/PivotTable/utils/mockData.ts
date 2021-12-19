@@ -1,4 +1,3 @@
-
 export function mockTrelloExportJson(len) {
   return {
     id: 'idBoard',
@@ -40,9 +39,29 @@ export function mockTrelloExportJson(len) {
     cards: [
       {
         id: 'idCard',
+        name: 'doing1',
+        desc: '',
+        descData: {
+          emoji: {},
+        },
         idList: 'idList',
         idBoard: 'idBoard',
         idLabels: ['label1'],
+        idChecklists: [],
+        idMembers: [],
+        labels: [],
+        closed: false,
+        dateLastActivity: '2021-12-10T09:00:43.252Z',
+        idMemersVoted: [],
+        idShort: 2,
+        isTemplate: false,
+        cardRole: null,
+        dueReminder: null,
+        dueComplete: false,
+        due: null,
+        cover: {},
+        attachments: [],
+        customFieldItems: [],
       },
     ],
     lists: [

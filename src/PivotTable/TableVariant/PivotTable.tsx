@@ -4,9 +4,9 @@ import cx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useExpanded, useGroupBy } from 'react-table';
 
-import { BASIC_COLUMNS, FAKE_DATA } from '../_fakeData/storyFakeData';
 import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
 import { PivotTableStandard } from './PivotTableStandard';
+import { defaultPvtData, kanbanGuideDemoCardsPvtData } from './tableData';
 import {
   getKanbanDataFromPvtData,
   getPivotTableStandardColumns,
@@ -24,29 +24,8 @@ export type PivotTableStandardProps = {
 
 export function PivotTable(props: PivotTableStandardProps) {
   const [pvtData, setPvtData] = useState({
-    data: [
-      {
-        recordId: 1,
-        field1: 'r1c1',
-        field2: 'r1c2',
-        fieldN: 'r1c3',
-        group: '分组A',
-      },
-      {
-        recordId: 2,
-        field1: 'r2c1',
-        field2: 'r2c2',
-        fieldN: 'r2c3',
-        group: '分组B',
-      },
-      {
-        recordId: 3,
-        field1: 'r3c1',
-        field2: 'r3c2',
-        fieldN: 'r3c3',
-        group: '分组A',
-      },
-    ],
+    // data: defaultPvtData,
+    data: kanbanGuideDemoCardsPvtData,
   });
   const [pvtViews, setPvtViews] = useState([
     {
@@ -99,9 +78,8 @@ export function PivotTable(props: PivotTableStandardProps) {
     let groupField = '';
     if (showGroupedTable) {
       const dataFields = Object.keys(tableData[0]);
-      groupField =
-        // 'group';
-        dataFields[Math.floor(Math.random() * dataFields.length)];
+      groupField = 'group';
+      // dataFields[Math.floor(Math.random() * dataFields.length)];
       console.log(';;dataFields, groupField ', dataFields, groupField);
     } else {
       groupField = '';

@@ -72,7 +72,7 @@ export const getInitialState = () => {
     // 这里是一个分组列
     {
       id: 'groupColId' + getId(),
-      title: '看板示例',
+      title: '看板示例说明',
       // color: "Orange",
       // records包含一个分组面板中的所有卡片
       records: [

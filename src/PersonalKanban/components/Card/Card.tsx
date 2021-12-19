@@ -59,14 +59,20 @@ const useStyles = makeStyles<Theme>((theme) =>
     },
     cardTitle: {},
     tagBtn: {
-      backgroundColor: '#d4c5f9',
-      textTransform: 'none',
+      backgroundColor: '#eee8fd',
       // backgroundColor: '#a2eeef',
+      textTransform: 'none',
       '&:hover': {
-        backgroundColor: '#d4c5f9',
+        backgroundColor: '#eee8fd',
       },
       marginRight: theme.spacing(0.5),
       marginBottom: theme.spacing(0.5),
+    },
+    tagBtnFullPage: {
+      backgroundColor: '#d4c5f9',
+      '&:hover': {
+        backgroundColor: '#d4c5f9',
+      },
     },
     taskDueTimeBtn: {
       backgroundColor: '#eef3fc',
@@ -212,7 +218,9 @@ export function Card(props: CardProps) {
                   <Button
                     onClick={(e) => e.stopPropagation()}
                     variant='contained'
-                    className={classes.tagBtn}
+                    className={cx(classes.tagBtn, {
+                      [classes.tagBtnFullPage]: kanbanVariant === 'fullPage',
+                    })}
                     disableElevation
                     disableRipple
                     key={tagName}
