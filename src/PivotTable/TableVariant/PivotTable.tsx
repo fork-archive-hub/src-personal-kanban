@@ -1,9 +1,11 @@
 import '../pivot-table.css';
 
+import Toolbar from 'PivotTable/Toolbar/Toolbar';
 import cx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useExpanded, useGroupBy } from 'react-table';
 
+import { PersonalKanban } from '../../PersonalKanban';
 import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
 import { PivotTableStandard } from './PivotTableStandard';
 import { defaultPvtData, kanbanGuideDemoCardsPvtData } from './tableData';
@@ -29,16 +31,16 @@ export function PivotTable(props: PivotTableStandardProps) {
   });
   const [pvtViews, setPvtViews] = useState([
     {
-      id: 'idTv',
-      name: 'tableView1',
-      type: 'table',
+      id: 'idKv',
+      name: '看板视图测试',
+      type: 'kanban',
       tableColumns: {},
       tableConfig: {},
     },
     {
-      id: 'idKv',
-      name: 'kanbanView1',
-      type: 'kanban',
+      id: 'idTv',
+      name: '表格视图测试',
+      type: 'table',
       tableColumns: {},
       tableConfig: {},
     },
@@ -52,7 +54,7 @@ export function PivotTable(props: PivotTableStandardProps) {
     setToggleShowToolbarActionsMenuButtons,
   ] = useState(true);
 
-  const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
+  const [showGroupedTable, setToggleShowGroupedTable] = useState(true);
   // const [groupOptions, setGroupOptions] = useState({});
 
   /** 改变key的时候，会强制重渲染整个table，要慎用，只有需要改变大部分table的时候才建议用 */
@@ -66,66 +68,66 @@ export function PivotTable(props: PivotTableStandardProps) {
 
     let retView = null;
 
-    // if (firstView.type === 'kanban') {
-    //   const kanbanData = getKanbanDataFromPvtData(pvtData);
+    if (firstView.type === 'kanban') {
+      const kanbanData = getKanbanDataFromPvtData(pvtData);
 
-    //   retView = <h1>看板视图 暂未实现</h1>;
-    // }
+      retView = <PersonalKanban />;
+    }
 
     // ------------- 默认会显示表格
-    // if (firstView.type === 'table' || !firstView.type) {
-    const tableData = getKanbanDataFromPvtData(pvtData)['data'];
-    let groupField = '';
-    if (showGroupedTable) {
-      const dataFields = Object.keys(tableData[0]);
-      groupField = 'group';
-      // dataFields[Math.floor(Math.random() * dataFields.length)];
-      console.log(';;dataFields, groupField ', dataFields, groupField);
-    } else {
-      groupField = '';
+    if (firstView.type === 'table' || !firstView.type) {
+      const tableData = getKanbanDataFromPvtData(pvtData)['data'];
+      let groupField = '';
+      if (showGroupedTable) {
+        const dataFields = Object.keys(tableData[0]);
+        groupField = 'group';
+        // dataFields[Math.floor(Math.random() * dataFields.length)];
+        console.log(';;dataFields, groupField ', dataFields, groupField);
+      } else {
+        groupField = '';
+      }
+
+      // todo 支持添加多个分组列
+      const tableColumns = getPivotTableStandardColumns({
+        rowData: tableData[0],
+        showGroupedTable,
+        groupOptions: showGroupedTable
+          ? {
+              groupField,
+              // groupHeader: '分组列',
+            }
+          : null,
+      });
+      console.log(';;tableColumns ', tableColumns);
+
+      const tableOptions: any = {
+        initialState: {},
+      };
+      if (showGroupedTable) {
+        tableOptions.initialState.groupBy = [groupField];
+      }
+      const tablePlugins = [];
+      if (showGroupedTable) {
+        tablePlugins.push(useGroupBy, useExpanded, useExpandAll);
+      }
+
+      const tableProps = {
+        tableData,
+        tableColumns,
+        tableOptions,
+        tablePlugins,
+
+        showGroupedTable,
+        setToggleShowGroupedTable,
+        showToolbar,
+        showToolbarActionsMenuButtons,
+        pvtViews,
+        setPvtViews,
+      };
+      // console.log(';;tableProps ', tableProps);
+
+      retView = <PivotTableStandard {...tableProps} key={tableKey} />;
     }
-
-    // todo 支持添加多个分组列
-    const tableColumns = getPivotTableStandardColumns({
-      rowData: tableData[0],
-      showGroupedTable,
-      groupOptions: showGroupedTable
-        ? {
-            groupField,
-            // groupHeader: '分组列',
-          }
-        : null,
-    });
-    console.log(';;tableColumns ', tableColumns);
-
-    const tableOptions: any = {
-      initialState: {},
-    };
-    if (showGroupedTable) {
-      tableOptions.initialState.groupBy = [groupField];
-    }
-    const tablePlugins = [];
-    if (showGroupedTable) {
-      tablePlugins.push(useGroupBy, useExpanded, useExpandAll);
-    }
-
-    const tableProps = {
-      tableData,
-      tableColumns,
-      tableOptions,
-      tablePlugins,
-
-      showGroupedTable,
-      setToggleShowGroupedTable,
-      showToolbar,
-      showToolbarActionsMenuButtons,
-      pvtViews,
-      setPvtViews,
-    };
-    // console.log(';;tableProps ', tableProps);
-
-    retView = <PivotTableStandard {...tableProps} key={tableKey} />;
-    // }
 
     return retView;
   }, [
@@ -137,7 +139,32 @@ export function PivotTable(props: PivotTableStandardProps) {
     tableKey,
   ]);
 
-  return currentPvtView;
+  return (
+    <div className='pvt'>
+      <>
+        <Toolbar
+          showToolbar={showToolbar}
+          showToolbarActionsMenuButtons={showToolbarActionsMenuButtons}
+          setToggleShowGroupedTable={setToggleShowGroupedTable}
+          pvtViews={pvtViews}
+          setPvtViews={setPvtViews}
+        />
+        {/* todo 将搜索筛选移到toolbar，SearchBar来自ui-core */}
+        {
+          // instance.setGlobalFilter ? (
+          //   <SearchBarContainer>
+          //     <SearchBar
+          //       placeholder='全局搜索，请输入'
+          //       onChange={(e) => instance.setGlobalFilter(e.target.value)}
+          //       value={instance.state.globalFilter}
+          //     />
+          //   </SearchBarContainer>
+          // ) : null
+        }
+      </>
+      {currentPvtView};
+    </div>
+  );
 }
 
 export default PivotTable;

@@ -40,6 +40,7 @@ export type ToolbarProps = {
   showToolbar?: boolean;
   showToolbarActionsMenuButtons?: boolean;
   setToggleShowGroupedTable?: Function;
+  pvtViews?: any[];
   setPvtViews?: Function;
 };
 
@@ -52,6 +53,7 @@ export function Toolbar(props) {
     showToolbar = true,
     showToolbarActionsMenuButtons = true,
     setToggleShowGroupedTable,
+    pvtViews,
     setPvtViews,
   } = props;
 
@@ -61,12 +63,12 @@ export function Toolbar(props) {
 
   const toolbarActionsMenuData = useMemo(
     () => [
-      { name: '字段', icon: <WidgetsOutlinedIcon />, handler: NOOP },
       {
         name: '分组',
         icon: <ViewAgendaOutlinedIcon />,
         handler: handleClickGroupTableMenu,
       },
+      { name: '字段', icon: <WidgetsOutlinedIcon />, handler: NOOP },
       { name: '筛选', icon: <FilterListOutlinedIcon />, handler: NOOP },
       { name: '排序', icon: <ImportExportIcon />, handler: NOOP },
       { name: '搜索', icon: <SearchIcon />, handler: NOOP },
@@ -112,7 +114,7 @@ export function Toolbar(props) {
             startIcon={<ViewListOutlinedIcon />}
             endIcon={<ExpandMoreIcon />}
           >
-            表格视图测试 1
+            {pvtViews[0].name}
           </Button>
         </div>
         <div
@@ -126,6 +128,7 @@ export function Toolbar(props) {
     );
   }, [
     handlePvtTitleClick,
+    pvtViews,
     showToolbarActionsMenuButtons,
     toolbarActionsMenuButtonsReElem,
   ]);

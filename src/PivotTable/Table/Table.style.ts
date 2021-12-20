@@ -140,6 +140,7 @@ export const TableBody = styled.tbody<{ rowsHeight?: number }>`
   }
 `;
 
+/** `<table>`的容器元素 */
 export const TableContainer = styled.div`
   position: relative;
 

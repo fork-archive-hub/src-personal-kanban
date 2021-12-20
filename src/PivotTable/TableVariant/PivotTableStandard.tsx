@@ -37,23 +37,6 @@ export function PivotTableStandard(props: PivotTableStandardProps) {
     setPvtViews,
   } = props;
 
-  // const columns = useMemo(
-  //   () =>
-  //     showGroupedTable
-  //       ? [
-  //           {
-  //             Header: 'Group',
-  //             accessor: 'group',
-  //             Cell: ({ row: { groupByVal } }) => {
-  //               return groupByVal;
-  //             },
-  //           },
-  //           ...BASIC_COLUMNS,
-  //         ]
-  //       : BASIC_COLUMNS,
-  //   [showGroupedTable],
-  // );
-
   const tableInstance = useTable<Faker.Card>(
     {
       data: tableData,

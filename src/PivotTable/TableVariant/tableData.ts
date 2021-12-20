@@ -51,8 +51,10 @@ export function getPivotTableStandardColumns(options) {
   }
 
   if (showGroupedTable && groupOptions) {
-    tableDefaultColumns = tableDefaultColumns.filter(
-      (col) => col.accessor !== groupOptions.groupField,
+    tableDefaultColumns = tableDefaultColumns.filter((col) =>
+      typeof col.accessor === 'function'
+        ? col.id !== groupOptions.groupField
+        : col.accessor !== groupOptions.groupField,
     );
 
     tableDefaultColumns.unshift({
