@@ -25,6 +25,7 @@ export type PivotTableStandardProps = {
 };
 
 export function PivotTable(props: PivotTableStandardProps) {
+  // 初始默认的数据结构是适合在表格中直接使用的对象数组格式
   const [pvtData, setPvtData] = useState({
     // data: defaultPvtData,
     data: kanbanGuideDemoCardsPvtData,
@@ -87,7 +88,7 @@ export function PivotTable(props: PivotTableStandardProps) {
         groupField = '';
       }
 
-      // todo 支持添加多个分组列
+      // todo 支持添加多个分组列，暂时只支持单个分组字段
       const tableColumns = getPivotTableStandardColumns({
         rowData: tableData[0],
         showGroupedTable,
