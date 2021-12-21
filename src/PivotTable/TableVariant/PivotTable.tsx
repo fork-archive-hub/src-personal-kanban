@@ -1,14 +1,19 @@
 import '../pivot-table.css';
 
-import Toolbar from 'PivotTable/Toolbar/Toolbar';
 import cx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useExpanded, useGroupBy } from 'react-table';
 
 import { PersonalKanban } from '../../PersonalKanban';
+import { Toolbar } from '../Toolbar';
 import { useExpandAll } from '../plugin/useExpandAll/useExpandAll';
 import { PivotTableStandard } from './PivotTableStandard';
-import { defaultPvtData, kanbanGuideDemoCardsPvtData } from './tableData';
+import {
+  defaultPvtData,
+  generateKanbanGuideDemoData,
+  getTableColumnsForKanban,
+  getTableDataFromPvtData,
+} from './tableData';
 import {
   getKanbanDataFromPvtData,
   getPivotTableStandardColumns,
@@ -25,37 +30,41 @@ export type PivotTableStandardProps = {
 };
 
 export function PivotTable(props: PivotTableStandardProps) {
-  // 初始默认的数据结构是适合在表格中直接使用的对象数组格式
+  // 所有视图的源数据，初始默认的数据结构是适合在表格中直接使用的对象数组格式
   const [pvtData, setPvtData] = useState({
     // data: defaultPvtData,
-    data: kanbanGuideDemoCardsPvtData,
+    data: generateKanbanGuideDemoData(5),
   });
   const [pvtViews, setPvtViews] = useState([
+    {
+      id: 'idTv',
+      name: '表格视图测试',
+      type: 'tableForKanban',
+      toolbarConfig: {},
+      tableConfig: {
+        columns: {},
+      },
+    },
     {
       id: 'idKv',
       name: '看板视图测试',
       type: 'kanban',
       tableColumns: {},
-      tableConfig: {},
-    },
-    {
-      id: 'idTv',
-      name: '表格视图测试',
-      type: 'table',
-      tableColumns: {},
-      tableConfig: {},
+      toolbarConfig: {},
+      kanbanConfig: {},
     },
   ]);
   // const updatepvtViews = useCallback(() => {}, []);
   console.log(';;rendering PivotTable ', pvtViews);
 
+  // 这里控制全局工具条，每个视图还可以定义自己的工具条配置
   const [showToolbar, setToggleShowToolbar] = useState(true);
   const [
     showToolbarActionsMenuButtons,
     setToggleShowToolbarActionsMenuButtons,
   ] = useState(true);
 
-  const [showGroupedTable, setToggleShowGroupedTable] = useState(true);
+  const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
   // const [groupOptions, setGroupOptions] = useState({});
 
   /** 改变key的时候，会强制重渲染整个table，要慎用，只有需要改变大部分table的时候才建议用 */
@@ -76,29 +85,34 @@ export function PivotTable(props: PivotTableStandardProps) {
     }
 
     // ------------- 默认会显示表格
-    if (firstView.type === 'table' || !firstView.type) {
-      const tableData = getKanbanDataFromPvtData(pvtData)['data'];
+    if (firstView.type.indexOf('table') !== -1 || !firstView.type) {
+      const tableData = getTableDataFromPvtData(pvtData['data']);
       let groupField = '';
       if (showGroupedTable) {
         const dataFields = Object.keys(tableData[0]);
         groupField = 'group';
         // dataFields[Math.floor(Math.random() * dataFields.length)];
-        console.log(';;dataFields, groupField ', dataFields, groupField);
+        console.log(';;groupField, dataFields ', groupField, dataFields);
       } else {
         groupField = '';
       }
 
-      // todo 支持添加多个分组列，暂时只支持单个分组字段
-      const tableColumns = getPivotTableStandardColumns({
-        rowData: tableData[0],
-        showGroupedTable,
-        groupOptions: showGroupedTable
-          ? {
-              groupField,
-              // groupHeader: '分组列',
-            }
-          : null,
-      });
+      let tableColumns;
+      if (firstView.type === 'tableForKanban') {
+        tableColumns = getTableColumnsForKanban();
+      } else {
+        // todo 支持添加多个分组列，暂时只支持单个分组字段
+        tableColumns = getPivotTableStandardColumns({
+          rowData: tableData[0],
+          showGroupedTable,
+          groupOptions: showGroupedTable
+            ? {
+                groupField,
+                // groupHeader: '分组列',
+              }
+            : null,
+        });
+      }
       console.log(';;tableColumns ', tableColumns);
 
       const tableOptions: any = {

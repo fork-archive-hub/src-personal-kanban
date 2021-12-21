@@ -16,26 +16,12 @@ export function mockTrelloExportJson(len) {
     pinned: false,
     starred: false,
     url: 'https://trello.com/b/qoBz7TLE/hello-trello',
-    limits: {},
     subscribed: false,
     labelNames: {
       green: '完成',
       red: '警告',
       blue: '',
     },
-    prefs: {
-      cardCovers: true,
-    },
-
-    actions: [
-      {
-        id: 'idAction',
-        idMemberCreator: 'idUser',
-        data: {},
-        type: 'updateCard',
-        date: '2021-12-10T09:00:43.262Z',
-      },
-    ],
     cards: [
       {
         id: 'idCard',
@@ -47,7 +33,7 @@ export function mockTrelloExportJson(len) {
         idList: 'idList',
         idBoard: 'idBoard',
         idLabels: ['label1'],
-        idChecklists: [],
+        idChecklists: ['61b3169db3dfa4373e95a27b'],
         idMembers: [],
         labels: [],
         closed: false,
@@ -68,6 +54,8 @@ export function mockTrelloExportJson(len) {
       {
         id: 'idList',
         name: 'to-do',
+        closed: false,
+        idBoard: '61a4fa788bd06112ae1024cb',
       },
     ],
     labels: [
@@ -80,15 +68,45 @@ export function mockTrelloExportJson(len) {
     ],
     checklists: [
       {
-        id: 'idChecklist',
+        id: '61b3169db3dfa4373e95a27b',
         name: 'test checklist',
+        idCard: '61b315dea50f318496c59840',
+        checkItems: [
+          {
+            idChecklist: '61b3169db3dfa4373e95a27b',
+            state: 'complete',
+            id: '61b316a7dce17a5b97006b16',
+            name: 'ckeditor',
+            nameData: {
+              emoji: {},
+            },
+            pos: 16879,
+            due: null,
+            idMember: null,
+          },
+          {
+            idChecklist: '61b3169db3dfa4373e95a27b',
+            state: 'incomplete',
+            id: '61b316ab877ce337dbc11e2e',
+            name: 'prosemirror',
+            nameData: {
+              emoji: {},
+            },
+            pos: 33786,
+            due: null,
+            idMember: null,
+          },
+        ],
       },
     ],
     customFields: [{}],
     members: [
       {
         id: 'idUser',
-        activityBlocked: false,
+        username: 'uptonking1',
+        fullName: 'uptonking',
+        avatarUrl: '',
+        memberType: 'normal',
       },
     ],
     memberships: [
@@ -98,6 +116,19 @@ export function mockTrelloExportJson(len) {
         memberType: 'admin',
         unconfirmed: false,
         deactivated: false,
+      },
+    ],
+    limits: {},
+    prefs: {
+      cardCovers: true,
+    },
+    actions: [
+      {
+        id: 'idAction',
+        idMemberCreator: 'idUser',
+        data: {},
+        type: 'updateCard',
+        date: '2021-12-10T09:00:43.262Z',
       },
     ],
   };

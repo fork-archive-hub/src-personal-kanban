@@ -9,6 +9,72 @@ export function getKanbanDataFromPvtData(data) {
   return data;
 }
 
+export function getTableDataFromPvtData<T>(
+  data: Array<T>,
+  processData?: (dataRef: Array<T>) => any[],
+) {
+  return typeof processData === 'function' ? processData(data) : data;
+}
+
+/**
+ * * 计算出针对看板设计的table的columns列定义模型
+ */
+export function getTableColumnsForKanban(options?: object) {
+  // const { showGroupedTable, groupOptions } = options;
+
+  const defaultColumnsDefinitions = [
+    {
+      Header: '标题',
+      accessor: 'name',
+    },
+    {
+      Header: '描述',
+      accessor: 'desc',
+    },
+    {
+      Header: '任务分组',
+      // accessor: 'idListDetails',
+      // accessor: (row, rowIndex) => row['idListDetails'],
+      accessor: (row, rowIndex) => JSON.stringify(row['idListDetails']),
+    },
+    {
+      Header: '标签',
+      // accessor: 'idLabelsDetails',
+      accessor: (row, rowIndex) => JSON.stringify(row['idLabelsDetails']),
+    },
+
+    {
+      Header: '负责人',
+      // accessor: 'idMembersDetails',
+      accessor: (row, rowIndex) => JSON.stringify(row['idMembersDetails']),
+    },
+    {
+      Header: '子任务',
+      // accessor: 'idChecklistsDetails',
+      accessor: (row, rowIndex) => JSON.stringify(row['idChecklistsDetails']),
+    },
+    {
+      Header: '相关文档',
+      // accessor: 'idRelatedDocsDetails',
+      accessor: (row, rowIndex) => JSON.stringify(row['idRelatedDocsDetails']),
+    },
+    {
+      Header: '截止时间',
+      accessor: 'due',
+    },
+    {
+      Header: '优先级',
+      accessor: 'priority',
+    },
+    {
+      Header: '状态',
+      accessor: 'status',
+    },
+  ];
+
+  return defaultColumnsDefinitions;
+}
+
 /**
  * * 计算出table的columns列定义模型
  */
@@ -34,7 +100,6 @@ export function getPivotTableStandardColumns(options) {
     // 将传入数据的各个属性名作为表格的列名
     tableDefaultColumns = Object.keys(rowData).map((field, idx) => ({
       Header: field,
-      // accessor: field,
       accessor: (row, rowIndex) => {
         if (
           ['string', 'number', 'boolean', 'null', 'undefined'].includes(
@@ -93,58 +158,119 @@ export const defaultPvtData = [
   },
 ];
 
-export const kanbanGuideDemoCardsPvtData = [
-  {
-    id: 1,
-    name: '卡片1',
-    desc: '',
-    idList: '看板示例说明',
-    idBoard: '示例看板',
-    idMembers: [],
-    due: {},
-    labels: [],
-    idChecklists: [],
-    relatedDocs: {
-      title: '相关文档',
-      docList: [
-        {
-          docTitle: 'ckeditor architecture core',
-          docId: 'unique-doc-id1',
-          url: '',
+/**
+ * * mock测试用的看板数据，根据trello导出的数据修改而来。
+ * https://trello.com/b/qoBz7TLE/hello-trello
+ */
+export function generateKanbanGuideDemoData(count?: number) {
+  if (!count) return [];
+
+  return Array(count)
+    .fill(1)
+    .map((__, idx) => {
+      return {
+        id: 'cardId' + idx,
+        name: '卡片标题 ' + idx,
+        desc: '',
+        descData: {
+          emoji: {},
         },
-        {
-          docTitle: 'ckeditor editing engine',
-          docId: 'unique-doc-id2',
-          url: '',
+        idList: 'idList' + (idx % 3),
+        idListDetails: {
+          id: 'idList' + (idx % 3),
+          name: 'to-do',
+          closed: false,
+          idBoard: 'idBoard',
         },
-      ],
-    },
-    group: '分组A',
-  },
-  {
-    id: 2,
-    name: '卡片2',
-    desc: '',
-    idList: '看板示例说明',
-    idBoard: '示例看板',
-    idMembers: [],
-    due: {},
-    labels: [],
-    idChecklists: [],
-    relatedDocs: {},
-    group: '分组B',
-  },
-  {
-    id: 3,
-    name: '卡片3',
-    desc: '',
-    idList: '看板示例说明',
-    idBoard: '示例看板',
-    idMembers: [],
-    due: {},
-    labels: [],
-    idChecklists: [],
-    relatedDocs: {},
-    group: '分组A',
-  },
-];
+        idBoard: 'idBoard',
+        idBoardDetails: '示例看板',
+        idLabels: ['idLabel1', 'idLabel2'],
+        idLabelsDetails: [
+          {
+            id: 'idLabel1',
+            idBoard: 'idBoard',
+            name: '测试标签1',
+            color: 'purple',
+          },
+          {
+            id: 'idLabel2',
+            idBoard: 'idBoard',
+            name: '测试标签2',
+            color: 'purple',
+          },
+        ],
+        idMembers: ['idUser1'],
+        idMembersDetails: [
+          {
+            id: 'idUser1',
+            username: 'uptonking1',
+            fullName: 'uptonking',
+            avatarUrl: '',
+            memberType: 'normal',
+          },
+        ],
+        idMembersVoted: [],
+        idChecklists: ['idChecklist'],
+        idChecklistsDetails: [
+          {
+            id: 'idChecklist',
+            name: 'test checklist',
+            idCard: 'cardId' + idx,
+            checkItems: [
+              {
+                idChecklist: 'idChecklist',
+                state: 'complete',
+                id: '61b316a7dce17a5b97006b16',
+                name: 'ckeditor',
+                nameData: {
+                  emoji: {},
+                },
+                pos: 16879,
+                due: null,
+                idMember: null,
+              },
+              {
+                idChecklist: 'idChecklist',
+                state: 'incomplete',
+                id: '61b316ab877ce337dbc11e2e',
+                name: 'prosemirror',
+                nameData: {
+                  emoji: {},
+                },
+                pos: 33786,
+                due: null,
+                idMember: null,
+              },
+            ],
+          },
+        ],
+        idRelatedDocs: ['docId1', 'docId2'],
+        idRelatedDocsDetails: {
+          title: '相关文档',
+          docList: [
+            {
+              docTitle: 'ckeditor architecture core',
+              docId: 'docId1',
+              url: '',
+            },
+            {
+              docTitle: 'ckeditor editing engine',
+              docId: 'docId2',
+              url: '',
+            },
+          ],
+        },
+        due: '2022-01-30T08:57:00.000Z',
+        dueReminder: 1440,
+        dueComplete: false,
+        priority: idx % 3 === 0 ? '最高' : '',
+        status: '',
+        closed: false,
+        isTemplate: false,
+        attachments: [],
+        pluginData: [],
+        customFieldItems: [],
+        group: '分组' + (idx % 3),
+      };
+    });
+}
