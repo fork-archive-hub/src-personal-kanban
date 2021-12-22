@@ -1,5 +1,5 @@
-import cx from "clsx";
-import { useFormik } from "formik";
+import cx from 'clsx';
+import { useFormik } from 'formik';
 import React, {
   useCallback,
   useEffect,
@@ -7,7 +7,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Avatar,
@@ -38,57 +38,57 @@ import {
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import CheckIcon from "@material-ui/icons/Check";
-import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import EventAvailableOutlinedIcon from "@material-ui/icons/EventAvailableOutlined";
-import FaceIcon from "@material-ui/icons/Face";
-import LinkIcon from "@material-ui/icons/Link";
-import PersonAddDisabledOutlinedIcon from "@material-ui/icons/PersonAddDisabledOutlined";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import SettingsIcon from "@material-ui/icons/Settings";
-import SortOutlinedIcon from "@material-ui/icons/SortOutlined";
+} from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
+import FaceIcon from '@material-ui/icons/Face';
+import LinkIcon from '@material-ui/icons/Link';
+import PersonAddDisabledOutlinedIcon from '@material-ui/icons/PersonAddDisabledOutlined';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import SettingsIcon from '@material-ui/icons/Settings';
+import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
 
-import Radio from "../../components/Radio";
-import { RecordColor } from "../../constants";
-import type { Record } from "../../types";
-import { ActionDueDate } from "./ActionDueDate";
-import { ActionTaskMembers } from "./ActionTaskMembers";
-import { ItemChecklist } from "./ItemChecklist";
-import { ItemRelatedDocs } from "./ItemRelatedDocs";
-import { ItemTags } from "./ItemTags";
-import { RecordTitle } from "./RecordTitle";
-import { generateUserList } from "./mockData";
+import Radio from '../../components/Radio';
+import { RecordColor } from '../../constants';
+import type { Record } from '../../types';
+import { ActionDueDate } from './ActionDueDate';
+import { ActionTaskMembers } from './ActionTaskMembers';
+import { ItemChecklist } from './ItemChecklist';
+import { ItemRelatedDocs } from './ItemRelatedDocs';
+import { ItemTags } from './ItemTags';
+import { RecordTitle } from './RecordTitle';
+import { generateUserList } from './mockData';
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     configItemFormControl: {
-      width: "100%",
+      width: '100%',
     },
     configItemTitle: {
-      margin: "8px 0 4px",
+      margin: '8px 0 4px',
     },
     cardDesc: {
       color: theme.palette.text.secondary,
     },
     tagsSpacing: {
-      "& > *": {
+      '& > *': {
         margin: theme.spacing(0.8),
       },
     },
-  })
+  }),
 );
 
 function convertSubTasksDataToViewChecklist(subTaskList): any[] {
-  const retChecklist = subTaskList["records"].map((task) => {
-    const { id, title, taskStatus } = task;
+  const retChecklist = subTaskList[0]['checkItems'].map((task) => {
+    const { id, name, state } = task;
     return {
       id,
-      title,
-      status: taskStatus && taskStatus === "done" ? true : false,
+      title: name,
+      status: state && state === 'done' ? true : false,
     };
   });
 
@@ -113,37 +113,35 @@ export function RecordDetails(props: RecordDetailsProps) {
   const {
     record,
     disabled,
-    formTitle = "卡片详情",
+    formTitle = '卡片详情',
     onSubmit,
     onSubmitDataWithDialogOpen,
     onCancel,
   } = props;
   const {
-    title,
-    description,
+    cardTitle: propCardTitle,
+    cardTitleEmoji,
+    desc,
+    status,
+    priority,
     createdAt,
-    tags,
-    taskStatus,
-    taskMembers,
-    taskStartTime,
-    taskDueTime,
-    taskPriority,
-    taskEmoji,
-    subTaskList,
-    relatedDocs,
-    attachments,
-    comments,
+    cardLabels,
+    cardMembers,
+    cardChecklists,
+    cardRelatedDocs,
+    cardStartTime,
+    cardDueTime,
   } = record;
 
   const [isEditingCardDesc, setIsEditingCardDesc] = useState(false);
 
   /** 更新卡片数据到全局，同时不关闭卡片弹窗 */
   const updateCardData = useCallback(
-    (subField) => {
+    (subField: Partial<Record>) => {
       onSubmitDataWithDialogOpen({ ...record, ...subField });
       forceUpdate();
     },
-    [onSubmitDataWithDialogOpen, record]
+    [onSubmitDataWithDialogOpen, record],
   );
 
   // todo 待删除
@@ -155,11 +153,11 @@ export function RecordDetails(props: RecordDetailsProps) {
   } = useFormik({
     initialValues: Object.assign(
       {
-        title: "",
-        description: "",
-        color: "",
+        title: '',
+        description: '',
+        color: '',
       },
-      record
+      record,
     ),
     onSubmit: (values) => {
       onSubmit && onSubmit(values);
@@ -167,22 +165,22 @@ export function RecordDetails(props: RecordDetailsProps) {
     validate: (values) => {
       const errors: any = {};
       if (!values.title) {
-        errors.title = "* 必填项";
+        errors.title = '* 必填项';
       }
       return errors;
     },
   });
 
   const [isEditingCardTitle, setIsEditingCardTitle] = useState(false);
-  const [cardTitle, setCardTitle] = useState(title);
+  const [cardTitle, setCardTitle] = useState(propCardTitle);
   const handleCardTitleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setCardTitle(event.target.value);
       // if (!event.target.value || !event.target.value.trim()) return;
       // todo 显示不能为空的提示信息
-      updateCardData({ title: event.target.value });
+      updateCardData({ cardTitle: event.target.value });
     },
-    [updateCardData]
+    [updateCardData],
   );
 
   const availableUsers = generateUserList(5);
@@ -192,7 +190,7 @@ export function RecordDetails(props: RecordDetailsProps) {
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setTaskMembersAnchorEl(event.currentTarget);
     },
-    []
+    [],
   );
   const handleSelectingTaskMembersPanelClose = useCallback(() => {
     setTaskMembersAnchorEl(null);
@@ -208,7 +206,15 @@ export function RecordDetails(props: RecordDetailsProps) {
             // taskMembers: taskMembers
             //   ? [userId, ...taskMembers.slice(1)]
             //   : [userId],
-            taskMembers: [userId],
+            cardMembers: [
+              {
+                id: userId,
+                username: 'uptonking1',
+                fullName: 'uptonking',
+                avatarUrl: '',
+                memberType: 'normal',
+              },
+            ],
           });
         }
         handleSelectingTaskMembersPanelClose();
@@ -221,28 +227,28 @@ export function RecordDetails(props: RecordDetailsProps) {
         return [userId];
       });
     },
-    [handleSelectingTaskMembersPanelClose, updateCardData]
+    [handleSelectingTaskMembersPanelClose, updateCardData],
   );
   const handleSetTaskMembersToEmpty = useCallback(() => {
     updateCardData({
-      taskMembers: [],
+      cardMembers: [],
     });
     setSelectedTaskMembers([]);
     handleSelectingTaskMembersPanelClose();
   }, [handleSelectingTaskMembersPanelClose, updateCardData]);
 
   const taskMembersText = useMemo(() => {
-    let retText = "无负责人";
-    if (taskMembers && taskMembers.length > 0) {
+    let retText = '无负责人';
+    if (cardMembers && cardMembers.length > 0) {
       const firstMember = availableUsers.find(
-        (u) => u.userId === taskMembers[0]
+        (u) => u.id === cardMembers[0].id,
       );
       if (firstMember) {
         retText = firstMember.username;
       }
     }
     return retText;
-  }, [availableUsers, taskMembers]);
+  }, [availableUsers, cardMembers]);
 
   const [isSelectingDueDate, setIsSelectingDueDate] = useState(false);
   // todo 传入的截止日期应该作为初始值
@@ -257,142 +263,150 @@ export function RecordDetails(props: RecordDetailsProps) {
       date.setHours(Math.trunc(offset / 60), offset % 60);
     }
     setSelectedDueDate(date);
-    updateCardData({ taskDueTime: date.toISOString().slice(0, 10) });
+    updateCardData({ cardDueTime: date.toISOString().slice(0, 10) });
     setIsSelectingDueDate(false);
   };
   const dueDateContent = useMemo(() => {
-    let dueDateContent = "";
-    if (taskDueTime) {
-      dueDateContent = taskDueTime;
+    let dueDateContent = '';
+    if (cardDueTime) {
+      dueDateContent = cardDueTime;
     }
     if (selectedDueDate) {
       dueDateContent = selectedDueDate.toISOString().slice(0, 10);
     }
     if (isSelectingDueDate) {
-      dueDateContent = "";
+      dueDateContent = '';
     }
     return dueDateContent;
-  }, [isSelectingDueDate, selectedDueDate, taskDueTime]);
+  }, [isSelectingDueDate, selectedDueDate, cardDueTime]);
 
   const doesSubTaskListExist =
-    subTaskList && subTaskList["records"] && subTaskList["records"].length > 0;
+    cardChecklists &&
+    cardChecklists.length &&
+    cardChecklists[0]['checkItems'] &&
+    cardChecklists[0]['checkItems'].length > 0;
   let subTasksChecklist = [];
   if (doesSubTaskListExist) {
-    subTasksChecklist = convertSubTasksDataToViewChecklist(subTaskList);
+    subTasksChecklist = convertSubTasksDataToViewChecklist(cardChecklists);
   }
   const handleSubTaskChecklistChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       // console.log(';;checkbox-click ', event.target.name, event.target);
       const latestSubTaskList = {
-        ...subTaskList,
-        records: subTaskList["records"].map((task) =>
+        ...cardChecklists[0],
+        records: cardChecklists[0]['checkItems'].map((task) =>
           task.id === event.target.name
             ? {
                 ...task,
-                taskStatus: task.taskStatus === "done" ? "todo" : "done",
+                state: task.state === 'done' ? 'todo' : 'done',
               }
-            : task
+            : task,
         ),
       };
       // console.log(';;latestSubTaskList ', latestSubTaskList.records);
-      updateCardData({ subTaskList: latestSubTaskList });
+      updateCardData({ cardChecklists: [latestSubTaskList] });
     },
-    [subTaskList, updateCardData]
+    [cardChecklists, updateCardData],
   );
   const [isAddingSubTask, setIsAddingSubTask] = useState(false);
   const handleAddSubTaskChecklistItem = useCallback(() => {
     setIsAddingSubTask(true);
-    setNewSubTaskChecklistItemName("");
+    setNewSubTaskChecklistItemName('');
   }, []);
   const [newSubTaskChecklistItemName, setNewSubTaskChecklistItemName] =
-    useState("");
+    useState('');
   const handleInputSubTaskChecklistItemName = useCallback((event) => {
     const itemName = event.target.value;
     setNewSubTaskChecklistItemName(itemName);
   }, []);
   const handleUpdateSubTasksData = useCallback(() => {
     let _subTaskList = {};
-    if (subTaskList) {
-      _subTaskList = subTaskList;
+    if (cardChecklists) {
+      _subTaskList = cardChecklists[0];
     }
-    if (!_subTaskList["records"]) {
-      _subTaskList["records"] = [];
+    if (!_subTaskList['checkItems']) {
+      _subTaskList['checkItems'] = [];
     }
     const latestSubTaskList = {
       ..._subTaskList,
-      records: [
-        ..._subTaskList["records"],
+      checkItems: [
+        ..._subTaskList['checkItems'],
         {
-          id: "taskId-" + Math.random().toFixed(6),
+          id: 'taskId-' + Math.random().toFixed(6),
           title: newSubTaskChecklistItemName,
-          taskStatus: "todo",
+          taskStatus: 'todo',
         },
       ],
     };
-    updateCardData({ subTaskList: latestSubTaskList });
+    updateCardData({ cardChecklists: [latestSubTaskList] });
 
     setIsAddingSubTask(false);
-  }, [newSubTaskChecklistItemName, subTaskList, updateCardData]);
+  }, [newSubTaskChecklistItemName, cardChecklists, updateCardData]);
 
   const [isAddingNewTag, setIsAddingNewTag] = useState(false);
-
-  const [newTagName, setNewTagName] = useState("");
+  const [newTagName, setNewTagName] = useState('');
   const handleInputNewTagName = useCallback((event) => {
     setNewTagName(event.target.value);
   }, []);
   const handleStartAddNewTag = useCallback(() => {
     setIsAddingNewTag(true);
-    setNewTagName("");
+    setNewTagName('');
   }, []);
   const handleUpdateTagsData = useCallback(() => {
     let _tags = [];
-    if (tags) {
-      _tags = tags;
+    if (cardLabels) {
+      _tags = cardLabels;
     }
     const latestTags = [
       ..._tags,
       {
-        tagName: newTagName,
+        id: 'idLabel' + Math.random(),
+        idBoard: 'idBoard',
+        name: newTagName,
+        color: 'purple',
         // bgColor: '',
       },
     ];
-    updateCardData({ tags: latestTags });
+    updateCardData({ cardLabels: latestTags });
 
     setIsAddingNewTag(false);
-  }, [newTagName, tags, updateCardData]);
+  }, [newTagName, cardLabels, updateCardData]);
 
   const doesRelatedDocsExist =
-    relatedDocs && relatedDocs["docList"] && relatedDocs["docList"].length > 0;
-  const [docName, setDocName] = useState("");
+    cardRelatedDocs &&
+    cardRelatedDocs.length > 0 &&
+    cardRelatedDocs[0]['docList'] &&
+    cardRelatedDocs[0]['docList'].length > 0;
+  const [docName, setDocName] = useState('');
   const handleDocNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setDocName(event.target.value);
     },
-    []
+    [],
   );
   const handleAddRelatedDocs = useCallback(() => {
     if (!docName || !docName.trim()) return;
     let _relatedDocs = {};
-    if (relatedDocs) {
-      _relatedDocs = relatedDocs;
+    if (cardRelatedDocs) {
+      _relatedDocs = cardRelatedDocs[0];
     }
-    if (!_relatedDocs["docList"]) {
-      _relatedDocs["docList"] = [];
+    if (!_relatedDocs['docList']) {
+      _relatedDocs['docList'] = [];
     }
     const latestRelatedDocs = {
       ..._relatedDocs,
       docList: [
-        ..._relatedDocs["docList"],
+        ..._relatedDocs['docList'],
         {
-          docId: "docId-" + Math.random().toFixed(6),
+          docId: 'docId-' + Math.random().toFixed(6),
           docTitle: docName,
-          url: "",
+          url: '',
         },
       ],
     };
 
-    updateCardData({ relatedDocs: latestRelatedDocs });
-  }, [docName, relatedDocs, updateCardData]);
+    updateCardData({ cardRelatedDocs: [latestRelatedDocs] });
+  }, [docName, cardRelatedDocs, updateCardData]);
   // console.log(';;selectedTaskMembers-len ', selectedTaskMembers.length);
 
   return (
@@ -413,7 +427,7 @@ export function RecordDetails(props: RecordDetailsProps) {
             handleSelectingTaskMembersPanelOpen={
               handleSelectingTaskMembersPanelOpen
             }
-            taskMembers={taskMembers}
+            taskMembers={cardMembers}
             taskMembersText={taskMembersText}
             isSelectingTaskMembersPanelOpen={isSelectingTaskMembersPanelOpen}
             taskMembersAnchorEl={taskMembersAnchorEl}
@@ -436,7 +450,7 @@ export function RecordDetails(props: RecordDetailsProps) {
         </Grid>
         <Grid item xs={2}>
           <Button
-            variant="text"
+            variant='text'
             // className={classes.taskCommonActionsBtn}
             startIcon={<SortOutlinedIcon />}
           >
@@ -445,13 +459,13 @@ export function RecordDetails(props: RecordDetailsProps) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend" className={classes.configItemTitle}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend' className={classes.configItemTitle}>
             标签
           </FormLabel>
           <Grid container className={classes.tagsSpacing}>
             <ItemTags
-              tags={tags}
+              tags={cardLabels}
               isAddingNewTag={isAddingNewTag}
               newTagName={newTagName}
               handleInputNewTagName={handleInputNewTagName}
@@ -463,32 +477,32 @@ export function RecordDetails(props: RecordDetailsProps) {
       </Grid>
       <Grid item xs={12}>
         <FormControl
-          component="fieldset"
+          component='fieldset'
           className={classes.configItemFormControl}
         >
           <FormLabel
             onClick={() => {
               setIsEditingCardDesc(true);
             }}
-            component="legend"
+            component='legend'
             className={classes.configItemTitle}
           >
             任务描述或内容描述
             {values.description ? (
-              <IconButton aria-label="edit">
-                <EditOutlinedIcon style={{ fontSize: "1rem" }} />
+              <IconButton aria-label='edit'>
+                <EditOutlinedIcon style={{ fontSize: '1rem' }} />
               </IconButton>
             ) : (
-              <IconButton aria-label="add">
-                <AddIcon style={{ fontSize: "1rem" }} />
+              <IconButton aria-label='add'>
+                <AddIcon style={{ fontSize: '1rem' }} />
               </IconButton>
             )}
           </FormLabel>
           {isEditingCardDesc ? (
             <TextField
               multiline
-              name="description"
-              label={"内容描述"}
+              name='description'
+              label={'内容描述'}
               value={values.description}
               error={Boolean(errors.description)}
               helperText={errors.description}
@@ -520,8 +534,8 @@ export function RecordDetails(props: RecordDetailsProps) {
         />
       </Grid>
       <Grid item xs={12}>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend" className={classes.configItemTitle}>
+        <FormControl component='fieldset' className={classes.formControl}>
+          <FormLabel component='legend' className={classes.configItemTitle}>
             相关文档
           </FormLabel>
         </FormControl>
@@ -530,18 +544,18 @@ export function RecordDetails(props: RecordDetailsProps) {
           handleDocNameChange={handleDocNameChange}
           handleAddRelatedDocs={handleAddRelatedDocs}
           doesRelatedDocsExist={doesRelatedDocsExist}
-          relatedDocs={relatedDocs}
+          relatedDocs={cardRelatedDocs}
         />
       </Grid>
       <Grid item xs={12}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend" className={classes.configItemTitle}>
+        <FormControl component='fieldset'>
+          <FormLabel component='legend' className={classes.configItemTitle}>
             卡片背景色(开发中)
           </FormLabel>
           <RadioGroup
             row
-            aria-label="background"
-            name="color"
+            aria-label='background'
+            name='color'
             value={values.color}
             onChange={handleCardFormChange}
           >

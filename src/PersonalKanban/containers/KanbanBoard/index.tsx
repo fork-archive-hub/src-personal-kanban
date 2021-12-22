@@ -61,7 +61,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
   const cloneColumns = useCallback((columns: Column[]) => {
     return columns.map((column: Column) => ({
       ...column,
-      records: [...column.records!],
+      cardsRecords: [...column.cardsRecords!],
     }));
   }, []);
 
@@ -74,7 +74,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
 
   const getRecordIndex = useCallback(
     (recordId: string, columnId: string) => {
-      return columns[getColumnIndex(columnId)]?.records?.findIndex(
+      return columns[getColumnIndex(columnId)]?.cardsRecords?.findIndex(
         (r: Record) => r.id === recordId,
       );
     },
@@ -89,7 +89,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
     setColumns((columns: Column[]) => [
       ...columns,
       Object.assign(
-        { id: getId(), records: [], createdAt: getCreatedAt() },
+        { id: getId(), cardsRecords: [], createdAt: getCreatedAt() },
         column,
       ),
     ]);
@@ -108,8 +108,8 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       setColumns((_columns: Column[]) => {
         const columnIndex = getColumnIndex(column.id);
         const columns = cloneColumns(_columns);
-        columns[columnIndex].title = column.title;
-        columns[columnIndex].description = column.description;
+        columns[columnIndex].listGroupTitle = column.listGroupTitle;
+        columns[columnIndex].desc = column.desc;
         columns[columnIndex].color = column.color;
         columns[columnIndex].wipEnabled = column.wipEnabled;
         columns[columnIndex].wipLimit = column.wipLimit;
@@ -161,12 +161,12 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       setColumns((_columns: Column[]) => {
         const columns = cloneColumns(_columns);
 
-        columns[columnIndex].records = [
-          ...columns[columnIndex].records,
+        columns[columnIndex].cardsRecords = [
+          ...columns[columnIndex].cardsRecords,
           {
             id: getId(),
-            title: record.title,
-            description: record.description,
+            cardTitle: record.cardTitle,
+            desc: record.desc,
             color: record.color,
             createdAt: getCreatedAt(),
           },
@@ -187,7 +187,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
 
       setColumns((_columns) => {
         const columns = cloneColumns(_columns);
-        const _record = columns[columnIndex].records[recordIndex!];
+        const _record = columns[columnIndex].cardsRecords[recordIndex!];
 
         Object.assign(_record, record);
         return columns;
@@ -202,7 +202,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       const recordIndex = getRecordIndex(record.id, column.id);
       setColumns((_columns) => {
         const columns = cloneColumns(_columns);
-        columns[columnIndex].records.splice(recordIndex!, 1);
+        columns[columnIndex].cardsRecords.splice(recordIndex!, 1);
         return columns;
       });
     },
@@ -214,7 +214,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
       const columnIndex = getColumnIndex(column.id);
       setColumns((_columns) => {
         const columns = cloneColumns(_columns);
-        columns[columnIndex].records = [];
+        columns[columnIndex].cardsRecords = [];
         return columns;
       });
     },

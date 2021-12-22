@@ -22,3 +22,14 @@
 .pvt .pvt-row-GroupedAndCollapsed {
   border-top: 1px solid rgba(24, 20, 31, 0.1);
 }
+
+.pvt .pvt-tagBtn {
+  background-color: #eee8fd;
+  text-transform: none;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.pvt .pvt-tagBtn:hover {
+  background-color: #eee8fd;
+}

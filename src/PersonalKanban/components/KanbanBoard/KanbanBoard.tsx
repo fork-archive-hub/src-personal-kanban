@@ -79,7 +79,7 @@ export function KanbanBoard(props: KanbanBoardProps) {
         return;
       }
 
-      const record = getColumnById(source.droppableId)?.records?.[source.index];
+      const record = getColumnById(source.droppableId)?.cardsRecords?.[source.index];
 
       onCardMove({
         source: getColumnById(source.droppableId),

@@ -1,9 +1,9 @@
-import React from "react";
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import React from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
-import Column, { ColumnCardList } from "../../components/Column";
-import KanbanCard from "../../components/KanbanCard";
-import { Column as ColumnType } from "../../types";
+import Column, { ColumnCardList } from '../../components/Column';
+import KanbanCard from '../../components/KanbanCard';
+import { Column as ColumnType } from '../../types';
 
 type KanbanInnerColumnCardListProps = {
   column: ColumnType;
@@ -32,8 +32,13 @@ type KanbanColumnCardListProps = {
 
 const KanbanColumnCardList: React.FC<KanbanColumnCardListProps> = (props) => {
   const { column, onRecordEdit, onRecordDelete } = props;
-  const { id: columnId, records = [], wipEnabled, wipLimit = false } = column;
-  const isDropDisabled = wipEnabled && wipLimit <= records?.length;
+  const {
+    id: columnId,
+    cardsRecords = [],
+    wipEnabled,
+    wipLimit = false,
+  } = column;
+  const isDropDisabled = wipEnabled && wipLimit <= cardsRecords?.length;
   return (
     <Droppable droppableId={columnId} isDropDisabled={isDropDisabled}>
       {(provided) => (

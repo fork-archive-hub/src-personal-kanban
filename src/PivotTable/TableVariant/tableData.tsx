@@ -1,3 +1,7 @@
+import { Button } from '@material-ui/core';
+
+import { IconCell } from '../cell/IconCell/IconCell';
+
 export function generatePivotTableData(count) {
   return {
     pvTableName: 'testPivotTable',
@@ -44,27 +48,87 @@ export function getTableColumnsForKanban(options?: Record<string, any>) {
     {
       Header: '标签',
       // accessor: 'idLabelsDetails',
-      accessor: (row, rowIndex) => JSON.stringify(row['idLabelsDetails']),
+      // accessor: (row, rowIndex) => JSON.stringify(row['idLabelsDetails']),
+      accessor: (row, rowIndex) => row['idLabelsDetails'],
+      id: 'idLabelsDetails',
+      Cell: ({ cell: { value } }) => {
+        if (!value || value.length === 0) return null;
+        return value.map((tag) => {
+          const { name } = tag;
+          return name && name.trim() ? (
+            <Button
+              onClick={(e) => e.stopPropagation()}
+              variant='contained'
+              className={'pvt-tagBtn'}
+              disableElevation
+              disableRipple
+              key={name}
+            >
+              {name}
+            </Button>
+          ) : null;
+        });
+      },
     },
 
     {
       Header: '负责人',
       // accessor: 'idMembersDetails',
-      accessor: (row, rowIndex) => JSON.stringify(row['idMembersDetails']),
+      // accessor: (row, rowIndex) => JSON.stringify(row['idMembersDetails']),
+      accessor: (row, rowIndex) => row['idMembersDetails'],
+      id: 'idMembersDetails',
+      Cell: ({ cell: { value } }) =>
+        value && value.length > 0 ? (
+          <IconCell
+            icon={'person-outline'}
+            label={value[0].fullName}
+            large={true}
+          />
+        ) : null,
     },
     {
       Header: '子任务',
       // accessor: 'idChecklistsDetails',
-      accessor: (row, rowIndex) => JSON.stringify(row['idChecklistsDetails']),
+      // accessor: (row, rowIndex) => JSON.stringify(row['idChecklistsDetails']),
+      accessor: (row, rowIndex) => row['idChecklistsDetails'],
+      id: 'idChecklistsDetails',
+      Cell: ({ cell: { value } }) =>
+        value && value.length > 0 ? (
+          <IconCell
+            icon={'calendar-check-outline'}
+            label={`0 / ${value.length}`}
+            large={true}
+          />
+        ) : null,
     },
     {
       Header: '相关文档',
       // accessor: 'idRelatedDocsDetails',
-      accessor: (row, rowIndex) => JSON.stringify(row['idRelatedDocsDetails']),
+      // accessor: (row, rowIndex) => JSON.stringify(row['idRelatedDocsDetails']),
+      accessor: (row, rowIndex) => row['idRelatedDocsDetails'],
+      id: 'idRelatedDocsDetails',
+      Cell: ({ cell: { value } }) =>
+        value && value['docList'] && value['docList'].length > 0 ? (
+          <IconCell
+            icon={'sheet'}
+            label={`${value['docList'][0]['docTitle']}`}
+            large={true}
+          />
+        ) : null,
     },
     {
       Header: '截止时间',
-      accessor: 'due',
+      // accessor: 'due',
+      accessor: (row, rowIndex) => row['due'],
+      id: 'due',
+      Cell: ({ cell: { value } }) =>
+        value ? (
+          <IconCell
+            icon={'clock-outline'}
+            label={`${value.slice(0, 10)}`}
+            large={true}
+          />
+        ) : null,
     },
     {
       Header: '优先级',
@@ -197,6 +261,8 @@ export function generateKanbanGuideDemoData(count?: number) {
         descData: {
           emoji: {},
         },
+        // status: 'normal',
+        priority: idx % 3 === 0 ? '最高' : '',
         idList: 'idList' + (idx % 3),
         idListDetails: {
           id: 'idList' + (idx % 3),
@@ -206,37 +272,43 @@ export function generateKanbanGuideDemoData(count?: number) {
         },
         idBoard: 'idBoard',
         idBoardDetails: '示例看板',
-        idLabels: ['idLabel1', 'idLabel2'],
-        idLabelsDetails: [
-          {
-            id: 'idLabel1',
-            idBoard: 'idBoard',
-            name: '测试标签1',
-            color: 'purple',
-          },
-          {
-            id: 'idLabel2',
-            idBoard: 'idBoard',
-            name: '测试标签2',
-            color: 'purple',
-          },
-        ],
-        idMembers: ['idUser1'],
-        idMembersDetails: [
-          {
-            id: 'idUser1',
-            username: 'uptonking1',
-            fullName: 'uptonking',
-            avatarUrl: '',
-            memberType: 'normal',
-          },
-        ],
+        idLabels: idx % 3 === 1 ? ['idLabel1', 'idLabel2'] : [],
+        idLabelsDetails:
+          idx % 3 === 1
+            ? [
+                {
+                  id: 'idLabel1',
+                  idBoard: 'idBoard',
+                  name: '测试标签1',
+                  color: 'purple',
+                },
+                {
+                  id: 'idLabel2',
+                  idBoard: 'idBoard',
+                  name: '测试标签2',
+                  color: 'purple',
+                },
+              ]
+            : [],
+        idMembers: idx % 3 === 0 ? ['idUser1'] : [],
+        idMembersDetails:
+          idx % 3 === 0
+            ? [
+                {
+                  id: 'idUser1',
+                  username: 'uptonking1',
+                  fullName: 'uptonking' + idx,
+                  avatarUrl: '',
+                  memberType: 'normal',
+                },
+              ]
+            : [],
         idMembersVoted: [],
         idChecklists: ['idChecklist'],
         idChecklistsDetails: [
           {
             id: 'idChecklist',
-            name: 'test checklist',
+            name: 'test checklist 子任务',
             idCard: 'cardId' + idx,
             checkItems: [
               {
@@ -285,14 +357,14 @@ export function generateKanbanGuideDemoData(count?: number) {
         due: '2022-01-30T08:57:00.000Z',
         dueReminder: 1440,
         dueComplete: false,
-        priority: idx % 3 === 0 ? '最高' : '',
-        // status: 'normal',
         closed: false,
         isTemplate: false,
         attachments: [],
         pluginData: [],
         customFieldItems: [],
         group: '分组' + (idx % 3),
+        createdBy: '',
+        createdTime: '',
       };
     });
 }

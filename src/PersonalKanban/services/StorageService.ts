@@ -1,7 +1,7 @@
-import type { Column } from "../types";
+import type { Column } from '../types';
 
-const DARK_MODE = "dark_mode";
-const COLUMNS = "columns";
+const DARK_MODE = 'dark_mode';
+const COLUMNS = 'columns';
 
 export function getItem(key: string) {
   return JSON.parse(localStorage.getItem(key)!);
@@ -23,6 +23,7 @@ export function setColumns(value: Column[]) {
   return setItem(COLUMNS, value);
 }
 
+/** 从localStorage中读取看板数据 */
 export function getColumns() {
   return getItem(COLUMNS);
 }

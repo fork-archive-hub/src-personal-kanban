@@ -37,6 +37,14 @@ export function PivotTable(props: PivotTableStandardProps) {
   });
   const [pvtViews, setPvtViews] = useState([
     {
+      id: 'idKv',
+      name: '看板视图测试',
+      type: 'kanban',
+      tableColumns: {},
+      toolbarConfig: {},
+      kanbanConfig: {},
+    },
+    {
       id: 'idTv',
       name: '表格视图测试',
       type: 'tableForKanban',
@@ -44,14 +52,6 @@ export function PivotTable(props: PivotTableStandardProps) {
       tableConfig: {
         columns: {},
       },
-    },
-    {
-      id: 'idKv',
-      name: '看板视图测试',
-      type: 'kanban',
-      tableColumns: {},
-      toolbarConfig: {},
-      kanbanConfig: {},
     },
   ]);
   // const updatepvtViews = useCallback(() => {}, []);

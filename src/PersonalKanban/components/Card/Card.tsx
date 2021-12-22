@@ -123,7 +123,7 @@ type CardProps = {
 };
 
 /**
- * 看板中一个面板列上的一个卡片
+ * 看板中一个分组列面板上的一个卡片
  */
 export function Card(props: CardProps) {
   const classes = useStyles();
@@ -142,35 +142,35 @@ export function Card(props: CardProps) {
     ...rest
   } = props;
   const {
-    title,
-    description,
+    cardTitle,
+    cardTitleEmoji,
+    desc,
+    status,
+    priority,
     createdAt,
-    tags,
-    taskStatus,
-    taskMembers,
-    taskStartTime,
-    taskDueTime,
-    taskPriority,
-    taskEmoji,
-    subTaskList,
-    relatedDocs,
-    attachments,
-    comments,
+    cardLabels,
+    cardMembers,
+    cardChecklists,
+    cardRelatedDocs,
+    cardStartTime,
+    cardDueTime,
   } = record;
 
   const handleEdit = useCallback(() => onEdit(record), [record, onEdit]);
   const handleDelete = useCallback(() => onDelete(record), [record, onDelete]);
 
   const doesSubTaskListExist =
-    subTaskList && subTaskList['records'] && subTaskList['records'].length > 0;
+    cardChecklists &&
+    cardChecklists.length > 0 &&
+    cardChecklists[0]['checkItems'] &&
+    cardChecklists[0]['checkItems'].length > 0;
   let cardSubTasksTotalCount = 0;
   let cardSubTasksDoneCount = 0;
   if (doesSubTaskListExist) {
-    cardSubTasksTotalCount = subTaskList['records'].length;
-    subTaskList['records'].forEach((record) => {
+    cardSubTasksTotalCount = cardChecklists[0]['checkItems'].length;
+    cardChecklists[0]['checkItems'].forEach((record) => {
       // console.log(';;subTask-record ', record);
-
-      if (record.taskStatus === 'done') {
+      if (record.status === 'done') {
         cardSubTasksDoneCount++;
       }
     });
@@ -178,7 +178,10 @@ export function Card(props: CardProps) {
   // console.log(';;cardSubTasksDoneCount ', cardSubTasksDoneCount);
 
   const doesRelatedDocsExist =
-    relatedDocs && relatedDocs['docList'] && relatedDocs['docList'].length > 0;
+    cardRelatedDocs &&
+    cardRelatedDocs.length > 0 &&
+    cardRelatedDocs[0]['docList'] &&
+    cardRelatedDocs[0]['docList'].length > 0;
   const [isRelatedDocsListOpen, setIsRelatedDocsListOpen] = useState(true);
   const handleToggleRelatedDocsListOpen = useCallback((e) => {
     setIsRelatedDocsListOpen((prev) => !prev);
@@ -202,19 +205,21 @@ export function Card(props: CardProps) {
       <Grid container spacing={1}>
         <Grid item container alignItems='center' justifyContent='space-between'>
           <Box display='flex' style={{ padding: `12px 12px 12px 8px` }}>
-            <Typography title={title} className={classes.cardTitle}>
-              {taskEmoji && taskEmoji.trim() ? taskEmoji + ' ' : null}
-              {title}
+            <Typography title={cardTitle} className={classes.cardTitle}>
+              {cardTitleEmoji && cardTitleEmoji.trim()
+                ? cardTitleEmoji + ' '
+                : null}
+              {cardTitle}
             </Typography>
           </Box>
         </Grid>
 
-        {tags && tags.length > 0 ? (
+        {cardLabels && cardLabels.length > 0 ? (
           <Grid item container>
             <Grid item>
-              {tags.map((tag) => {
-                const { tagName } = tag;
-                return tagName && tagName.trim() ? (
+              {cardLabels.map((tag) => {
+                const { name } = tag;
+                return name && name.trim() ? (
                   <Button
                     onClick={(e) => e.stopPropagation()}
                     variant='contained'
@@ -223,9 +228,9 @@ export function Card(props: CardProps) {
                     })}
                     disableElevation
                     disableRipple
-                    key={tagName}
+                    key={name}
                   >
-                    {tagName}
+                    {name}
                   </Button>
                 ) : null;
               })}
@@ -233,9 +238,9 @@ export function Card(props: CardProps) {
           </Grid>
         ) : null}
 
-        {taskDueTime || doesSubTaskListExist ? (
+        {cardDueTime || doesSubTaskListExist ? (
           <Grid item container>
-            {taskDueTime ? (
+            {cardDueTime ? (
               <Grid item>
                 <Button
                   onClick={(e) => e.stopPropagation()}
@@ -245,7 +250,7 @@ export function Card(props: CardProps) {
                   title='截止日期'
                   disableElevation
                 >
-                  {taskDueTime}
+                  {cardDueTime}
                 </Button>
               </Grid>
             ) : null}
@@ -253,7 +258,6 @@ export function Card(props: CardProps) {
               <Grid item>
                 <Button
                   onClick={(e) => e.stopPropagation()}
-                  // variant='contained'
                   disableElevation
                   className={classes.subTaskListBtn}
                   startIcon={<AssignmentTurnedInOutlinedIcon />}
@@ -269,18 +273,17 @@ export function Card(props: CardProps) {
           </Grid>
         ) : null}
 
-        {taskPriority ? (
+        {priority ? (
           <Grid item container>
             <Grid item>
               <Button
                 onClick={(e) => e.stopPropagation()}
-                // variant='contained'
                 disableElevation
                 className={classes.subTaskListBtn}
                 startIcon={<SortOutlinedIcon />}
-                title={`当前优先级: ${taskPriority}，任务默认优先级为普通-10`}
+                title={`当前优先级: ${priority}，任务默认优先级为普通-10`}
               >
-                优先级: {taskPriority}
+                优先级: {priority}
               </Button>
             </Grid>
           </Grid>
@@ -303,7 +306,7 @@ export function Card(props: CardProps) {
             <Grid item container>
               <Collapse in={isRelatedDocsListOpen} timeout='auto' unmountOnExit>
                 <List aria-label='相关文档列表' disablePadding>
-                  {relatedDocs['docList'].map((doc) => {
+                  {cardRelatedDocs[0]['docList'].map((doc) => {
                     const { docId, docTitle } = doc;
 
                     return (
@@ -323,6 +326,7 @@ export function Card(props: CardProps) {
                           <a
                             className={classes.relatedDocsTitle}
                             title={docTitle}
+                            // href='#'
                           >
                             {docTitle.length > 24
                               ? docTitle.slice(0, 24) + '...'
@@ -339,7 +343,7 @@ export function Card(props: CardProps) {
         ) : null}
 
         <Grid item container alignItems='center' justifyContent='space-between'>
-          {taskMembers && taskMembers.length > 0 ? (
+          {cardMembers && cardMembers.length > 0 ? (
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
@@ -348,6 +352,7 @@ export function Card(props: CardProps) {
               aria-label='任务负责人 owner member'
               disableRipple
               className={classes.cardBottomIconBtn}
+              title={cardMembers[0]['fullName']}
             >
               <AccountCircleOutlinedIcon />
             </IconButton>

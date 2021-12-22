@@ -106,11 +106,11 @@ export function Column(props: ColumnProps) {
   } = props;
 
   const {
-    title,
-    description,
+     listGroupTitle,
+   desc,
     caption,
     color,
-    records = [],
+    cardsRecords = [],
     wipEnabled,
     wipLimit = Infinity,
   } = column;
@@ -118,8 +118,8 @@ export function Column(props: ColumnProps) {
   // const [__, forceColumnUpdate] = useReducer((x) => x + 1, 0);
   // console.log(';;Column-forceBoardUpdate ', forceBoardUpdate, column);
 
-  const disableAddRecordAction = wipEnabled && wipLimit <= records.length;
-  const disableAllRecordDeleteAction = !records.length;
+  const disableAddRecordAction = wipEnabled && wipLimit <= cardsRecords.length;
+  const disableAllRecordDeleteAction = !cardsRecords.length;
 
   const columnColor = color as keyof typeof ColumnColor;
 
@@ -368,8 +368,8 @@ export function Column(props: ColumnProps) {
       {...rest}
     >
       <ColumnHeaderComponent
-        title={title}
-        description={description}
+        title={listGroupTitle}
+        description={desc}
         showEditAction={showEditAction}
         showDeleteAction={showDeleteAction}
         onEdit={handleOpenEditDialog}
