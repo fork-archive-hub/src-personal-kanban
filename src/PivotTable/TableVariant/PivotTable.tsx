@@ -64,14 +64,11 @@ export function PivotTable(props: PivotTableStandardProps) {
     setToggleShowToolbarActionsMenuButtons,
   ] = useState(true);
 
-  const [showGroupedTable, setToggleShowGroupedTable] = useState(false);
+  const [showGroupedTable, setToggleShowGroupedTable] = useState(true);
   // const [groupOptions, setGroupOptions] = useState({});
 
   /** 改变key的时候，会强制重渲染整个table，要慎用，只有需要改变大部分table的时候才建议用 */
-  const tableKey = useMemo(
-    () => cx({ showGroupedTable: showGroupedTable }),
-    [showGroupedTable],
-  );
+  const tableKey = useMemo(() => cx({ showGroupedTable }), [showGroupedTable]);
 
   const currentPvtView = useMemo(() => {
     const firstView = pvtViews[0];
@@ -92,6 +89,10 @@ export function PivotTable(props: PivotTableStandardProps) {
         const dataFields = Object.keys(tableData[0]);
         groupField = 'group';
         // dataFields[Math.floor(Math.random() * dataFields.length)];
+
+        if (firstView.type === 'tableForKanban') {
+          groupField = 'idListDetails';
+        }
         console.log(';;groupField, dataFields ', groupField, dataFields);
       } else {
         groupField = '';
@@ -99,7 +100,16 @@ export function PivotTable(props: PivotTableStandardProps) {
 
       let tableColumns;
       if (firstView.type === 'tableForKanban') {
-        tableColumns = getTableColumnsForKanban();
+        groupField = 'idListDetails';
+        tableColumns = getTableColumnsForKanban({
+          showGroupedTable,
+          groupOptions: showGroupedTable
+            ? {
+                groupField,
+                groupHeader: '分组',
+              }
+            : null,
+        });
       } else {
         // todo 支持添加多个分组列，暂时只支持单个分组字段
         tableColumns = getPivotTableStandardColumns({

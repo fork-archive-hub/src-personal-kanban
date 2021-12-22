@@ -19,10 +19,10 @@ export function getTableDataFromPvtData<T>(
 /**
  * * 计算出针对看板设计的table的columns列定义模型
  */
-export function getTableColumnsForKanban(options?: object) {
-  // const { showGroupedTable, groupOptions } = options;
+export function getTableColumnsForKanban(options?: Record<string, any>) {
+  const { showGroupedTable, groupOptions } = options;
 
-  const defaultColumnsDefinitions = [
+  let kanbanColumnsDefinitions = [
     {
       Header: '标题',
       accessor: 'name',
@@ -33,9 +33,13 @@ export function getTableColumnsForKanban(options?: object) {
     },
     {
       Header: '任务分组',
-      // accessor: 'idListDetails',
+      accessor: 'idListDetails',
       // accessor: (row, rowIndex) => row['idListDetails'],
-      accessor: (row, rowIndex) => JSON.stringify(row['idListDetails']),
+      // accessor: (row, rowIndex) => JSON.stringify(row['idListDetails']),
+      Cell: ({ cell: { value }, row }) => {
+        // return <span>{JSON.stringify(value)}</span>;
+        return <span>{value.name}</span>;
+      },
     },
     {
       Header: '标签',
@@ -72,7 +76,25 @@ export function getTableColumnsForKanban(options?: object) {
     },
   ];
 
-  return defaultColumnsDefinitions;
+  if (showGroupedTable && groupOptions) {
+    kanbanColumnsDefinitions = kanbanColumnsDefinitions.filter((col: any) =>
+      typeof col.accessor === 'function'
+        ? col.id !== groupOptions.groupField
+        : col.accessor !== groupOptions.groupField,
+    );
+
+    kanbanColumnsDefinitions.unshift({
+      Header: groupOptions.groupHeader || groupOptions.groupField,
+      accessor: (row, rowIndex) => row['idListDetails']['name'],
+      id: groupOptions.groupField,
+      Cell: ({ row: { groupByVal } }) => {
+        // return <h3>groupByVal</h3>;
+        return groupByVal;
+      },
+    } as any);
+  }
+
+  return kanbanColumnsDefinitions;
 }
 
 /**
@@ -178,7 +200,7 @@ export function generateKanbanGuideDemoData(count?: number) {
         idList: 'idList' + (idx % 3),
         idListDetails: {
           id: 'idList' + (idx % 3),
-          name: 'to-do',
+          name: '分组' + (idx % 3),
           closed: false,
           idBoard: 'idBoard',
         },
@@ -264,7 +286,7 @@ export function generateKanbanGuideDemoData(count?: number) {
         dueReminder: 1440,
         dueComplete: false,
         priority: idx % 3 === 0 ? '最高' : '',
-        status: '',
+        // status: 'normal',
         closed: false,
         isTemplate: false,
         attachments: [],
