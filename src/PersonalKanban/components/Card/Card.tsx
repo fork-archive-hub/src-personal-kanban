@@ -152,7 +152,6 @@ export function Card(props: CardProps) {
     cardMembers,
     cardChecklists,
     cardRelatedDocs,
-    cardStartTime,
     cardDueTime,
   } = record;
 
@@ -168,9 +167,9 @@ export function Card(props: CardProps) {
   let cardSubTasksDoneCount = 0;
   if (doesSubTaskListExist) {
     cardSubTasksTotalCount = cardChecklists[0]['checkItems'].length;
-    cardChecklists[0]['checkItems'].forEach((record) => {
+    cardChecklists[0]['checkItems'].forEach((task) => {
       // console.log(';;subTask-record ', record);
-      if (record.status === 'done') {
+      if (task.state === 'done') {
         cardSubTasksDoneCount++;
       }
     });
@@ -260,6 +259,7 @@ export function Card(props: CardProps) {
                   onClick={(e) => e.stopPropagation()}
                   disableElevation
                   className={classes.subTaskListBtn}
+                  // todo 修改任务全部完成时的图标为绿色
                   startIcon={<AssignmentTurnedInOutlinedIcon />}
                   title={`待办事件(子任务)清单: 已完成 ${cardSubTasksDoneCount} / 总事项 ${cardSubTasksTotalCount};    未完成 ${
                     Number(cardSubTasksTotalCount) -

@@ -1,4 +1,4 @@
-import cx from "clsx";
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Button,
@@ -29,8 +29,8 @@ import {
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+} from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 
 export function RecordTitle(props) {
   const {
@@ -42,22 +42,22 @@ export function RecordTitle(props) {
 
   return isEditingCardTitle ? (
     <TextField
-      name="title"
-      label={"名称或标题"}
-      multiline={cardTitle.length > 20 ? true : false}
       value={cardTitle}
       onChange={handleCardTitleChange}
+      name='cardTitle'
+      label={'名称或标题'}
+      multiline={cardTitle.length > 20 ? true : false}
       onBlur={() => {
         setIsEditingCardTitle(false);
       }}
     />
   ) : (
     <Typography
-      gutterBottom
-      variant="h6"
       onClick={() => {
         setIsEditingCardTitle(true);
       }}
+      gutterBottom
+      variant='h6'
     >
       {cardTitle}
     </Typography>

@@ -65,7 +65,7 @@ type BoardProps = {
   kanbanVariant?: string;
 };
 
-/** 高度100vh的仪表板 */
+/** 看板组件 */
 export function Board(props: BoardProps) {
   const {
     columns,

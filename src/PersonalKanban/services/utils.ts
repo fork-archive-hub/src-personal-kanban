@@ -111,24 +111,24 @@ export const getInitialState = () => {
               checkItems: [
                 {
                   idChecklist: 'idChecklist',
-                  state: 'complete',
                   id: '61b316a7dce17a5b97006b16',
                   name: 'ckeditor',
                   nameData: {
                     emoji: {},
                   },
+                  state: 'complete',
                   pos: 16879,
                   due: null,
                   idMember: null,
                 },
                 {
                   idChecklist: 'idChecklist',
-                  state: 'incomplete',
                   id: '61b316ab877ce337dbc11e2e',
                   name: 'prosemirror',
                   nameData: {
                     emoji: {},
                   },
+                  state: 'incomplete',
                   pos: 33786,
                   due: null,
                   idMember: null,

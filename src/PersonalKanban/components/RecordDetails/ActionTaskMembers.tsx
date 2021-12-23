@@ -1,4 +1,4 @@
-import cx from "clsx";
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Avatar,
@@ -37,23 +37,22 @@ import {
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import CheckIcon from "@material-ui/icons/Check";
-import FaceIcon from "@material-ui/icons/Face";
-import LinkIcon from "@material-ui/icons/Link";
-import PersonAddDisabledOutlinedIcon from "@material-ui/icons/PersonAddDisabledOutlined";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import SortOutlinedIcon from "@material-ui/icons/SortOutlined";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+} from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import FaceIcon from '@material-ui/icons/Face';
+import LinkIcon from '@material-ui/icons/Link';
+import PersonAddDisabledOutlinedIcon from '@material-ui/icons/PersonAddDisabledOutlined';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
+import SortOutlinedIcon from '@material-ui/icons/SortOutlined';
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
     taskMembersList: {
       width: 240,
     },
-  })
+  }),
 );
 
 export function ActionTaskMembers(props) {
@@ -75,7 +74,7 @@ export function ActionTaskMembers(props) {
     <>
       <Button
         onClick={handleSelectingTaskMembersPanelOpen}
-        variant="text"
+        variant='text'
         startIcon={
           !taskMembers || (taskMembers && taskMembers.length < 1) ? (
             <PersonOutlineOutlinedIcon />
@@ -87,38 +86,38 @@ export function ActionTaskMembers(props) {
         {taskMembersText}
       </Button>
       <Popover
-        id={`id`}
         open={isSelectingTaskMembersPanelOpen}
-        anchorEl={taskMembersAnchorEl}
         onClose={handleSelectingTaskMembersPanelClose}
+        id={`idMembersPopover`}
+        anchorEl={taskMembersAnchorEl}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
       >
         <List dense={true} className={classes.taskMembersList}>
           <ListItem
-            button
-            key=""
             selected={!taskMembers || (taskMembers && taskMembers.length) === 0}
             onClick={handleSetTaskMembersToEmpty}
+            button
+            key=''
           >
             <ListItemAvatar>
               <Avatar>
                 <PersonAddDisabledOutlinedIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="无负责人" />
+            <ListItemText primary='无负责人' />
             {!taskMembers || (taskMembers && taskMembers.length === 0) ? (
               <ListItemSecondaryAction>
                 <IconButton
                   onClick={handleSetTaskMembersToEmpty}
-                  edge="end"
-                  aria-label="选为负责人"
+                  edge='end'
+                  aria-label='选为负责人'
                 >
                   <CheckIcon />
                 </IconButton>
@@ -126,7 +125,7 @@ export function ActionTaskMembers(props) {
             ) : null}
           </ListItem>
           {availableUsers.map((user) => {
-            const { userId, username, avatar } = user;
+            const { id: userId, username, avatar } = user;
             const isCurrUserSelected =
               taskMembers && taskMembers.indexOf(userId) !== -1;
             return (
@@ -148,8 +147,8 @@ export function ActionTaskMembers(props) {
                   <ListItemSecondaryAction>
                     <IconButton
                       disableRipple
-                      edge="end"
-                      aria-label="选中为负责人"
+                      edge='end'
+                      aria-label='选中为负责人'
                       onClick={() => {
                         handleToggleSelectTaskMember(userId);
                       }}

@@ -1,4 +1,4 @@
-import cx from "clsx";
+import cx from 'clsx';
 import React, {
   useCallback,
   useEffect,
@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 import {
   Avatar,
@@ -37,15 +37,15 @@ import {
   Select,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import CheckIcon from "@material-ui/icons/Check";
-import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import EventAvailableOutlinedIcon from "@material-ui/icons/EventAvailableOutlined";
-import FaceIcon from "@material-ui/icons/Face";
-import LinkIcon from "@material-ui/icons/Link";
+} from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
+import FaceIcon from '@material-ui/icons/Face';
+import LinkIcon from '@material-ui/icons/Link';
 
 const useStyles = makeStyles<Theme>((theme) =>
   createStyles({
@@ -54,16 +54,16 @@ const useStyles = makeStyles<Theme>((theme) =>
       minWidth: 24,
     },
     relatedDocsDocIcon: {
-      fontSize: "1.1rem",
+      fontSize: '1.1rem',
     },
     relatedDocListItem: {
       // paddingLeft: theme.spacing(2),
-      padding: "0 0 0 0",
+      padding: '0 0 0 0',
     },
     textSecondary: {
       color: theme.palette.text.secondary,
     },
-  })
+  }),
 );
 
 export function ItemRelatedDocs(props) {
@@ -80,17 +80,17 @@ export function ItemRelatedDocs(props) {
   return (
     <>
       <TextField
-        id="addNewDocOrLinkedDoc"
+        id='inputAddNewDocOrLinkedDoc'
         // label='先输入文档名，然后选择创建新文档或链接已有文档'
-        label="输入文档名"
+        label='输入文档名'
         value={docName}
         onChange={handleDocNameChange}
       />
       <Button
         onClick={handleAddRelatedDocs}
         // disabled
-        variant="contained"
-        color="primary"
+        variant='contained'
+        color='primary'
         startIcon={<AddIcon />}
         disableRipple
         disableElevation
@@ -100,16 +100,16 @@ export function ItemRelatedDocs(props) {
       &emsp;
       <Button
         disabled
-        variant="contained"
+        variant='contained'
         // color='default'
         // className={classes.button}
         startIcon={<LinkIcon />}
       >
         添加已有文档的链接
       </Button>
-      <List aria-label="相关文档列表">
+      <List aria-label='相关文档列表'>
         {doesRelatedDocsExist
-          ? relatedDocs["docList"].map((doc) => {
+          ? relatedDocs[0]['docList'].map((doc) => {
               const { docId, docTitle } = doc;
 
               return (
@@ -133,7 +133,7 @@ export function ItemRelatedDocs(props) {
                           > */}
                     <a className={classes.textSecondary} title={docTitle}>
                       {docTitle.length > 120
-                        ? docTitle.slice(0, 120) + "..."
+                        ? docTitle.slice(0, 120) + '...'
                         : docTitle}
                     </a>
                     {/* </Link> */}

@@ -85,6 +85,7 @@ export function KanbanBoardContainer(props: KanbanBoardContainerProps) {
     setColumns([]);
   }, []);
 
+  /** 在看板中添加一个新的分组列 */
   const handleAddColumn = useCallback(({ column }: { column: Column }) => {
     setColumns((columns: Column[]) => [
       ...columns,

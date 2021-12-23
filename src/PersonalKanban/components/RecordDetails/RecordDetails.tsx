@@ -82,19 +82,6 @@ const useStyles = makeStyles<Theme>((theme) =>
   }),
 );
 
-function convertSubTasksDataToViewChecklist(subTaskList): any[] {
-  const retChecklist = subTaskList[0]['checkItems'].map((task) => {
-    const { id, name, state } = task;
-    return {
-      id,
-      title: name,
-      status: state && state === 'done' ? true : false,
-    };
-  });
-
-  return retChecklist;
-}
-
 type RecordDetailsProps = {
   record?: Record;
   /** 提交后会更新看板数据 */
@@ -119,7 +106,7 @@ export function RecordDetails(props: RecordDetailsProps) {
     onCancel,
   } = props;
   const {
-    cardTitle: propCardTitle,
+    cardTitle: cardTitleProp,
     cardTitleEmoji,
     desc,
     status,
@@ -129,13 +116,12 @@ export function RecordDetails(props: RecordDetailsProps) {
     cardMembers,
     cardChecklists,
     cardRelatedDocs,
-    cardStartTime,
     cardDueTime,
   } = record;
 
   const [isEditingCardDesc, setIsEditingCardDesc] = useState(false);
 
-  /** 更新卡片数据到全局，同时不关闭卡片弹窗 */
+  /** 更新卡片数据到看板顶层，同时不关闭卡片弹窗 */
   const updateCardData = useCallback(
     (subField: Partial<Record>) => {
       onSubmitDataWithDialogOpen({ ...record, ...subField });
@@ -144,7 +130,7 @@ export function RecordDetails(props: RecordDetailsProps) {
     [onSubmitDataWithDialogOpen, record],
   );
 
-  // todo 待删除
+  // todo 重构后删除掉
   const {
     values,
     errors,
@@ -153,8 +139,8 @@ export function RecordDetails(props: RecordDetailsProps) {
   } = useFormik({
     initialValues: Object.assign(
       {
-        title: '',
-        description: '',
+        cardTitle: '',
+        desc: '',
         color: '',
       },
       record,
@@ -164,16 +150,16 @@ export function RecordDetails(props: RecordDetailsProps) {
     },
     validate: (values) => {
       const errors: any = {};
-      if (!values.title) {
-        errors.title = '* 必填项';
+      if (!values.cardTitle) {
+        errors.cardTitle = '* 必填项';
       }
       return errors;
     },
   });
 
   const [isEditingCardTitle, setIsEditingCardTitle] = useState(false);
-  const [cardTitle, setCardTitle] = useState(propCardTitle);
-  const handleCardTitleChange = useCallback(
+  const [cardTitle, setCardTitle] = useState(cardTitleProp);
+  const handleInputCardTitle = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setCardTitle(event.target.value);
       // if (!event.target.value || !event.target.value.trim()) return;
@@ -244,7 +230,7 @@ export function RecordDetails(props: RecordDetailsProps) {
         (u) => u.id === cardMembers[0].id,
       );
       if (firstMember) {
-        retText = firstMember.username;
+        retText = firstMember.fullName || firstMember.username;
       }
     }
     return retText;
@@ -287,14 +273,15 @@ export function RecordDetails(props: RecordDetailsProps) {
     cardChecklists[0]['checkItems'].length > 0;
   let subTasksChecklist = [];
   if (doesSubTaskListExist) {
-    subTasksChecklist = convertSubTasksDataToViewChecklist(cardChecklists);
+    // subTasksChecklist = convertSubTasksDataToViewChecklist(cardChecklists);
+    subTasksChecklist = cardChecklists[0]['checkItems'];
   }
   const handleSubTaskChecklistChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       // console.log(';;checkbox-click ', event.target.name, event.target);
       const latestSubTaskList = {
         ...cardChecklists[0],
-        records: cardChecklists[0]['checkItems'].map((task) =>
+        checkItems: cardChecklists[0]['checkItems'].map((task) =>
           task.id === event.target.name
             ? {
                 ...task,
@@ -308,18 +295,17 @@ export function RecordDetails(props: RecordDetailsProps) {
     },
     [cardChecklists, updateCardData],
   );
-  const [isAddingSubTask, setIsAddingSubTask] = useState(false);
-  const handleAddSubTaskChecklistItem = useCallback(() => {
-    setIsAddingSubTask(true);
-    setNewSubTaskChecklistItemName('');
+  const [isAddingChecklistItem, setIsAddingChecklistItem] = useState(false);
+  const [newChecklistItemName, setNewChecklistItemName] = useState('');
+  const handleStartAddingChecklistItem = useCallback(() => {
+    setIsAddingChecklistItem(true);
+    setNewChecklistItemName('');
   }, []);
-  const [newSubTaskChecklistItemName, setNewSubTaskChecklistItemName] =
-    useState('');
-  const handleInputSubTaskChecklistItemName = useCallback((event) => {
+  const handleInputChecklistItemName = useCallback((event) => {
     const itemName = event.target.value;
-    setNewSubTaskChecklistItemName(itemName);
+    setNewChecklistItemName(itemName);
   }, []);
-  const handleUpdateSubTasksData = useCallback(() => {
+  const handleUpdateChecklistData = useCallback(() => {
     let _subTaskList = {};
     if (cardChecklists) {
       _subTaskList = cardChecklists[0];
@@ -333,22 +319,22 @@ export function RecordDetails(props: RecordDetailsProps) {
         ..._subTaskList['checkItems'],
         {
           id: 'taskId-' + Math.random().toFixed(6),
-          title: newSubTaskChecklistItemName,
-          taskStatus: 'todo',
+          name: newChecklistItemName,
+          state: 'todo',
         },
       ],
     };
     updateCardData({ cardChecklists: [latestSubTaskList] });
 
-    setIsAddingSubTask(false);
-  }, [newSubTaskChecklistItemName, cardChecklists, updateCardData]);
+    setIsAddingChecklistItem(false);
+  }, [newChecklistItemName, cardChecklists, updateCardData]);
 
   const [isAddingNewTag, setIsAddingNewTag] = useState(false);
   const [newTagName, setNewTagName] = useState('');
   const handleInputNewTagName = useCallback((event) => {
     setNewTagName(event.target.value);
   }, []);
-  const handleStartAddNewTag = useCallback(() => {
+  const handleStartAddingNewTag = useCallback(() => {
     setIsAddingNewTag(true);
     setNewTagName('');
   }, []);
@@ -415,8 +401,8 @@ export function RecordDetails(props: RecordDetailsProps) {
       <Grid item xs={12}>
         <RecordTitle
           cardTitle={cardTitle}
+          handleCardTitleChange={handleInputCardTitle}
           isEditingCardTitle={isEditingCardTitle}
-          handleCardTitleChange={handleCardTitleChange}
           setIsEditingCardTitle={setIsEditingCardTitle}
         />
         <Divider />
@@ -448,7 +434,7 @@ export function RecordDetails(props: RecordDetailsProps) {
             isSelectingDueDate={isSelectingDueDate}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Button
             variant='text'
             // className={classes.taskCommonActionsBtn}
@@ -470,7 +456,7 @@ export function RecordDetails(props: RecordDetailsProps) {
               newTagName={newTagName}
               handleInputNewTagName={handleInputNewTagName}
               handleUpdateTagsData={handleUpdateTagsData}
-              handleStartAddNewTag={handleStartAddNewTag}
+              handleStartAddNewTag={handleStartAddingNewTag}
             />
           </Grid>
         </FormControl>
@@ -488,7 +474,7 @@ export function RecordDetails(props: RecordDetailsProps) {
             className={classes.configItemTitle}
           >
             任务描述或内容描述
-            {values.description ? (
+            {values.desc ? (
               <IconButton aria-label='edit'>
                 <EditOutlinedIcon style={{ fontSize: '1rem' }} />
               </IconButton>
@@ -500,21 +486,21 @@ export function RecordDetails(props: RecordDetailsProps) {
           </FormLabel>
           {isEditingCardDesc ? (
             <TextField
-              multiline
-              name='description'
-              label={'内容描述'}
-              value={values.description}
-              error={Boolean(errors.description)}
-              helperText={errors.description}
-              disabled={disabled}
+              value={values.desc}
               onChange={handleCardFormChange}
               onBlur={() => {
                 setIsEditingCardDesc(false);
               }}
+              multiline
+              name='desc'
+              label={'内容描述'}
+              error={Boolean(errors.desc)}
+              helperText={errors.desc}
+              disabled={disabled}
             />
           ) : (
             <Typography className={classes.cardDesc} gutterBottom>
-              {values.description}
+              {values.desc}
             </Typography>
           )}
         </FormControl>
@@ -524,13 +510,11 @@ export function RecordDetails(props: RecordDetailsProps) {
           doesSubTaskListExist={doesSubTaskListExist}
           subTasksChecklist={subTasksChecklist}
           handleSubTaskChecklistChange={handleSubTaskChecklistChange}
-          isAddingSubTask={isAddingSubTask}
-          newSubTaskChecklistItemName={newSubTaskChecklistItemName}
-          handleInputSubTaskChecklistItemName={
-            handleInputSubTaskChecklistItemName
-          }
-          handleUpdateSubTasksData={handleUpdateSubTasksData}
-          handleAddSubTaskChecklistItem={handleAddSubTaskChecklistItem}
+          isAddingSubTask={isAddingChecklistItem}
+          newSubTaskChecklistItemName={newChecklistItemName}
+          handleInputSubTaskChecklistItemName={handleInputChecklistItemName}
+          handleUpdateSubTasksData={handleUpdateChecklistData}
+          handleAddSubTaskChecklistItem={handleStartAddingChecklistItem}
         />
       </Grid>
       <Grid item xs={12}>
