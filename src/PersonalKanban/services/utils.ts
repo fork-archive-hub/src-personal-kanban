@@ -138,6 +138,7 @@ export const getInitialState = () => {
           ],
           cardRelatedDocs: [
             {
+              id:'idRelatedDocsList',
               title: '相关文档',
               docList: [
                 {

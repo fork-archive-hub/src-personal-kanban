@@ -11,12 +11,10 @@ import { PivotTableStandard } from './PivotTableStandard';
 import {
   defaultPvtData,
   generateKanbanGuideDemoData,
-  getTableColumnsForKanban,
-  getTableDataFromPvtData,
-} from './tableData';
-import {
   getKanbanDataFromPvtData,
   getPivotTableStandardColumns,
+  getTableColumnsForKanban,
+  getTableDataFromPvtData,
 } from './tableData';
 
 export type PivotTableStandardProps = {
@@ -57,7 +55,7 @@ export function PivotTable(props: PivotTableStandardProps) {
   // const updatepvtViews = useCallback(() => {}, []);
   console.log(';;rendering PivotTable ', pvtViews);
 
-  // 这里控制全局工具条，每个视图还可以定义自己的工具条配置
+  // 这里控制全局工具条，每个视图可以定义自己的工具条配置
   const [showToolbar, setToggleShowToolbar] = useState(true);
   const [
     showToolbarActionsMenuButtons,
@@ -81,7 +79,7 @@ export function PivotTable(props: PivotTableStandardProps) {
       retView = <PersonalKanban />;
     }
 
-    // ------------- 默认会显示表格
+    // ------------- 默认会显示普通表格视图
     if (firstView.type.indexOf('table') !== -1 || !firstView.type) {
       const tableData = getTableDataFromPvtData(pvtData['data']);
       let groupField = '';
@@ -187,7 +185,7 @@ export function PivotTable(props: PivotTableStandardProps) {
           // ) : null
         }
       </>
-      {currentPvtView};
+      {currentPvtView}
     </div>
   );
 }

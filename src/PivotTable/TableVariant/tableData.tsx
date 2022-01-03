@@ -245,8 +245,9 @@ export const defaultPvtData = [
 ];
 
 /**
- * * mock测试用的看板数据，根据trello导出的数据修改而来。
+ * * mock测试用的看板数据，动态生成，根据trello导出的数据修改而来。
  * https://trello.com/b/qoBz7TLE/hello-trello
+ * https://trello.com/b/qoBz7TLE.json
  */
 export function generateKanbanGuideDemoData(count?: number) {
   if (!count) return [];
@@ -261,8 +262,12 @@ export function generateKanbanGuideDemoData(count?: number) {
         descData: {
           emoji: {},
         },
-        // status: 'normal',
+        status: 'normal',
         priority: idx % 3 === 0 ? '最高' : '',
+        due: '2022-01-30T08:57:00.000Z',
+        dueReminder: 1440,
+        dueComplete: false,
+        closed: false,
         idList: 'idList' + (idx % 3),
         idListDetails: {
           id: 'idList' + (idx % 3),
@@ -271,7 +276,10 @@ export function generateKanbanGuideDemoData(count?: number) {
           idBoard: 'idBoard',
         },
         idBoard: 'idBoard',
-        idBoardDetails: '示例看板',
+        idBoardDetails: {
+          id: 'idBoard',
+          name: '示例看板',
+        },
         idLabels: idx % 3 === 1 ? ['idLabel1', 'idLabel2'] : [],
         idLabelsDetails:
           idx % 3 === 1
@@ -354,10 +362,7 @@ export function generateKanbanGuideDemoData(count?: number) {
             },
           ],
         },
-        due: '2022-01-30T08:57:00.000Z',
-        dueReminder: 1440,
-        dueComplete: false,
-        closed: false,
+
         isTemplate: false,
         attachments: [],
         pluginData: [],
@@ -367,4 +372,130 @@ export function generateKanbanGuideDemoData(count?: number) {
         createdTime: '',
       };
     });
+}
+
+/**
+ * * mock测试用的看板数据，静态文字版，根据trello导出的数据修改而来。
+ * https://trello.com/b/qoBz7TLE/hello-trello
+ */
+export function generateKanbanGuideDemoDataStatic() {
+  // 数组中每项代表一个卡片
+  return [
+    {
+      id: 'card0101',
+      name: '这是一个全功能的卡片示例，其他卡片是使用教程',
+      nameData: {
+        emoji: { shortName: '', native: '✨' },
+      },
+      desc: 'Make a fresh start by erasing this board. Click delete button on main toolbar.',
+      descData: {
+        emoji: {},
+      },
+      status: 'done',
+      priority: '11',
+      due: '2022-01-30T08:57:00.000Z',
+      dueReminder: 1440,
+      dueComplete: false,
+      closed: false,
+      idList: 'listGroupId01',
+      idListDetails: {
+        id: 'listGroupId01',
+        name: '看板示例说明',
+        closed: false,
+        idBoard: 'idBoard',
+      },
+      idBoard: 'idBoard',
+      idBoardDetails: {
+        id: 'idBoard',
+        name: '示例看板',
+      },
+      idLabels: ['idLabel1', 'idLabel2'],
+      idLabelsDetails: [
+        {
+          id: 'idLabel1',
+          idBoard: 'idBoard',
+          name: '全功能卡片',
+          color: 'purple',
+        },
+        {
+          id: 'idLabel2',
+          idBoard: 'idBoard',
+          name: '教程',
+          color: 'purple',
+        },
+      ],
+      idMembers: ['idUser1'],
+      idMembersDetails: [
+        {
+          id: 'idUser1',
+          username: 'uptonking1',
+          fullName: 'uptonking',
+          avatarUrl: '',
+          memberType: 'normal',
+        },
+      ],
+      idMembersVoted: [],
+      idChecklists: ['idChecklist'],
+      idChecklistsDetails: [
+        {
+          id: 'idChecklist',
+          name: 'test checklist 子任务',
+          idCard: 'card0101',
+          checkItems: [
+            {
+              idChecklist: 'idChecklist',
+              id: '61b316a7dce17a5b97006b16',
+              name: 'ckeditor',
+              state: 'complete',
+              nameData: {
+                emoji: {},
+              },
+              pos: 16879,
+              due: null,
+              idMember: null,
+            },
+            {
+              idChecklist: 'idChecklist',
+              id: '61b316ab877ce337dbc11e2e',
+              name: 'prosemirror',
+              state: 'incomplete',
+              nameData: {
+                emoji: {},
+              },
+              pos: 33786,
+              due: null,
+              idMember: null,
+            },
+          ],
+        },
+      ],
+      idRelatedDocs: ['idRelatedDocsList'],
+      idRelatedDocsDetails: [
+        {
+          id: 'idRelatedDocsList',
+          title: '相关文档',
+          docList: [
+            {
+              docTitle: 'ckeditor architecture core',
+              docId: 'unique-doc-id1',
+              url: '',
+            },
+            {
+              docTitle: 'ckeditor editing engine',
+              docId: 'unique-doc-id2',
+              url: '',
+            },
+          ],
+        },
+      ],
+
+      isTemplate: false,
+      attachments: [],
+      pluginData: [],
+      customFieldItems: [],
+      group: '默认分组字段',
+      createdBy: '',
+      createdTime: '',
+    },
+  ];
 }

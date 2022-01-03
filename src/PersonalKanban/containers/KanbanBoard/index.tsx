@@ -46,7 +46,7 @@ const useKanbanBoardStyles = makeStyles<Theme>((theme) =>
 type KanbanBoardContainerProps = {
   kanbanData?: any;
   updateKanbanData?: Function;
-  variant?: 'kanbanInPvtTable' | 'fullPage';
+  variant?: 'fullPage' | 'kanbanInPvtTable';
 };
 
 /**
