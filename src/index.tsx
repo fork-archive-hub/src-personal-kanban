@@ -3,11 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import PersonalKanban from './PersonalKanban';
-import { PivotTableFull } from './PivotTable/PivotTable';
 import { PivotTable } from './PivotTable/TableVariant';
-import reportWebVitals from './reportWebVitals';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
+// import PersonalKanban from './PersonalKanban';
+// import { PivotTableFull } from './PivotTable/PivotTable';
+// import reportWebVitals from './reportWebVitals';
+// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 
 ReactDOM.render(
   // <React.StrictMode>
@@ -17,5 +19,5 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-serviceWorkerRegistration.register();
-reportWebVitals();
+// serviceWorkerRegistration.register();
+// reportWebVitals();
